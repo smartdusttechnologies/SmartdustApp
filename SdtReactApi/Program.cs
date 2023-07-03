@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using SdtReactApi;
+using SmartdustApp;
 
-namespace SdtReactApi
+namespace SmartdustApp
 {
     public class Program
     {

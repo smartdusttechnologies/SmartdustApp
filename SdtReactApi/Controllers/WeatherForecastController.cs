@@ -3,7 +3,7 @@ using SmartdustApi.Common;
 using SmartdustApi.Models;
 using SmartdustApi.Services.Interfaces;
 
-namespace SdtReactApi.Controllers
+namespace SmartdustApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]

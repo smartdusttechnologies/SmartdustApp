@@ -1,4 +1,4 @@
-namespace SdtReactApi
+namespace SmartdustApp
 {
     public class WeatherForecast
     {
