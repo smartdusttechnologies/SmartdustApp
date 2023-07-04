@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
+﻿using SmartdustApp.Business.Common;
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces.Security;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Services
 {

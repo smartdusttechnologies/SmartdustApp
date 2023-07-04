@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using SmartdustApp.Business.Model;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Services
 {

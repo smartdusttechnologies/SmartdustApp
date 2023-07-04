@@ -1,18 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SmartdustApi.DTO
+﻿namespace SmartdustApp.Business.Core.Model
 {
-    public class UserDTO
+    public class UserModel : Entity
     {
         /// <summary>
         /// User Name.
         /// </summary>
-        [Required]
         public string UserName { get; set; }
         /// <summary>
         /// First Name.
         /// </summary>
-        [Required]
         public string FirstName { get; set; }
         /// <summary>
         /// Last Name.
@@ -21,12 +17,10 @@ namespace SmartdustApi.DTO
         /// <summary>
         /// Email Address.
         /// </summary>
-        [Required]
         public string Email { get; set; }
         /// <summary>
         /// Mobile.
         /// </summary>
-        [Required]
         public string Mobile { get; set; }
         /// <summary>
         /// Country.
@@ -36,12 +30,35 @@ namespace SmartdustApi.DTO
         /// IsdCode.
         /// </summary>
         public string ISDCode { get; set; }
+        /// <summary>
+        /// TwoFactor is enabled or not.
+        /// </summary>
+        public bool TwoFactor { get; set; }
+        /// <summary>
+        /// Account locked or not.
+        /// </summary>
+        public bool Locked { get; set; }
+        /// <summary>
+        /// Is Active.
+        /// </summary>
+        public bool IsActive { get; set; }
+        /// <summary>
+        /// Email Validation Status
+        /// </summary>
+        public int EmailValidationStatus { get; set; }
+        /// <summary>
+        /// Mobile Validation Status
+        /// </summary>
         public int MobileValidationStatus { get; set; }
-        [Required]
+        /// <summary>
+        /// Organization Id.
+        /// </summary>
         public int OrgId { get; set; }
-        [Required]
+        /// <summary>
+        /// Admin Level.
+        /// </summary>
+        public int AdminLevel { get; set; }
         public string Password { get; set; }
-        [Required]
         public string NewPassword { get; set; }
 
     }

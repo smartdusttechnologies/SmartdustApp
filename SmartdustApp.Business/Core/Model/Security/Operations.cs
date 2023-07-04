@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace SmartdustApp.Business.Model
+namespace SmartdustApp.Business.Core.Model
 {
     public static class Operations
     {

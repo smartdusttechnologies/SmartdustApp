@@ -1,4 +1,4 @@
-﻿namespace SmartdustApp.Business.Model
+﻿namespace SmartdustApp.Business.Core.Model
 {
     /// <summary>
     /// Claims Types

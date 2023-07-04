@@ -1,6 +1,4 @@
-﻿using SmartdustApp.Business.Core.Models;
-
-namespace SmartdustApp.Business.Model
+﻿namespace SmartdustApp.Business.Core.Model
 {
     /// <summary>
     /// Class to get the user role with claims.

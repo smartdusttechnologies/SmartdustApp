@@ -1,6 +1,7 @@
-﻿using SmartdustApi.Model;
+﻿using SmartdustApp.Web.Models;
+using SmartdustApp.Business.Core.Model;
 
-namespace SmartdustApi.DTO
+namespace SmartdustApp.DTO
 {
     public class LeaveDTO : Entity
     {

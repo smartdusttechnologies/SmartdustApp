@@ -1,10 +1,10 @@
 ﻿using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Core.Interfaces
 {
     public interface IContactService
     {
-        RequestResult<bool> Save(ContactDTO contact);
+        RequestResult<bool> Save(ContactModel contact);
     }
 }

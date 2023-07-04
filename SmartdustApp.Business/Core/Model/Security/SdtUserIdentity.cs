@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace SmartdustApp.Business.Model
+namespace SmartdustApp.Business.Core.Model
 {
     public class SdtUserIdentity : ClaimsIdentity
     {

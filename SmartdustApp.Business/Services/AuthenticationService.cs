@@ -2,12 +2,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using SmartdustApp.Business.Model;
 using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces.Security;
 using SmartdustApp.Business.Data.Repository.Interfaces;
+using SmartdustApp.Business.Core.Model;
+using Microsoft.Extensions.Configuration;
 
 namespace SmartdustApp.Business.Services
 {

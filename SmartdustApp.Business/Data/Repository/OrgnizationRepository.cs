@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using System.Data;
 using SmartdustApp.Business.Infrastructure;
-using SmartdustApp.Business.Models;
 using SmartdustApp.Business.Data.Repository.Interfaces;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Repository
 {
@@ -22,10 +22,10 @@ namespace SmartdustApp.Business.Repository
         ///get the data of the Orgnaization
         /// </summary>
         /// <returns></returns>
-        public List<OrganizationModel> Get()
+        public List<Organization> Get()
         {
             using IDbConnection db = _connectionFactory.GetConnection;
-            return db.Query<OrganizationModel>("select * from [Organization] WHERE IsDeleted = 0").ToList();
+            return db.Query<Organization>("select * from [Organization] WHERE IsDeleted = 0").ToList();
         }
        
     }

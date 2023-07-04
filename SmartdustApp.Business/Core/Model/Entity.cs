@@ -1,5 +1,5 @@
-﻿namespace SmartdustApi.Model
-{ 
+﻿namespace SmartdustApp.Business.Core.Model
+{
     public abstract class Entity
     {
         /// <summary>

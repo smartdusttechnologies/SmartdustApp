@@ -1,9 +1,7 @@
 ﻿using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Models;
-using SmartdustApp.Business.Repository.Interfaces;
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Services
 {
@@ -16,14 +14,14 @@ namespace SmartdustApp.Business.Services
             _OrganizationRepository = OrganizationRepository;
         }
 
-        public RequestResult<List<OrganizationModel>> Get()
+        public RequestResult<List<Organization>> Get()
         {
            var organization = _OrganizationRepository.Get();
             if (organization == null)
             {
-                return new RequestResult<List<OrganizationModel>>();
+                return new RequestResult<List<Organization>>();
             }
-            return new RequestResult<List<OrganizationModel>>(organization);
+            return new RequestResult<List<Organization>>(organization);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartdustApp.Web.Models
+namespace SmartdustApp.Business.Core.Model
 {
-    public class ContactDTO
+    public class ContactModel
     {
         [Required]
         public string Name { get; set; }

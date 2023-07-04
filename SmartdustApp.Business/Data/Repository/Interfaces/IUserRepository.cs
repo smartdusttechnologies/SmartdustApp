@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Model;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Data.Repository.Interfaces
 {

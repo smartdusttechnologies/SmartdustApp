@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Models;
-
+﻿using SmartdustApp.Business.Core.Model;
+using System.Collections.Generic;
 namespace SmartdustApp.Business.Data.Repository.Interfaces
 {
     public interface IOrganizationRepository
     {
-        List<OrganizationModel> Get();
+        List<Organization> Get();
 
     }
 }

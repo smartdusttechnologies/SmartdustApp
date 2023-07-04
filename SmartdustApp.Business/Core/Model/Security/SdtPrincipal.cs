@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace SmartdustApp.Business.Model
+namespace SmartdustApp.Business.Core.Model
 {
     public class SdtPrincipal : ClaimsPrincipal
     {

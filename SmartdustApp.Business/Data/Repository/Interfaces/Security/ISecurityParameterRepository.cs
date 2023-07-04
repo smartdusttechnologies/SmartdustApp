@@ -1,6 +1,5 @@
-﻿using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
-using System.Collections.Generic;
+﻿using SmartdustApp.Business.Core.Model;
+using SmartdustApp.Common;
 
 namespace SmartdustApp.Business.Data.Repository.Interfaces.Security
 {

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Model;
-
+using SmartdustApp.Business.Core.Model;
 namespace SmartdustApp.Business.Core.Interfaces
 {
     public interface IRoleService

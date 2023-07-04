@@ -1,7 +1,7 @@
 ﻿using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Services
 {
@@ -14,7 +14,7 @@ namespace SmartdustApp.Business.Services
             _contactRepository = contactRepository;
         }
 
-        public RequestResult<bool> Save(ContactDTO contact)
+        public RequestResult<bool> Save(ContactModel contact)
         {
            var result =  _contactRepository.Save(contact);
             if(result.IsSuccessful)

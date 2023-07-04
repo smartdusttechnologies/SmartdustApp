@@ -1,5 +1,4 @@
-﻿using SmartdustApp.Business.Model;
-using System.Collections.Generic;
+﻿using SmartdustApp.Business.Core.Model;
 namespace SmartdustApp.Business.Data.Repository.Interfaces
 {
     public interface IRoleRepository

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using SmartdustApp.Business.Model;
-using System;
+using SmartdustApp.Business.Core.Model;
 using System.Security.Cryptography;
 using System.Text;
 

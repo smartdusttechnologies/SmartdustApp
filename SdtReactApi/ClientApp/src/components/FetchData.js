@@ -52,7 +52,7 @@ export class FetchData extends Component {
   }
 
   async populateWeatherData() {
-      const response = await fetch('weatherforecast/gw');
+      const response = await fetch('home/GetOrganizations');
       const data = await response.json();
       console.log(data);
       debugger;

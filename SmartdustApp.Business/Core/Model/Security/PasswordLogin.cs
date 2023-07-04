@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartdustApp.Business.Model
+namespace SmartdustApp.Business.Core.Model
 {
     public class PasswordLogin
     {

@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using SmartdustApp.Business.Infrastructure;
-using SmartdustApp.Business.Model;
 using SmartdustApp.Business.Data.Repository.Interfaces;
 using System.Data;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Repository
 {

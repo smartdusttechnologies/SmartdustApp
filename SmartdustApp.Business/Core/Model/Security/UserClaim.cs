@@ -1,13 +1,10 @@
 ﻿
 
-using SmartdustApp.Business.Core.Models;
-
-namespace SmartdustApp.Business.Model
+namespace SmartdustApp.Business.Core.Model
 {
-    public class GroupClaim : Entity
+    public class UserClaim : Entity
     {
         public CustomClaimType ClaimType { get; set; }
         public string ClaimValue { get; set; }
     }
 }
-

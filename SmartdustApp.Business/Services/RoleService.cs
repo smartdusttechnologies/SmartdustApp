@@ -1,8 +1,6 @@
-﻿
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Core.Interfaces;
+﻿using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Services
 {

@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using SmartdustApp.Business.Common;
 using SmartdustApp.Business.Infrastructure;
-using SmartdustApp.Business.Model;
 using SmartdustApp.Business.Data.Repository.Interfaces;
 using System.Data;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Repository
 {
@@ -16,7 +16,7 @@ namespace SmartdustApp.Business.Repository
             _connectionFactory = connectionFactory;
         }
 
-        public RequestResult<bool> Save(ContactDTO contact)
+        public RequestResult<bool> Save(ContactModel contact)
         {
             string query = @"Insert into [Contact] (Name,Mail,Address,Subject,Phone,Message)
                                                   values (@Name,@Mail,@Address,@Subject,@Phone,@Message)";

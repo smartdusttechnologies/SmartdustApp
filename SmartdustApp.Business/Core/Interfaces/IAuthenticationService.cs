@@ -1,6 +1,5 @@
 ﻿using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Model;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Core.Interfaces
 {

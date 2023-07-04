@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartdustApi.DTO
+namespace SmartdustApp.DTO
 {
     public class ChangePasswordDTO
     {

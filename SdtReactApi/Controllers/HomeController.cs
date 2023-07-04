@@ -1,11 +1,12 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-
-using SmartdustApi.Common;
-using SmartdustApi.Model;
-using SmartdustApi.Models;
+using SmartdustApp.Business.Common;
 using SmartdustApp.Business.Core.Interfaces;
+using SmartdustApp.Business.Core.Model;
+using SmartdustApp.Common;
+using SmartdustApp.Web.Models;
 
-namespace SmartdustApi.Controllers
+namespace SmartdustApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -14,12 +15,13 @@ namespace SmartdustApi.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IContactService _contactService;
         private readonly IOrganizationService _organizationService;
-
-        public HomeController(ILogger<HomeController> logger, IContactService contactService, IOrganizationService organizationService)
+        private readonly IMapper _mapper;
+        public HomeController(IMapper mapper,ILogger<HomeController> logger, IContactService contactService, IOrganizationService organizationService)
         {
             _logger = logger;
             _contactService = contactService;
             _organizationService = organizationService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -28,7 +30,8 @@ namespace SmartdustApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                return Json(_contactService.Save(contact));
+                var contactInfo = _mapper.Map<ContactDTO,ContactModel>(contact);
+                return Json(_contactService.Save(contactInfo));
             }
 
             List<ValidationMessage> errors = new List<ValidationMessage>

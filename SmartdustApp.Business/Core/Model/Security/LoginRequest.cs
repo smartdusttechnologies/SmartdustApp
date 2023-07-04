@@ -1,7 +1,6 @@
-﻿using SmartdustApp.Business.Core.Models;
-using System;
+﻿using System;
 
-namespace SmartdustApp.Business.Model
+namespace SmartdustApp.Business.Core.Model
 {
     public class LoginRequest : Entity
     {

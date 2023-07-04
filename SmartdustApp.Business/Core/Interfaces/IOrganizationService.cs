@@ -1,11 +1,10 @@
 ﻿using SmartdustApp.Business.Common;
-using SmartdustApp.Business.Model;
-using SmartdustApp.Business.Models;
+using SmartdustApp.Business.Core.Model;
 
 namespace SmartdustApp.Business.Core.Interfaces
 {
     public interface IOrganizationService
     {
-        RequestResult<List<OrganizationModel>> Get();
+        RequestResult<List<Organization>> Get();
     }
 }
