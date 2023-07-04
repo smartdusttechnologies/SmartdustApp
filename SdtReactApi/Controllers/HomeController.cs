@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartdustApi.Common;
 using SmartdustApi.Model;
 using SmartdustApi.Models;
-using SmartdustApi.Services.Interfaces;
+using SmartdustApp.Business.Core.Interfaces;
 
 namespace SmartdustApi.Controllers
 {
