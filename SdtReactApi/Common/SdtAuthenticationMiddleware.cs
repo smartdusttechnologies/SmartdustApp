@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using SmartdustApi.Model;
-using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using SmartdustApp.Business.Core.Model;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SmartdustApi.Common
+namespace SmartdustApp.Common
 {
     public class SdtAuthenticationMiddleware
     {

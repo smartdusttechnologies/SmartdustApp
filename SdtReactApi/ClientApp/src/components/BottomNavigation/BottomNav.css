@@ -1,0 +1,9 @@
+.BottomNavigation-container{
+    display: none;
+}
+
+@media screen and (min-width:101px) and (max-width:600px){
+    .BottomNavigation-container{
+        display: flex;
+    }
+}

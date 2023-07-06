@@ -1,0 +1,25 @@
+.NotificationBell-button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.NotificationBell-button::after{
+    content: attr(current-count);
+    position: absolute;
+    background-color: rgb(249, 64, 64);
+    color: white;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: -11px;
+    border: 2px solid white;
+}
+.Notification-header{
+    width: 380px;
+}
+
+@media screen and (min-width:101px) and (max-width:600px){
+    .Notification-header{
+        width: 300px;
+    }
+}

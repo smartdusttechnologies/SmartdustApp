@@ -1,0 +1,34 @@
+.About-page{
+    height: auto;
+}
+.About{
+    height: 50vh;
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+.About-container{
+    width: 55%;
+    margin: auto;
+}
+#About-Q{
+    font-size: 40px;
+    font-weight: 600;
+    
+}
+#About-text{
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.Auto-slider{
+    width: 60%;
+    margin: auto;
+    background-color: black;
+}
+@media screen and (min-width:101px) and (max-width:600px){
+    .About-page{
+        height: 100vh;
+    }
+}

@@ -1,0 +1,99 @@
+.Contact-details{
+    width: 100%;
+    height: 35rem;
+    background-color: black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+}
+.smartdust-details{
+    color: white;
+    text-align: center;
+}
+#title{
+    font-size: 40px;
+    font-weight: 500;
+}
+/* .user-details-form{
+    
+} */
+.user-details-form input{
+    border: none;
+    background-color: transparent;
+    border: 2px transparent;
+    border-bottom: solid white 1px;
+    color: white;
+    height: 31px;
+    margin: 10px 0px;
+}
+.user-details-form input:hover{
+    border: solid white 1px;
+    transition: 0.3s ease-in-out;
+}
+.user-details-form input::placeholder{
+    color: white;
+    font-size: 15px;
+}
+.user-details-form label{
+    font-size: 17px;
+}
+.flex-input-div{
+    display: flex;
+    gap: 20px;
+}
+.flex-input-div input{
+    width: 200px;
+}
+.long-input input{
+    width: 425px;
+    height: 70px;
+}
+.submit-user-details{
+    width: 425px;
+    text-align: center;
+}
+.submit-user-details input{
+    width: 425px;
+    height: 36px;
+    background-color: #fff;
+    color: black;
+    border-radius: 25px;
+    font-weight: 500;
+}
+
+@media screen and (min-width:101px) and (max-width:600px){
+    .Contact-details{
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100vh;
+        padding-bottom: 36px;
+    }
+    .flex-input-div{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .flex-input-div input{
+        width: 300px;
+    }
+    .long-input input{
+        width: 300px;
+        height: 31px;
+    }
+    #title{
+        font-size: 30px;
+        font-weight: 400;
+    }
+    .user-details-form input{
+        height: 31px;
+        margin: 10px 0px;
+    }
+    .submit-user-details{
+        width: 300px;
+    }
+    .submit-user-details input{
+        width: 300px;
+        height: 36px;
+    }
+}

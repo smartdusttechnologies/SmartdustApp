@@ -1,0 +1,38 @@
+.Footer-body{
+    height: 50vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+.Footer{
+    text-align: center;
+    align-items: center;
+    display: grid;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+.Social-media{
+    color: white;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+.Social-media a{
+    color: white;
+    font-size: 20px;
+}
+.Footer-text{
+    color: white;
+}
+.Footer-text p{
+    font-size: 16px;
+}
+
+@media screen and (min-width:101px) and (max-width:600px){
+    .Footer-body{
+        width: 390px;
+        height: 25vh;
+    }
+
+}

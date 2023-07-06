@@ -1,0 +1,46 @@
+.Navbar-body{
+    display: flex;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.Navbar{
+    width: 92%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    
+}
+.left{
+    width: 220px;
+    padding: 8px;
+}
+.left img{
+    width:100%;
+}
+.right{
+    width: 360px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.right a{
+    text-decoration: none;
+    color: black;
+    /* font-size: 17px; */
+    font-weight: 600;
+}
+.right a:hover{
+    color: rgb(244, 96, 121);
+    transition: 0.4s ease-in-out;
+}
+
+@media screen and (min-width:101px) and (max-width:600px){
+    .none{
+        display: none;
+    }
+    .left{
+        width: 150px;
+        margin: auto;
+        margin-right: 15%;
+        padding: 6px;
+    }
+}

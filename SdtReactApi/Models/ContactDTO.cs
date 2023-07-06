@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartdustApi.Model
+namespace SmartdustApp.Web.Models
 {
     public class ContactDTO
     {

@@ -1,22 +1,20 @@
-import React, { Component } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import AppRoutes from './AppRoutes';
-import { Layout } from './components/Layout';
-import './custom.css';
+import './App.css';
+import Navbar from './components/Navbar/Navbar';
+import AllRoutes from './components/Routes/AllRoutes';
+import Footer from './components/Footer/Footer';
+import BottomNav from './components/BottomNavigation/BottomNav';
+import LocationMap from './components/Localtionmap/Locationmap';
 
-export default class App extends Component {
-  static displayName = App.name;
-
-  render() {
+function App() {
     return (
-      <Layout>
-        <Routes>
-          {AppRoutes.map((route, index) => {
-            const { element, ...rest } = route;
-            return <Route key={index} {...rest} element={element} />;
-          })}
-        </Routes>
-      </Layout>
+        <div>
+            <Navbar />
+            <AllRoutes />
+            <LocationMap />
+            <Footer />
+            <BottomNav />
+        </div>
     );
-  }
 }
+
+export default App;
