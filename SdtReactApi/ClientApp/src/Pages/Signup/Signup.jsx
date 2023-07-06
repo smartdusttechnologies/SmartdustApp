@@ -104,7 +104,7 @@ const Signup = () => {
     //    this.setState({ forecasts: data, loading: false });
     //}
   const handleGetOrganizations = ()=>{
-    axios.get('https://localhost:7042/Api/Home/GetOrganizations')
+    axios.get('/Api/Home/GetOrganizations')
     .then(response=>{
       console.log(response?.data?.requestedObject)
       setOrganizations(response?.data?.requestedObject)
