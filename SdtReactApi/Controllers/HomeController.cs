@@ -9,7 +9,7 @@ using SmartdustApp.Web.Models;
 namespace SmartdustApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("Api/[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

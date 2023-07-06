@@ -1,0 +1,106 @@
+.signup-page{
+    display: flex;
+    justify-content: center;
+    height: 50rem;;
+    background-image: url(../../assets/images/LoginPagebackgroundImage.jpg);
+}
+.signup-container{
+    text-align: center;
+    width: 350px;
+    border: 1px solid rgb(196, 194, 194);
+    padding: 0px 20px;
+    height: 47rem;
+    margin-top: 20px;
+    background-color: #fff;
+}
+.text-signup{
+    font-size: 23px;
+    font-weight: 500;
+    color: rgb(16, 128, 175);
+}
+.signup-container form{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.signup-container form input{
+    border-radius: 5px;
+}
+.signup-container form select{
+    border-radius: 5px;
+    border: 1px solid rgb(177, 175, 175);
+}
+.submit-btn{
+    background-color: rgb(61, 147, 85);
+    color: white;
+    width: 350px;
+    height: 2rem;
+    margin: auto;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 5px;
+}
+.submit-btn:hover{
+    background-color: rgb(55, 169, 87);
+    transition: 0.3s ease-in-out;
+}
+.login{
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+}
+.Or-div{
+    display: flex;
+    justify-content: space-around;
+    margin: 5px 0px;
+    align-items: center;
+}
+.Or-div div hr{
+    width: 100px;
+}
+.social-media-login{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+}
+.social-media-login p{
+    text-align: center;
+    margin: 2px;
+}
+.social-media-login a{
+    text-decoration: none;
+    align-items: center;
+    width: 150px;
+    height: 2rem;
+    margin: auto;
+    border-radius: 5px;
+    color: white;
+}
+.blue-login{
+    background-color: #25a0d0;
+}
+.red-login{
+    background-color: #de312e;
+}
+@media screen and (min-width:101px) and (max-width:600px){
+    .signup-container{
+        width: 240px;
+        height: 46rem;;
+    }
+    .submit-btn{
+        width: 240px;
+    }
+    .social-media-login{
+        gap: 15px;
+    }
+    .social-media-login p{
+        text-align: center;
+        margin: 2px;
+    }
+    .social-media-login a{
+        width: 100px;
+        height: 2rem;
+        margin: auto;
+    }
+}
