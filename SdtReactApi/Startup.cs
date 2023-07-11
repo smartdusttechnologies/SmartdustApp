@@ -96,9 +96,8 @@ namespace SmartdustApp
             app.UseCors();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseHttpsRedirection();
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -108,7 +107,6 @@ namespace SmartdustApp
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");

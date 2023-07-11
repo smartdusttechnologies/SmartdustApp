@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider'
 
-const signupapi = 'https://localhost:7042/Security/SignUp';
+const signupapi = 'api/security/SignUp';
 
 const Signup = () => {
   const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
@@ -96,15 +96,8 @@ const Signup = () => {
           }
         })
   }
-    //async populateWeatherData() {
-    //    const response = await fetch('https://localhost:7042/api/home/GetOrganizations');
-    //    const data = await response.json();
-    //    console.log(data);
-    //    debugger;
-    //    this.setState({ forecasts: data, loading: false });
-    //}
   const handleGetOrganizations = ()=>{
-    axios.get('/Api/Home/GetOrganizations')
+    axios.get('api/home/GetOrganizations')
     .then(response=>{
       console.log(response?.data?.requestedObject)
       setOrganizations(response?.data?.requestedObject)
