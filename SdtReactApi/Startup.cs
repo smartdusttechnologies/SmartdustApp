@@ -96,7 +96,7 @@ namespace SmartdustApp
             app.UseCors();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

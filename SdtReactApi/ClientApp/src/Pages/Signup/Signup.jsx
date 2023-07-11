@@ -96,15 +96,8 @@ const Signup = () => {
           }
         })
   }
-    //async populateWeatherData() {
-    //    const response = await fetch('https://localhost:7042/api/home/GetOrganizations');
-    //    const data = await response.json();
-    //    console.log(data);
-    //    debugger;
-    //    this.setState({ forecasts: data, loading: false });
-    //}
   const handleGetOrganizations = ()=>{
-    axios.get('/Api/Home/GetOrganizations')
+    axios.get('api/home/GetOrganizations')
     .then(response=>{
       console.log(response?.data?.requestedObject)
       setOrganizations(response?.data?.requestedObject)
