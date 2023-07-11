@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider'
 
-const signupapi = 'https://localhost:7042/Security/SignUp';
+const signupapi = 'api/security/SignUp';
 
 const Signup = () => {
   const {auth , setAuth , notification , setNotification} = useContext(AuthContext)

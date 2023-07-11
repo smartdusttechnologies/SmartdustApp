@@ -9,7 +9,7 @@ using SmartdustApp.Business.Core.Interfaces;
 namespace SmartdustApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SecurityController : Controller
     {
         private readonly IAuthenticationService _authenticationService;

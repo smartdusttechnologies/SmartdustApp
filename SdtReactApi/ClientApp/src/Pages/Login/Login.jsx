@@ -7,7 +7,7 @@ import { TextField } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const loginurl = 'https://localhost:7023/Security/Login';
+const loginurl = 'api/security/login';
 
 const Login = () => {
   const navigate = useNavigate()

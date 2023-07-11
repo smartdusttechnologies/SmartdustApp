@@ -7,7 +7,7 @@ import AuthContext from '../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 // API Link 
-const APIurl = 'https://localhost:7023/Home/Contactus';
+const APIurl = 'api/home/Contactus';
 
 const initialState = {
   name: "",
