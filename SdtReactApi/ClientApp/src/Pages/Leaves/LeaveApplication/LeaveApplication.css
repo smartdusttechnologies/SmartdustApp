@@ -1,0 +1,33 @@
+.leave-application-page{
+    height: 50rem;
+    /* background-color: #0f2741; */
+}
+.leave-application-header{
+    height: 5rem;
+    font-family: sans-serif;
+    text-align: center;
+    /* color: white; */
+    padding-top: 11px;
+}
+.leave-application{
+    width: 600px;
+    margin: auto;
+    height: 21rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 30px;
+    padding-top: 30px;
+    border-radius: 20px;
+    margin-top: 30px;
+}
+.date-pickers{
+    display: flex;
+    gap: 20px;
+}
+
+@media screen and (min-width:101px) and (max-width:600px){
+
+}

@@ -8,6 +8,10 @@ import Signup from '../../Pages/Signup/Signup'
 import ChangePassword from '../../Pages/ChangePassword/ChangePassword'
 import ForgotPassword from '../../Pages/Login/ForgotPassword/ForgotPassword'
 import PrivateRoute from './PrivateRoute'
+import LeaveDashboard from '../../Pages/Leaves/LeaveDashboard/LeaveDashboard'
+import LeaveApplication from '../../Pages/Leaves/LeaveApplication/LeaveApplication'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const AllRoutes = () => {
   return (
@@ -26,6 +30,24 @@ const AllRoutes = () => {
         }
       ></Route>
       <Route path='/forgotpassword' element={<ForgotPassword/>}></Route>
+      <Route
+        path='/leavedashboard'
+        element={
+          //<PrivateRoute>
+            <LeaveDashboard/>
+          //</PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path='/leaveapplication'
+        element={
+          //<PrivateRoute>
+          //</PrivateRoute>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LeaveApplication/>
+          </LocalizationProvider>
+        }
+      ></Route>
     </Routes>
   )
 }

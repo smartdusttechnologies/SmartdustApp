@@ -1,0 +1,22 @@
+.leave-dashboard{
+    height: 50rem;
+}
+.leaveboard-head{
+    /* background-color: rgb(123, 174, 246); */
+    height: 4.5rem;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.leaveboard-options{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.leaveboard-head h1{
+    font-family: sans-serif;
+}

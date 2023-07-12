@@ -10,7 +10,6 @@ function App() {
         <div>
             <Navbar />
             <AllRoutes />
-            <LocationMap />
             <Footer />
             <BottomNav />
         </div>

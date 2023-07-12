@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider'
 
-const signupapi = 'https://localhost:7042/Security/SignUp';
+const signupapi = 'https://localhost:7023/Security/SignUp';
 
 const Signup = () => {
   const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
@@ -96,13 +96,7 @@ const Signup = () => {
           }
         })
   }
-    //async populateWeatherData() {
-    //    const response = await fetch('https://localhost:7042/api/home/GetOrganizations');
-    //    const data = await response.json();
-    //    console.log(data);
-    //    debugger;
-    //    this.setState({ forecasts: data, loading: false });
-    //}
+
   const handleGetOrganizations = ()=>{
       axios.get('https://localhost:7042/home/GetOrganizations')
     .then(response=>{
@@ -137,15 +131,13 @@ const Signup = () => {
           <TextField size='small' onChange={(e)=>handleChange(e)} name='firstname' label='Enter FirstName' type="text" required/>
           <TextField size='small' onChange={(e)=>handleChange(e)} name='lastname' label='Enter LastName' type="text" required/>
           <TextField size='small' onChange={(e)=>handleChange(e)} name='username' label='Enter UserName' type="text" required/>
-          <TextField size='small' onChange={(e)=>handleChange(e)} name='mail' label='Enter Email' type="text" required/>
+          <TextField size='small' onChange={(e)=>handleChange(e)} name='mail' label='Enter Email' type="email" required/>
           <TextField size='small' onChange={(e)=>handleChange(e)} name='phone' label='Enter MobileNumber' type="number" required/>
 
           <FormControl>
           <InputLabel id="demo-select-small-label">Country</InputLabel>
             <Select onChange={(e)=>handleChange(e)} size='small' label='Country' name="country">
               <MenuItem value="india">India</MenuItem>
-              <MenuItem value="Australia">Australia</MenuItem>
-              <MenuItem value="England">England</MenuItem>
             </Select>
           </FormControl>
 
