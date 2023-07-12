@@ -21,7 +21,7 @@
 .user-details-form input{
     border: none;
     background-color: transparent;
-    border: 2px transparent;
+    border: solid transparent 1px;
     border-bottom: solid white 1px;
     color: white;
     height: 31px;
