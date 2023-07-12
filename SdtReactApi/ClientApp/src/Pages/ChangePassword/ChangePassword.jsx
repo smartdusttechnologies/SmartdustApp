@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
-const api = 'https://localhost:7023/Security/ChangePassword';
+const api = 'api/security/ChangePassword';
 
 const ChangePassword = () => {
   const navigate = useNavigate()

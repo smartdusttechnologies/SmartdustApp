@@ -9,7 +9,7 @@ import LocationMap from '../../components/Localtionmap/Locationmap';
 import Button from '@mui/joy/Button';
 
 // API Link 
-const APIurl = 'https://localhost:7023/Home/Contactus';
+const APIurl = 'api/home/Contactus';
 
 const initialState = {
   name: "",
