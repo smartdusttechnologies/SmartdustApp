@@ -9,6 +9,9 @@ using SmartdustApp.Business.Infrastructure;
 using SmartdustApp.Business.Repository;
 using SmartdustApp.Business.Services;
 using SmartdustApp.Business.Core.Interfaces;
+using SmartdustApp.Business.Data.Repository;
+using TestingAndCalibrationLabs.Business.Core.Interfaces;
+using TestingAndCalibrationLabs.Business.Services;
 
 namespace SmartdustApp
 {
@@ -59,9 +62,11 @@ namespace SmartdustApp
             });
             //Repository DI
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<ILeaveRepository, LeaveRepository>();
             //Service DI
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IConnectionFactory, ConnectionFactory>();
+            services.AddScoped<ILeaveService, LeaveService>();
             //
 
             services.AddScoped<Business.Core.Interfaces.ILogger, Logger>();
@@ -80,6 +85,9 @@ namespace SmartdustApp
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<ISecurityParameterService, SecurityParameterService>();
+
+            //Email service
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

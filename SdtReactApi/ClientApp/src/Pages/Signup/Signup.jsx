@@ -95,22 +95,10 @@ const Signup = () => {
             setNotification([...notification, {message:error.response?.data.message[0].reason,success:isSuccessful}])
           }
         })
-  }
-    //async populateWeatherData() {
-    //    const response = await fetch('https://localhost:7042/api/home/GetOrganizations');
-    axios.get('api/home/GetOrganizations')
-    //    console.log(data);
-    //    debugger;
-    //    this.setState({ forecasts: data, loading: false });
-    //}
-    //    const response = await fetch('https://localhost:7042/api/home/GetOrganizations');
-    axios.get('/Api/Home/GetOrganizations')
-    //    console.log(data);
-    //    debugger;
-    //    this.setState({ forecasts: data, loading: false });
-    //}
+    }
+
   const handleGetOrganizations = ()=>{
-    axios.get('/Api/Home/GetOrganizations')
+      axios.get('api/home/GetOrganizations')
     .then(response=>{
       console.log(response?.data?.requestedObject)
       setOrganizations(response?.data?.requestedObject)
