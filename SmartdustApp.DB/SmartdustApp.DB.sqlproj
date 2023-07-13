@@ -75,6 +75,8 @@
     <Build Include="dbo\Tables\Leaves.sql" />
     <Build Include="dbo\Tables\Contact.sql" />
     <Build Include="dbo\Tables\ClaimType.sql" />
-    <Build Include="dbo\seedData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SeedData.sql" />
   </ItemGroup>
 </Project>

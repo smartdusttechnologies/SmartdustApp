@@ -6,7 +6,7 @@ import BottomNav from './components/BottomNavigation/BottomNav';
 
 function App() {
     return (
-        <div>
+        <div className='App'>
             <Navbar />
             <AllRoutes />
             <Footer />
