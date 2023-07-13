@@ -35,67 +35,80 @@ const Signup = () => {
     console.log(newuser)
   }
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-      axios.post( signupapi , {
-        id:0,
-        userName: newuser.username,
-        firstName: newuser.firstname,
-        lastName: newuser.lastname,
-        email:newuser.mail,
-        mobile:newuser.phone,
-        country:newuser.country,
-        isdCode:'',
-        mobileValidationStatus: 0,
-        orgId:newuser.org,
-        password:newuser.password,
-        newPassword:newuser.confirmpassword
-        })
-        .then(response=> {
-          console.log(response?.data)
-          console.log(response?.data.message[0].reason)
-          const isSuccessful = response?.data.isSuccessful
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if (validateForm()) {
+            axios.post(signupapi, {
+                id: 0,
+                userName: newuser.username,
+                firstName: newuser.firstname,
+                lastName: newuser.lastname,
+                email: newuser.mail,
+                mobile: newuser.phone,
+                country: newuser.country,
+                isdCode: '',
+                mobileValidationStatus: 0,
+                orgId: newuser.org,
+                password: newuser.password,
+                newPassword: newuser.confirmpassword
+            })
+                .then(response => {
+                    console.log(response?.data)
+                    console.log(response?.data.message[0].reason)
+                    const isSuccessful = response?.data.isSuccessful
 
-          // For Success
-          if(isSuccessful){
-            toast.success(response?.data.message[0].reason,{
-              position: "bottom-center",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
-            setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
+                    // For Success
+                    if (isSuccessful) {
+                        toast.success(response?.data.message[0].reason, {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                        });
+                        setNotification([...notification, { message: response?.data.message[0].reason, success: isSuccessful }])
 
-            setTimeout(() => {
-              navigate('/login')
-            }, 3000);
-          }
+                        setTimeout(() => {
+                            navigate('/login')
+                        }, 3000);
+                    }
 
-        })
-        .catch(error=>{
-          console.log(error)
-          const isSuccessful = error.response?.data.isSuccessful
+                })
+                .catch(error => {
+                    console.log(error)
+                    const isSuccessful = error.response?.data.isSuccessful
 
-          // For Error 
-          if(!isSuccessful){
-            toast.error(error.response?.data.message[0].reason,{
-              position: "bottom-center",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
-            setNotification([...notification, {message:error.response?.data.message[0].reason,success:isSuccessful}])
-          }
-        })
+                    // For Error 
+                    if (!isSuccessful) {
+                        toast.error(error.response?.data.message[0].reason, {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                        });
+                        setNotification([...notification, { message: error.response?.data.message[0].reason, success: isSuccessful }])
+                    }
+                })
+        }
     }
+
+    const validateForm = () => {
+        const errors = {};
+
+        if (!/^\d{10}$/.test(newuser.phone)) {
+            errors.phone = 'Phone number must be a 10-digit number';
+            toast.warn(errors.phone, { position: "bottom-center" });
+        }
+
+        return Object.keys(errors).length === 0;
+    };
 
   const handleGetOrganizations = ()=>{
       axios.get('api/home/GetOrganizations')
@@ -136,14 +149,14 @@ const Signup = () => {
 
           <FormControl>
           <InputLabel id="demo-select-small-label">Country</InputLabel>
-            <Select onChange={(e)=>handleChange(e)} size='small' label='Country' name="country">
+                      <Select onChange={(e) => handleChange(e)} size='small' label='Country' name="country" required>
               <MenuItem value="india">India</MenuItem>
             </Select>
           </FormControl>
 
           <FormControl>
           <InputLabel id="demo-select-small-label">SYSORG</InputLabel>
-            <Select onChange={(e)=>handleChange(e)} size='small' label='SYSORG' name='org'>
+                      <Select onChange={(e) => handleChange(e)} size='small' label='SYSORG' name='org' required>
               {
                 organizations.map((el)=>(
                   <MenuItem value={el.id}>{el.orgName}</MenuItem>
