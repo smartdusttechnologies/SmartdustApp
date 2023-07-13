@@ -42,16 +42,6 @@ namespace SmartdustApp
                 //options.AddPolicy(PolicyTypes.Users.Manage, policy => { policy.RequireClaim(CustomClaimTypes.Permission, Permissions.UsersPermissions.Delete); });
                 options.AddPolicy(PolicyTypes.Users.EditRole, policy => { policy.RequireClaim(CustomClaimType.ApplicationPermission.ToString(), Permissions.UsersPermissions.EditRole); });
             });
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.WithOrigins("https://localhost:44481/", "http://localhost:44481").AllowAnyOrigin()
-                                            .AllowAnyHeader()
-                                            .AllowAnyMethod();
-                    });
-            });
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -93,7 +83,7 @@ namespace SmartdustApp
             {
                 app.UseExceptionHandler("/Error");
             }
-            app.UseCors();
+            //app.UseCors();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseHttpsRedirection();
@@ -103,15 +93,18 @@ namespace SmartdustApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapFallbackToFile("index.html");
             });
             app.UseSpa(spa =>
             {
+                
                 spa.Options.SourcePath = "ClientApp";
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+            
         }
     }
 }
