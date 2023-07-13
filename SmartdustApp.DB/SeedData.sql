@@ -5,7 +5,7 @@ BEGIN
     INSERT INTO [dbo].[Organization]
                ([Id], [OrgCode], [OrgName], [IsDeleted])
          VALUES
-               (0, N'SYSORG', N'SYSORG', 0),
+               (0, N'SYSORG', N'SYSORG', 0)
     SET IDENTITY_INSERT [dbo].[Organization]  OFF
 END
 GO
