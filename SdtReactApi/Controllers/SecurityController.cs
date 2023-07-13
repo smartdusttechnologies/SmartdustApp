@@ -35,7 +35,7 @@ namespace SmartdustApp.Controllers
                 result.Message = success;
                 return Json(result);
             }
-            return Json(result);
+            return BadRequest(result);
         }
         /// <summary>
         /// Method to get the Login details from UI and Process Login.
@@ -56,7 +56,7 @@ namespace SmartdustApp.Controllers
                 result.Message = success;
                 return Json(result);
             }
-            return Json(result);
+            return BadRequest(result);
         }
         [HttpPost]
         [Route("ChangePassword")]
@@ -82,7 +82,7 @@ namespace SmartdustApp.Controllers
                     result.Message = success;
                     return Ok(result);
                 }
-                return Json(result);
+                return BadRequest(result);
             }
             else
             {
