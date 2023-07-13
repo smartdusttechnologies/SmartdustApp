@@ -23,7 +23,7 @@ namespace SmartdustApp.Business.Core.Model
         /// It is used for the Logo Image
         /// </summary>
         public string LogoImage { get; set; }
-             
+        
         /// <summary>
         /// This is used for the Organisation email address.
         /// </summary>

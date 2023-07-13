@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import LocationMap from '../../components/Localtionmap/Locationmap';
+import Button from '@mui/joy/Button';
 
 // API Link 
 const APIurl = 'api/home/Contactus';
@@ -12,7 +14,7 @@ const APIurl = 'api/home/Contactus';
 const initialState = {
   name: "",
   mail:"",
-  phone:0,
+  phone:'',
   address:"",
   subject:"",
   message:""
@@ -24,6 +26,7 @@ const Contact = () => {
 
   // User Details 
   const [userdata , setUserdata] = useState(initialState)
+  const [loading , setLoading] = useState(false)
 
   const handleChange = (e)=>{
     const newdata = {...userdata }
@@ -35,94 +38,97 @@ const Contact = () => {
   const handleSubmit = (e)=>{
     e.preventDefault()
     console.log(userdata)
-    axios.post( APIurl , {
-    name: userdata.name,
-    mail:userdata.mail,
-    phone:userdata.phone,
-    subject:userdata.subject,
-    address:userdata.address,
-    message:userdata.message
-    })
-    .then(response=>{
-      console.log(response?.data)
-      console.log(response?.data.message[0].reason)
-      const isSuccessful = response?.data.requestedObject
+    
+    if(validateForm()){
+      setLoading(true)
+      axios.post( APIurl , {
+      name: userdata.name,
+      mail:userdata.mail,
+      phone:userdata.phone,
+      subject:userdata.subject,
+      address:userdata.address,
+      message:userdata.message
+      })
+      .then(response=>{
+        console.log(response?.data)
+        console.log(response?.data.message[0].reason)
+        const isSuccessful = response?.data.requestedObject
 
-      // For Success
-      if(isSuccessful){
-        toast.success(response?.data.message[0].reason,{
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
-        setUserdata(initialState)
-        // setTimeout(() => {
-        //   navigate('/')
-        // }, 4000);
-      }
+        // For Success
+        if(isSuccessful){
+          toast.success(response?.data.message[0].reason,{
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
+          setUserdata(initialState)
+          setLoading(false)
+        }
+      })
+      .catch(error=>{
+        setLoading(false)
 
-      // For Error 
-      // if(!isSuccessful){
-      //   toast.error('All Fields Are Required',{
-      //     position: "bottom-center",
-      //     autoClose: 5000,
-      //     hideProgressBar: true,
-      //     closeOnClick: true,
-      //     pauseOnHover: false,
-      //     draggable: true,
-      //     progress: undefined,
-      //     theme: "dark",
-      //   });
-      //   setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
-      // }
-    })
-    .catch(error=>{
-      console.log(error?.response.data)
-      const isSuccessful = error?.response.data.requestedObject
+        // For Error 
+        if(!error?.response.data.requestedObject){
+          toast.error(error.response?.data.message[0].reason,{
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setNotification([...notification, {message : error.response?.data.message[0].reason , success : error?.response.data.requestedObject}])
+        }
 
-      // For Error 
-      if(!isSuccessful){
-        toast.error(error.response?.data.message[0].reason,{
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        setNotification([...notification, {message:error.response?.data.message[0].reason,success:isSuccessful}])
-      }
-
-      // console.log(error?.response.data?.errors)
-      // const errormessages = error?.response.data?.errors
-      // if(errormessages){
-      //   for(let key in errormessages){
-      //     console.log(errormessages[key][0])
-      //     let msg = errormessages[key][0]
-      //     toast.error(msg,{
-      //       position: "bottom-center",
-      //       autoClose: 5000,
-      //       hideProgressBar: true,
-      //       closeOnClick: true,
-      //       pauseOnHover: false,
-      //       draggable: true,
-      //       progress: undefined,
-      //       theme: "dark",
-      //     });
-      //     setNotification([...notification, {message:msg,success:false}])
-      //     break;
-      //   }
-      // }
-    })
+        // console.log(error?.response.data?.errors)
+        // const errormessages = error?.response.data?.errors
+        // if(errormessages){
+        //   for(let key in errormessages){
+        //     console.log(errormessages[key][0])
+        //     let msg = errormessages[key][0]
+        //     toast.error(msg,{
+        //       position: "bottom-center",
+        //       autoClose: 5000,
+        //       hideProgressBar: true,
+        //       closeOnClick: true,
+        //       pauseOnHover: false,
+        //       draggable: true,
+        //       progress: undefined,
+        //       theme: "dark",
+        //     });
+        //     setNotification([...notification, {message:msg,success:false}])
+        //     break;
+        //   }
+        // }
+      })
+    }
+    
   }
+
+  const validateForm = () => {
+		const errors = {};
+
+		if (!/^[a-zA-Z\s]+$/.test(userdata.name)) {
+		  errors.name = 'Name can only contain letters and spaces';
+      toast.warn(errors.name,{position: "bottom-center",theme: "dark"});
+		}
+
+		if (!/^\d{10}$/.test(userdata.phone)) {
+		  errors.phone = 'Phone number must be a 10-digit number';
+      toast.warn(errors.phone,{position: "bottom-center",theme: "dark"});
+		}
+
+		return Object.keys(errors).length === 0;
+	};
 
 
   return (
@@ -137,7 +143,7 @@ const Contact = () => {
 
         {/* User Detail Form */}
         <div className='user-details'>
-          <form onSubmit={(e)=>handleSubmit(e)} className='user-details-form' > 
+          <form onSubmit={(e)=>handleSubmit(e)} className='user-details-form' >
           <div className='flex-input-div'>
             <div>
               <label htmlFor="">Name</label> <br />
@@ -167,11 +173,19 @@ const Contact = () => {
             <input onChange={(e)=>handleChange(e)} id='message' value={userdata.message} type="text" placeholder='Type your message here' required />
           </div>
           <div  className='submit-user-details'>
-            <input type="submit" />
+            {/* <input type="submit" /> */}
+            {
+              loading ? <Button loading></Button> : <Button type='submit'>Submit</Button>
+            }
+            
           </div>
           </form>
         </div>
       </div>
+      
+      {/* Location Map  */}
+      <LocationMap/>
+
       <ToastContainer/>
     </div>
   )

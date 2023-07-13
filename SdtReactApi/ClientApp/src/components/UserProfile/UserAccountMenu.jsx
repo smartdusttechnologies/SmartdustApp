@@ -84,6 +84,14 @@ export default function UserAccountMenu() {
           </MenuItem>
         }  
         {  
+        //  auth.isAuthenticated && 
+         (<Link to={'/leavedashboard'} style={{textDecoration:"none", color:"grey"}}>
+            <MenuItem >
+              Leave Dashboard
+            </MenuItem>
+          </Link>)
+        }
+        {  
          auth.isAuthenticated && (<Link to={'/changepassword'} style={{textDecoration:"none", color:"grey"}}>
             <MenuItem >
               Change Password

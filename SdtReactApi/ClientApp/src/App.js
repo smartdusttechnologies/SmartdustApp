@@ -3,14 +3,12 @@ import Navbar from './components/Navbar/Navbar';
 import AllRoutes from './components/Routes/AllRoutes';
 import Footer from './components/Footer/Footer';
 import BottomNav from './components/BottomNavigation/BottomNav';
-import LocationMap from './components/Localtionmap/Locationmap';
 
 function App() {
     return (
-        <div>
+        <div className='App'>
             <Navbar />
             <AllRoutes />
-            <LocationMap />
             <Footer />
             <BottomNav />
         </div>
