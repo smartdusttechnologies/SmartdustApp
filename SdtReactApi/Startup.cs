@@ -98,14 +98,13 @@ namespace SmartdustApp
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapFallbackToFile("index.html");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
-                endpoints.MapFallbackToFile("index.html");
             });
             app.UseSpa(spa =>
             {
-                
                 spa.Options.SourcePath = "ClientApp";
                 if (env.IsDevelopment())
                 {
