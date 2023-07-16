@@ -1,12 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './LeaveDashboard.css'
-import LeavesDataTable from './LeavesTable'
 import LeaveBalanceMenu from './LeaveBalance'
-import { Button } from '@mui/material'
+import { Button,Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import LeavesDataTable from './LeavesTable'
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const LeaveDashboard = () => {
-  const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [rows, setRows] = useState([]);
+    const [isLoading, setLoading] = useState(false)
+    const handleGetLeaves = () => {
+        setLoading(true)
+        axios.get('api/leave/GetLeave')
+            .then(response => {
+                console.log(response.data.requestedObject)
+                setRows(response?.data?.requestedObject)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
+    }
+
+    useEffect(() => {
+        handleGetLeaves()
+    }, [])
 
   return (
     <div className='leave-dashboard'>
@@ -23,9 +45,12 @@ const LeaveDashboard = () => {
              </Button>
             </div>
           </div>
-        </div>
-        <div><LeavesDataTable /></div>
-        
+          </div>
+          <div>
+              {
+                  isLoading ? <Box sx={{ display: 'flex', justifyContent: 'center'}}><CircularProgress /></Box> : <LeavesDataTable rows={rows} />
+              }
+          </div>
     </div>
   )
 }
