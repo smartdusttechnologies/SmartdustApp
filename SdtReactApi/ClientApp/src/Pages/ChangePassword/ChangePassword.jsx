@@ -11,7 +11,7 @@ const api = 'api/security/ChangePassword';
 
 const ChangePassword = () => {
   const navigate = useNavigate()
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+  const {auth ,setAuth ,notification ,setNotification} = useContext(AuthContext)
 
 
   const [oldPassword , setOldpassword] = useState('');
