@@ -23,34 +23,6 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
 
-function createData(id, leavetype, leavefrom, leavetill, reason, status) {
-    return {
-        id,
-        leavetype,
-        leavefrom,
-        leavetill,
-        reason,
-        status
-    };
-}
-
-//const rows = [
-//    createData(1, 'Medical Leave', '30/02/2023', '03/03/2023', 'Fever', 'Pending'),
-//    createData(2, 'Paid Leave', '30/02/2023', '03/03/2023', 'Personal Work', 'Approved'),
-//    createData(3, 'Unpaid Leave', '30/02/2023', '03/03/2023', 'Vcation', 'Pending'),
-//    createData(4, 'Medical Leave', '30/02/2023', '03/03/2023', 'abc', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//    createData(5, 'Paid Leave', '30/02/2023', '03/03/2023', 'xyz', 'Pending'),
-//];
-
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -233,6 +205,18 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+const NoDataTableRows = (rows) => {
+    if (rows.length === 0) {
+        return (
+            <TableRow>
+                <TableCell colSpan={6} align="center">
+                    No data available
+                </TableCell>
+            </TableRow>
+        );
+    }
+};
+
 export default function LeavesDataTable({ rows }) {
     console.log(rows , 'props')
     const [order, setOrder] = React.useState('asc');
@@ -241,19 +225,6 @@ export default function LeavesDataTable({ rows }) {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    //const [rows, setRows] = React.useState([]);
-
-    //React.useEffect(() => {
-    //    axios.get('api/leave/GetLeave')
-    //        .then(response => {
-    //            console.log(response.data.requestedObject)
-    //            setRows(response?.data?.requestedObject)
-    //        })
-    //        .catch(error => {
-    //            console.log(error)
-    //        })
-    //}, [])
-    //console.log(rows ,'rowwwwwwws')
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -336,7 +307,7 @@ export default function LeavesDataTable({ rows }) {
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {rows.length===0 ? 'No data Available' : visibleRows.map((row, index) => {
+                            {rows.length === 0 ? NoDataTableRows(rows) : visibleRows.map((row, index) => {
                                 const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 

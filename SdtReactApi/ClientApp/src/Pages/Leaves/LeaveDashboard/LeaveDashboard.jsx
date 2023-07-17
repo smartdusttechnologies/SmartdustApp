@@ -6,12 +6,13 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import LeavesDataTable from './LeavesTable'
 import CircularProgress from '@mui/material/CircularProgress';
-
+import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
 
 const LeaveDashboard = () => {
     const navigate = useNavigate();
     const [rows, setRows] = useState([]);
-    const [isLoading, setLoading] = useState(false)
+    const [isLoading, setLoading] = useState(false);
+
     const handleGetLeaves = () => {
         setLoading(true)
         axios.get('api/leave/GetLeave')
@@ -48,7 +49,7 @@ const LeaveDashboard = () => {
           </div>
           <div>
               {
-                  isLoading ? <Box sx={{ display: 'flex', justifyContent: 'center'}}><CircularProgress /></Box> : <LeavesDataTable rows={rows} />
+                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={rows} />
               }
           </div>
     </div>

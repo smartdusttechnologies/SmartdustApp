@@ -79,6 +79,26 @@ namespace SmartdustApp.Business.Services
             return new RequestResult<bool>(true);
         }
         /// <summary>
+        /// Method to validate the Phone Number.
+        /// </summary>
+        private RequestResult<bool> ValidatePhoneNumber(string phoneNumber)
+        {
+            List<ValidationMessage> validationMessages = new List<ValidationMessage>();
+
+            // Remove any non-digit characters from the phone number
+            string sanitizedPhoneNumber = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
+            if (sanitizedPhoneNumber.Length != 10)
+            {
+                validationMessages.Add(new ValidationMessage { Reason = "Phone number must be 10 digits long", Severity = ValidationSeverity.Error });
+                return new RequestResult<bool>(false, validationMessages);
+            }
+
+            // Perform any additional validation logic specific to phone numbers, if needed
+
+            return new RequestResult<bool>(true);
+        }
+        /// <summary>
         /// Method to validate the Change Password.
         /// </summary>
         public RequestResult<bool> ChangePaaswordPolicy(ChangePasswordModel password)

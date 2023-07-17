@@ -2,6 +2,7 @@
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Core.Model;
 using SmartdustApp.Business.Data.Repository.Interfaces;
+using SmartdustApp.Business.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,26 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<LeaveModel>>();
             }
             return new RequestResult<List<LeaveModel>>(leave);
+        }
+
+        public RequestResult<bool> Save(LeaveModel leave)
+        {
+            var result = _leaveRepository.Save(leave);
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Leave Applied Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
         }
     }
 }
