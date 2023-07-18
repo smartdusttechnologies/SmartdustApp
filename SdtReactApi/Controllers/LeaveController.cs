@@ -20,10 +20,10 @@ namespace SmartdustApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetLeave")]
-        public IActionResult GetLeave()
+        [Route("GetLeave/{userID}")]
+        public IActionResult GetLeave(int userID)
         {
-            var list = _leaveService.Get();
+            var list = _leaveService.Get(userID);
             if (list.IsSuccessful)
             {
                 return Ok(list);

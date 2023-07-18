@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SmartdustApp.Business.Core.Model.PolicyTypes;
 
 namespace SmartdustApp.Business.Data.Repository
 {
@@ -22,10 +23,13 @@ namespace SmartdustApp.Business.Data.Repository
             _connectionFactory = connectionFactory;
         }
 
-        public List<LeaveModel> Get()
+        public List<LeaveModel> Get(int userID)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
-            return db.Query<LeaveModel>("select * from [Leave] WHERE UserID = 4").ToList();
+            var query = "SELECT * FROM [Leave] WHERE UserID = @userID";
+            var parameters = new { userID };
+
+            return db.Query<LeaveModel>(query, parameters).ToList();
         }
 
         public RequestResult<bool> Save(LeaveModel leave)

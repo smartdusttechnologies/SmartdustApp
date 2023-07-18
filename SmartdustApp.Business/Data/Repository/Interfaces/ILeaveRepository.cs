@@ -5,7 +5,7 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
 {
     public interface ILeaveRepository
     {
-        List<LeaveModel> Get();
+        List<LeaveModel> Get(int userID);
         RequestResult<bool> Save(LeaveModel leave);
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './LeaveDashboard.css'
 import LeaveBalanceMenu from './LeaveBalance'
 import { Button,Box } from '@mui/material'
@@ -7,15 +7,18 @@ import axios from 'axios'
 import LeavesDataTable from './LeavesTable'
 import CircularProgress from '@mui/material/CircularProgress';
 import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
+import AuthContext from '../../../context/AuthProvider'
 
 const LeaveDashboard = () => {
     const navigate = useNavigate();
     const [rows, setRows] = useState([]);
     const [isLoading, setLoading] = useState(false);
+    const { auth } = useContext(AuthContext);
+
 
     const handleGetLeaves = () => {
         setLoading(true)
-        axios.get('api/leave/GetLeave')
+        axios.get(`api/leave/GetLeave/${auth.userId}`)
             .then(response => {
                 console.log(response.data.requestedObject)
                 setRows(response?.data?.requestedObject)

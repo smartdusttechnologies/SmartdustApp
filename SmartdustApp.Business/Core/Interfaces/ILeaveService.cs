@@ -10,7 +10,7 @@ namespace SmartdustApp.Business.Core.Interfaces
 {
     public interface ILeaveService
     {
-        RequestResult<List<LeaveModel>> Get();
+        RequestResult<List<LeaveModel>> Get(int userID);
         RequestResult<bool> Save(LeaveModel leave);
     }
 }

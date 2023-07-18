@@ -20,14 +20,19 @@ namespace SmartdustApp.Business.Services
             _leaveRepository = leaveRepository;
         }
 
-        public RequestResult<List<LeaveModel>> Get()
+        public RequestResult<List<LeaveModel>> Get(int userID)
         {
-            var leave = _leaveRepository.Get();
+            var leave = _leaveRepository.Get(userID);
             if (leave == null)
             {
                 return new RequestResult<List<LeaveModel>>();
             }
             return new RequestResult<List<LeaveModel>>(leave);
+        }
+
+        public RequestResult<List<LeaveModel>> Get()
+        {
+            throw new NotImplementedException();
         }
 
         public RequestResult<bool> Save(LeaveModel leave)

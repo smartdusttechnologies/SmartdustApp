@@ -5,6 +5,41 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 const LeaveApplication = () => {
+    const [leaveData, setLeaveData] = useState({
+        leaveFrom: null,
+        leaveTo: null,
+        leaveType: '',
+        reason: ''
+    });
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setLeaveData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleLeaveFromChange = (date) => {
+        setLeaveData((prevState) => ({
+            ...prevState,
+            leaveFrom: date
+        }));
+    };
+
+    const handleLeaveToChange = (date) => {
+        setLeaveData((prevState) => ({
+            ...prevState,
+            leaveTo: date
+        }));
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // Perform your submit logic here
+        console.log('Leave Data:', leaveData);
+    };
+
   return (
     <div className='leave-application-page'>
       <div className='leave-application-header'> 

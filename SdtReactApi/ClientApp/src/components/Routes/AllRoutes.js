@@ -33,9 +33,9 @@ const AllRoutes = () => {
       <Route
         path='/leavedashboard'
         element={
-          //<PrivateRoute>
+          <PrivateRoute>
             <LeaveDashboard/>
-          //</PrivateRoute>
+          </PrivateRoute>
         }
       ></Route>
       <Route
