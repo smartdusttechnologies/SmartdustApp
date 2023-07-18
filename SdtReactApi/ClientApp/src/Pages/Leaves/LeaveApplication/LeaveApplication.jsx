@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import './LeaveApplication.css'
-import { Button, Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import axios from 'axios'
+import {Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import Button from '@mui/joy/Button';
+import { ToastContainer, toast } from 'react-toastify';
+import AuthContext from '../../../context/AuthProvider';
 
 const LeaveApplication = () => {
+    const { auth } = useContext(AuthContext);
+
     const [leaveData, setLeaveData] = useState({
         leaveFrom: null,
-        leaveTo: null,
+        leaveTill: null,
         leaveType: '',
         reason: ''
     });
+    const [loading, setLoading] = useState(false)
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -20,67 +28,118 @@ const LeaveApplication = () => {
         }));
     };
 
-    const handleLeaveFromChange = (date) => {
+    const handleLeaveFromChange = (e) => {
         setLeaveData((prevState) => ({
             ...prevState,
-            leaveFrom: date
+            leaveFrom: new Date(e.$d)
         }));
     };
 
-    const handleLeaveToChange = (date) => {
+    const handleLeaveTillChange = (e) => {
         setLeaveData((prevState) => ({
             ...prevState,
-            leaveTo: date
+            leaveTill: new Date(e.$d)
         }));
+        console.log(calculateDateDifference(leaveData.leaveTill, leaveData.leaveFrom))
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Perform your submit logic here
+    function calculateDateDifference(leaveTill, leaveFrom) {
+        const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+        const tillDate = new Date(leaveTill);
+        const fromDate = new Date(leaveFrom);
+
+        // Calculate the difference in days
+        const diffDays = Math.round(Math.abs((tillDate - fromDate) / oneDay)) + 1;
+
+        return diffDays;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
         console.log('Leave Data:', leaveData);
+        axios.post('api/leave/ApplyLeave', {
+            id: 0,
+            userId: auth.userId,
+            userName: auth.userName,
+            leaveType: leaveData.leaveType,
+            leaveFrom: leaveData.leaveFrom,
+            leaveTill: leaveData.leaveTill,
+            reason: leaveData.reason,
+            appliedDate: new Date(),
+            leaveStatus: 'Pending',
+            leaveDays: calculateDateDifference(leaveData.leaveTill, leaveData.leaveFrom)
+        })
+            .then(response => {
+                console.log(response?.data.message[0].reason)
+                toast.success(response?.data.message[0].reason, {position: "bottom-center"});
+            })
+            .catch(error => {
+                console.log(error)
+                toast.error(error.response?.data.message[0].reason, { position: "bottom-center" });
+            })
     };
 
-  return (
-    <div className='leave-application-page'>
-      <div className='leave-application-header'> 
-        <h1>Leave Application</h1>
-        <Divider/>
-      </div>
-      <form className='leave-application'>
-        <div className='date-pickers'>
-            <DemoItem label="Leave From">
-                <DatePicker
-                    label={'Leave From'}
-                    format="DD/MM/YYYY"
-                    onChange={(e)=>console.log(`${e.$D}-${e.$M}-${e.$y}`)}
-                />
-            </DemoItem>
-            <DemoItem label="To">
-                <DatePicker
-                    label={'Leave To'}
-                    format="DD/MM/YYYY"
-                />
-            </DemoItem>
-        </div>
-        
-        <FormControl className='leave-type'>
-          <InputLabel id="demo-select-small-label">Leave Type</InputLabel>
-            <Select size='small' label='Leave Type' required>
-              <MenuItem value="medicalleave">Medical Leave</MenuItem>
-            </Select>
-        </FormControl>
-        
-        <TextField label='Reason/Comments' required type='text' sx={{height:'50px'}}/>
+    return (
+        <div className='leave-application-page'>
+            <div className='leave-application-header'>
+                <h1>Leave Application</h1>
+                <Divider />
+            </div>
+            <form className='leave-application' onSubmit={(e) => handleSubmit(e)}>
+                <div className='date-pickers'>
+                    <DemoItem label="Leave From">
+                        <DatePicker
+                            label={'Leave From'}
+                            format="YYYY/MM/DD"
+                            value={leaveData.leaveFrom}
+                            onChange={(e) => handleLeaveFromChange(e)}
+                        />
+                    </DemoItem>
+                    <DemoItem label="To">
+                        <DatePicker
+                            label={'Leave To'}
+                            format="YYYY/MM/DD"
+                            value={leaveData.leaveTill}
+                            onChange={(e) => handleLeaveTillChange(e)}
+                        />
+                    </DemoItem>
+                </div>
 
-        <Button
-          type='submit'
-          variant="outlined" 
-        >
-          Submit
-        </Button>
-      </form>
-    </div>
-  )
+                <FormControl className='leave-type'>
+                    <InputLabel id="demo-select-small-label">Leave Type</InputLabel>
+                    <Select
+                        size='small'
+                        label='Leave Type'
+                        name='leaveType'
+                        value={leaveData.leaveType}
+                        onChange={(e) => handleChange(e)}
+                        required
+                    >
+                        <MenuItem value="MedicalLeave">Medical Leave</MenuItem>
+                        <MenuItem value="PaidLeave">Paid Leave</MenuItem>
+                        <MenuItem value="UnpaidLeave">Unpaid Leave</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <TextField
+                    label='Reason/Comments'
+                    required
+                    type='text'
+                    sx={{ height: '50px' }}
+                    name='reason'
+                    value={leaveData.reason}
+                    onChange={(e) => handleChange(e)}
+                />
+
+                <Button
+                    type='submit'
+                >
+                    Submit
+                </Button>
+            </form>
+            <ToastContainer />
+        </div>
+    )
 }
 
 export default LeaveApplication

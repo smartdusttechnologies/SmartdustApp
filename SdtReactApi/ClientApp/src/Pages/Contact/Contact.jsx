@@ -119,12 +119,12 @@ const Contact = () => {
 
 		if (!/^[a-zA-Z\s]+$/.test(userdata.name)) {
 		  errors.name = 'Name can only contain letters and spaces';
-      toast.warn(errors.name,{position: "bottom-center",theme: "dark"});
+          toast.warn(errors.name,{position: "bottom-center",theme: "dark"});
 		}
 
 		if (!/^\d{10}$/.test(userdata.phone)) {
 		  errors.phone = 'Phone number must be a 10-digit number';
-      toast.warn(errors.phone,{position: "bottom-center",theme: "dark"});
+          toast.warn(errors.phone,{position: "bottom-center",theme: "dark"});
 		}
 
 		return Object.keys(errors).length === 0;
