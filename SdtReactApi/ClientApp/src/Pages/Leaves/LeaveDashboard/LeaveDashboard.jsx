@@ -41,8 +41,8 @@ const LeaveDashboard = () => {
             <h1>LeaveBoard</h1>
             <div> <LeaveBalanceMenu/> </div>
             <div>
-             <Button variant="outlined" 
-              sx={{color:'black' , border:'1px solid rgb(128, 127, 127)'}}
+             <Button 
+              variant="outlined"
               onClick={()=> navigate('/leaveapplication')}
              >
               Apply a Leave

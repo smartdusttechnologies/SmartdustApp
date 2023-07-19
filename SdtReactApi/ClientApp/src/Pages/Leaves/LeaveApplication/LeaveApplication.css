@@ -30,5 +30,12 @@
 }
 
 @media screen and (min-width:101px) and (max-width:600px){
-
+    .leave-application {
+        width: 280px;
+        height: 28rem;
+        padding: 18px;
+    }
+    .date-pickers{
+        flex-direction: column;
+    }
 }

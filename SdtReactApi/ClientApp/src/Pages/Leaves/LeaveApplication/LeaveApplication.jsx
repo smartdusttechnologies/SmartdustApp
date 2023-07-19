@@ -8,16 +8,18 @@ import Button from '@mui/joy/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import AuthContext from '../../../context/AuthProvider';
 
-const LeaveApplication = () => {
-    const { auth } = useContext(AuthContext);
+const initialState = {
+    leaveFrom: null,
+    leaveTill: null,
+    leaveType: '',
+    reason: ''
+}
 
-    const [leaveData, setLeaveData] = useState({
-        leaveFrom: null,
-        leaveTill: null,
-        leaveType: '',
-        reason: ''
-    });
-    const [loading, setLoading] = useState(false)
+const LeaveApplication = () => {
+    const { auth, setNotification, notification } = useContext(AuthContext);
+
+    const [leaveData, setLeaveData] = useState(initialState);
+    const [isLoading, setLoading] = useState(false);
 
 
     const handleChange = (event) => {
@@ -56,7 +58,7 @@ const LeaveApplication = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Leave Data:', leaveData);
+        setLoading(true)
         axios.post('api/leave/ApplyLeave', {
             id: 0,
             userId: auth.userId,
@@ -71,11 +73,16 @@ const LeaveApplication = () => {
         })
             .then(response => {
                 console.log(response?.data.message[0].reason)
-                toast.success(response?.data.message[0].reason, {position: "bottom-center"});
+                toast.success(response?.data.message[0].reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data.message[0].reason, success: true }])
+                setLoading(false)
+                setLeaveData(initialState)
             })
             .catch(error => {
+                setLoading(false)
                 console.log(error)
-                toast.error(error.response?.data.message[0].reason, { position: "bottom-center" });
+                toast.error(error?.response?.data.message[0].reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error.response?.data.message[0].reason, success: false }])
             })
     };
 
@@ -133,6 +140,7 @@ const LeaveApplication = () => {
 
                 <Button
                     type='submit'
+                    loading={isLoading}
                 >
                     Submit
                 </Button>

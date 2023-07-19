@@ -18,7 +18,6 @@ export default function LeaveBalanceMenu() {
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}
-       sx={{color:'black' , border:'1px solid rgb(128, 127, 127)'}}
       >
         Leave Balance
       </Button>

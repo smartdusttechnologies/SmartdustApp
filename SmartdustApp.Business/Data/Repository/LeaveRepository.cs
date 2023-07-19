@@ -34,8 +34,8 @@ namespace SmartdustApp.Business.Data.Repository
 
         public RequestResult<bool> Save(LeaveModel leave)
         {
-            string query = @"Insert into [Leave] (UserID,LeaveType, LeaveFrom, LeaveTill,Reason, AppliedDate, LeaveStatus,LeaveDays)
-                                                  values (@UserID,@LeaveType,@LeaveFrom,@LeaveTill,@Reason,@AppliedDate,@LeaveStatus,@LeaveDays)";
+            string query = @"Insert into [Leave] (UserID,UserName,LeaveType, LeaveFrom, LeaveTill,Reason, AppliedDate, LeaveStatus,LeaveDays)
+                                                  values (@UserID,@UserName,@LeaveType,@LeaveFrom,@LeaveTill,@Reason,@AppliedDate,@LeaveStatus,@LeaveDays)";
             using IDbConnection db = _connectionFactory.GetConnection;
 
             var result = db.Execute(query, leave);

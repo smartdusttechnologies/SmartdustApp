@@ -55,7 +55,7 @@ const Login = () => {
           
           setTimeout(() => {
             navigate('/')
-          }, 3000);
+          }, 2000);
         }
       })
       .catch(error=>{
