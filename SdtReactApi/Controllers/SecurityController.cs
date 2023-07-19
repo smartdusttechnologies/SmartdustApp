@@ -24,7 +24,7 @@ namespace SmartdustApp.Controllers
         public IActionResult SignUp(UserDTO user)
         {
             var userModel = _mapper.Map<UserDTO,UserModel>(user);
-           
+            userModel.IsActive = true;
             RequestResult<bool> result = _authenticationService.Add(userModel);
             if (result.IsSuccessful)
             {

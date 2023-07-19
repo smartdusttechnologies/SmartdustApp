@@ -2,6 +2,7 @@
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces.Security;
 using SmartdustApp.Business.Core.Model;
+using System.Text.RegularExpressions;
 
 namespace SmartdustApp.Business.Services
 {
@@ -81,7 +82,7 @@ namespace SmartdustApp.Business.Services
         /// <summary>
         /// Method to validate the Phone Number.
         /// </summary>
-        private RequestResult<bool> ValidatePhoneNumber(string phoneNumber)
+        public RequestResult<bool> ValidatePhoneNumber(string phoneNumber)
         {
             List<ValidationMessage> validationMessages = new List<ValidationMessage>();
 
@@ -95,6 +96,27 @@ namespace SmartdustApp.Business.Services
             }
 
             // Perform any additional validation logic specific to phone numbers, if needed
+
+            return new RequestResult<bool>(true);
+        }
+
+        /// <summary>
+        /// Method to validate the Mail.
+        /// </summary>
+        public RequestResult<bool> ValidateEmail(string email)
+        {
+            List<ValidationMessage> validationMessages = new List<ValidationMessage>();
+
+            // Use a regular expression to validate the email format
+            Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+            if (!emailRegex.IsMatch(email))
+            {
+                validationMessages.Add(new ValidationMessage { Reason = "Invalid email format", Severity = ValidationSeverity.Error });
+                return new RequestResult<bool>(false, validationMessages);
+            }
+
+            // Perform any additional validation logic specific to email addresses, if needed
 
             return new RequestResult<bool>(true);
         }

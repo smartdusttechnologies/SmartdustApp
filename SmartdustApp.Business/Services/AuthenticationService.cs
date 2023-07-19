@@ -219,6 +219,17 @@ namespace SmartdustApp.Business.Services
                 validationMessages.Add(error);
                 return new RequestResult<bool>(false, validationMessages);
             }
+            var validatePhoneResult = _securityParameterService.ValidatePhoneNumber(user.Mobile);
+            if (!validatePhoneResult.IsSuccessful)
+            {
+                return validatePhoneResult;
+            }
+            var validateEmailResult = _securityParameterService.ValidateEmail(user.Email);
+            if (!validateEmailResult.IsSuccessful)
+            {
+                return validateEmailResult;
+            }
+
             var validatePasswordResult = _securityParameterService.ValidatePasswordPolicy(user.OrgId, user.Password);
             return validatePasswordResult;
         }

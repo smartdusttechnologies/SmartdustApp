@@ -5,6 +5,7 @@ using SmartdustApp.Business.Core.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using TestingAndCalibrationLabs.Business.Core.Interfaces;
+using static SmartdustApp.Business.Core.Model.PolicyTypes;
 
 namespace SmartdustApp.Business.Services
 {
@@ -14,18 +15,32 @@ namespace SmartdustApp.Business.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly ISecurityParameterService _securityParameterService;
 
 
-        public ContactService(IContactRepository contactRepository, IEmailService emailservice, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+        public ContactService(IContactRepository contactRepository, IEmailService emailservice, IConfiguration configuration, IWebHostEnvironment hostingEnvironment, ISecurityParameterService securityParameterService)
         {
             _contactRepository = contactRepository;
             _emailService = emailservice;
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
+            _securityParameterService = securityParameterService;
         }
 
         public RequestResult<bool> Save(ContactModel contact)
         {
+
+            string phone = $"{contact.Phone}";
+            var validatePhoneResult = _securityParameterService.ValidatePhoneNumber(phone);
+            if (!validatePhoneResult.IsSuccessful)
+            {
+                return validatePhoneResult;
+            }
+            var validateEmailResult = _securityParameterService.ValidateEmail(contact.Mail);
+            if (!validateEmailResult.IsSuccessful)
+            {
+                return validateEmailResult;
+            }
 
             EmailModel model = new EmailModel();
 
@@ -33,7 +48,6 @@ namespace SmartdustApp.Business.Services
             model.EmailTemplate = _configuration["TestingAndCalibrationSurvey:UserTemplate"];
             model.Subject = _configuration["TestingAndCalibrationSurvey:Subject"];
 
-            string phone = $"{contact.Phone}";
             //Create User Mail
             model.HtmlMsg = CreateBody(model.EmailTemplate);
             model.HtmlMsg = model.HtmlMsg.Replace("*name*", contact.Name);
