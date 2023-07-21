@@ -1,19 +1,25 @@
 import React, { useContext, useState } from 'react'
 import './LeaveApplication.css'
 import axios from 'axios'
-import {Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/joy/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import AuthContext from '../../../context/AuthProvider';
+import dayjs from 'dayjs';
+import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
 
 const initialState = {
-    leaveFrom: null,
-    leaveTill: null,
+    leaveDates:[],
     leaveType: '',
     reason: ''
 }
+
+const isWeekend = (date) => {
+    const day = date.day();
+
+    return day === 0 || day === 6;
+};
 
 const LeaveApplication = () => {
     const { auth, setNotification, notification } = useContext(AuthContext);
@@ -30,31 +36,25 @@ const LeaveApplication = () => {
         }));
     };
 
-    const handleLeaveFromChange = (e) => {
+    const handleLeaveDates = (e) => {
         setLeaveData((prevState) => ({
             ...prevState,
-            leaveFrom: new Date(e.$d)
+            leaveDates: [...prevState.leaveDates, new Date(e.$d)]
         }));
+        console.log(leaveData.leaveDates)
+        console.log(leaveData)
     };
 
-    const handleLeaveTillChange = (e) => {
-        setLeaveData((prevState) => ({
-            ...prevState,
-            leaveTill: new Date(e.$d)
-        }));
-        console.log(calculateDateDifference(leaveData.leaveTill, leaveData.leaveFrom))
-    };
+    //function calculateDateDifference(leaveTill, leaveFrom) {
+    //    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+    //    const tillDate = new Date(leaveTill);
+    //    const fromDate = new Date(leaveFrom);
 
-    function calculateDateDifference(leaveTill, leaveFrom) {
-        const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
-        const tillDate = new Date(leaveTill);
-        const fromDate = new Date(leaveFrom);
+    //    // Calculate the difference in days
+    //    const diffDays = Math.round(Math.abs((tillDate - fromDate) / oneDay)) + 1;
 
-        // Calculate the difference in days
-        const diffDays = Math.round(Math.abs((tillDate - fromDate) / oneDay)) + 1;
-
-        return diffDays;
-    };
+    //    return diffDays;
+    //};
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,7 +69,8 @@ const LeaveApplication = () => {
             reason: leaveData.reason,
             appliedDate: new Date(),
             leaveStatus: 'Pending',
-            leaveDays: calculateDateDifference(leaveData.leaveTill, leaveData.leaveFrom)
+            leaveDates: leaveData.leaveDates,
+            leaveDays: leaveData.leaveDates.length
         })
             .then(response => {
                 console.log(response?.data.message[0].reason)
@@ -94,37 +95,45 @@ const LeaveApplication = () => {
             </div>
             <form className='leave-application' onSubmit={(e) => handleSubmit(e)}>
                 <div className='date-pickers'>
-                    <DemoItem label="Leave From">
-                        <DatePicker
-                            label={'Leave From'}
+                    <DemoItem label="Select Dates">
+                        <MobileDatePicker
+                            label={'Select Dates'}
                             format="YYYY/MM/DD"
-                            value={leaveData.leaveFrom}
-                            onChange={(e) => handleLeaveFromChange(e)}
-                        />
-                    </DemoItem>
-                    <DemoItem label="To">
-                        <DatePicker
-                            label={'Leave To'}
-                            format="YYYY/MM/DD"
+                            disablePast
+                            shouldDisableDate={isWeekend}
+                            closeOnSelect={false}
+                            //orientation="landscape"
                             value={leaveData.leaveTill}
-                            onChange={(e) => handleLeaveTillChange(e)}
+                            onChange={(e) => handleLeaveDates(e)}
                         />
                     </DemoItem>
                 </div>
-
+                {
+                    leaveData.leaveDates.length > 0 && (
+                        <div>
+                            <h4>Leave Dates:</h4>
+                            <ol>
+                                {
+                                    leaveData.leaveDates.map((leave, index) => (
+                                        <li key={index}>{leave.toDateString()}</li>
+                                    ))
+                                }
+                            </ol>
+                        </div>)
+                }
                 <FormControl className='leave-type'>
                     <InputLabel id="demo-select-small-label">Leave Type</InputLabel>
                     <Select
-                        size='small'
+                        // size='small'
                         label='Leave Type'
                         name='leaveType'
                         value={leaveData.leaveType}
                         onChange={(e) => handleChange(e)}
                         required
                     >
-                        <MenuItem value="MedicalLeave">Medical Leave</MenuItem>
-                        <MenuItem value="PaidLeave">Paid Leave</MenuItem>
-                        <MenuItem value="UnpaidLeave">Unpaid Leave</MenuItem>
+                        <MenuItem value="Medical">Medical Leave</MenuItem>
+                        <MenuItem value="Paid">Paid Leave</MenuItem>
+                        <MenuItem value="Unpaid">Unpaid Leave</MenuItem>
                     </Select>
                 </FormControl>
 

@@ -1,18 +1,19 @@
-.leave-application-page{
-    height: 50rem;
-    /* background-color: #0f2741; */
+.leave-application-page {
+    height: 100%;
+    padding-bottom: 30px;
 }
-.leave-application-header{
+
+.leave-application-header {
     height: 5rem;
     font-family: sans-serif;
     text-align: center;
-    /* color: white; */
     padding-top: 11px;
 }
-.leave-application{
+
+.leave-application {
     width: 600px;
     margin: auto;
-    height: 21rem;
+    height: 100%;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: #fff;
     display: flex;
@@ -23,19 +24,21 @@
     border-radius: 20px;
     margin-top: 30px;
 }
+
 .date-pickers {
-    display: flex;
-    justify-content: space-between;
+    /* display: flex;
+    justify-content: space-between; */
     gap: 20px;
 }
 
-@media screen and (min-width:101px) and (max-width:600px){
+@media screen and (min-width:101px) and (max-width:600px) {
     .leave-application {
         width: 280px;
-        height: 28rem;
+        height: 100%;
         padding: 18px;
     }
-    .date-pickers{
+
+    .date-pickers {
         flex-direction: column;
     }
 }

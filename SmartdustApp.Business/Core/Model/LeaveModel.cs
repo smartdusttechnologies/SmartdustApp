@@ -12,12 +12,12 @@ namespace SmartdustApp.Business.Core.Model
         public int UserID { get; set; }
         public string UserName { get; set; }
         public string LeaveType { get; set; }
-        public DateTime LeaveFrom { get; set; }
-        public DateTime LeaveTill { get; set; }
         public string Reason { get; set; }
         public DateTime AppliedDate { get; set; }
         public string LeaveStatus { get; set; }
 
         public int LeaveDays { get; set; }
+
+        public List<DateTime> LeaveDates { get; set; }
     }
 }

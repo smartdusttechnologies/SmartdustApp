@@ -36,7 +36,7 @@ namespace SmartdustApp.Business.Repository
             return db.Query<UserModel>("Select top 1 * From [User] where Id=@id and IsDeleted=0", new { id }).FirstOrDefault();
         }
         /// <summary>
-        /// Get Iser Based on Name
+        /// Get User Based on Name
         /// </summary>
         public UserModel Get(string userName)
         {

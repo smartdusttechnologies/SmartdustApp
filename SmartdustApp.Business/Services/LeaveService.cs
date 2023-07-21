@@ -37,11 +37,18 @@ namespace SmartdustApp.Business.Services
 
         public RequestResult<bool> Save(LeaveModel leave)
         {
-            var validationResult = ValidateLeaveDate(leave);
-            if (!validationResult.IsSuccessful)
+            //var validationResult = ValidateLeaveDate(leave);
+            //if (!validationResult.IsSuccessful)
+            //{
+            //    return validationResult;
+            //}
+
+            // Check if the leave type is Medical or Paid, and update the LeaveBalance accordingly
+            if (leave.LeaveType == "Medical" || leave.LeaveType == "Paid")
             {
-                return validationResult;
+                _leaveRepository.UpdateLeaveBalance(leave.UserID, leave.LeaveType, leave.LeaveDays);
             }
+
             var result = _leaveRepository.Save(leave);
             if (result.IsSuccessful)
             {
@@ -60,37 +67,37 @@ namespace SmartdustApp.Business.Services
             return result;
         }
 
-        private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)
-        {
-            var currentDate = DateTime.Today;
-            if (leave.LeaveFrom.Date < currentDate)
-            {
-                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-                {
-                    new ValidationMessage() { Reason = "Leave From Date cannot be before the current date.", Severity = ValidationSeverity.Error }
-                };
-                return new RequestResult<bool>(false, validationMessages);
-            }
+        //private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)
+        //{
+        //    var currentDate = DateTime.Today;
+        //    if (leave.LeaveFrom.Date < currentDate)
+        //    {
+        //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+        //        {
+        //            new ValidationMessage() { Reason = "Leave From Date cannot be before the current date.", Severity = ValidationSeverity.Error }
+        //        };
+        //        return new RequestResult<bool>(false, validationMessages);
+        //    }
 
-            if (leave.LeaveTill.Date < currentDate)
-            {
-                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-                {
-                    new ValidationMessage() { Reason = "Leave Till Date cannot be before the current date.", Severity = ValidationSeverity.Error }
-                };
-                return new RequestResult<bool>(false, validationMessages);
-            }
+        //    if (leave.LeaveTill.Date < currentDate)
+        //    {
+        //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+        //        {
+        //            new ValidationMessage() { Reason = "Leave Till Date cannot be before the current date.", Severity = ValidationSeverity.Error }
+        //        };
+        //        return new RequestResult<bool>(false, validationMessages);
+        //    }
 
-            if (leave.LeaveTill.Date < leave.LeaveFrom.Date)
-            {
-                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-                {
-                    new ValidationMessage() { Reason = "Leave Till Date cannot be before Leave From Date.", Severity = ValidationSeverity.Error }
-                };
-                return new RequestResult<bool>(false, validationMessages);
-            }
+        //    if (leave.LeaveTill.Date < leave.LeaveFrom.Date)
+        //    {
+        //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+        //        {
+        //            new ValidationMessage() { Reason = "Leave Till Date cannot be before Leave From Date.", Severity = ValidationSeverity.Error }
+        //        };
+        //        return new RequestResult<bool>(false, validationMessages);
+        //    }
 
-            return new RequestResult<bool>(true);
-        }
+        //    return new RequestResult<bool>(true);
+        //}
     }
 }

@@ -69,16 +69,10 @@ const headCells = [
         label: 'Leave Type',
     },
     {
-        id: 'leaveFrom',
+        id: 'leaveDates',
         numeric: false,
         disablePadding: false,
-        label: 'Leave From',
-    },
-    {
-        id: 'leaveTill',
-        numeric: true,
-        disablePadding: false,
-        label: 'Leave Till',
+        label: 'Leave Dates',
     },
     {
         id: 'reason',
@@ -341,8 +335,7 @@ export default function LeavesDataTable({ rows }) {
                                         {/*</TableCell>*/}
                                         <TableCell align="right">{row.id}</TableCell>
                                         <TableCell align="right">{row.leaveType}</TableCell>
-                                        <TableCell align="right">{row.leaveFrom}</TableCell>
-                                        <TableCell align="right">{row.leaveTill}</TableCell>
+                                        <TableCell align="right">{row.leaveDates[0]}</TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
                                         <TableCell align="right">{row.leaveStatus}</TableCell>
                                     </TableRow>
