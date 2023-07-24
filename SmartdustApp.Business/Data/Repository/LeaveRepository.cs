@@ -69,7 +69,7 @@ namespace SmartdustApp.Business.Data.Repository
         }
 
         /// <summary>
-        /// Insert into Leave and Leave Dates Table
+        /// Insert into Leave and LeaveDates Table
         /// </summary>
         public RequestResult<bool> Save(LeaveModel leave)
         {
@@ -131,6 +131,22 @@ namespace SmartdustApp.Business.Data.Repository
 
             var parameters = new { userID, leaveDays };
             db.Execute(updateQuery, parameters);
+        }
+
+        // Method to fetch LeaveTypes from Lookup table
+        public List<string> GetLeaveTypes()
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            // SQL query to fetch LeaveTypes from Lookup table based on LookupCategory name
+            string query = @"
+                SELECT L.Name
+                FROM Lookup L
+                INNER JOIN LookupCategory LC ON L.LookupCategoryID = LC.ID
+                WHERE LC.Name = 'LeaveType' AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
+
+            // Use Dapper's Query method to fetch the LeaveTypes as a list of strings
+            return db.Query<string>(query).ToList();
         }
     }
 }

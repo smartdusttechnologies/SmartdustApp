@@ -159,7 +159,7 @@ const Signup = () => {
                       <Select onChange={(e) => handleChange(e)} size='small' label='SYSORG' name='org' required>
               {
                 organizations.map((el)=>(
-                  <MenuItem value={el.id}>{el.orgName}</MenuItem>
+                    <MenuItem key={el.id} value={el.id}>{el.orgName}</MenuItem>
                 ))
               }
             </Select>

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import AuthContext from '../../../context/AuthProvider';
 import dayjs from 'dayjs';
 import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
+import { useEffect } from 'react';
 
 const initialState = {
     leaveDates:[],
@@ -26,7 +27,7 @@ const LeaveApplication = () => {
 
     const [leaveData, setLeaveData] = useState(initialState);
     const [isLoading, setLoading] = useState(false);
-
+    const [leavetypes, setLeaveTypes] = useState([]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -87,6 +88,20 @@ const LeaveApplication = () => {
             })
     };
 
+    const handleGetLeaveTypes = () => {
+        axios.get('api/leave/GetLeaveTypes')
+            .then(response => {
+                console.log(response?.data?.requestedObject)
+                setLeaveTypes(response?.data?.requestedObject)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    useEffect(() => {
+        handleGetLeaveTypes()
+    }, [])
     return (
         <div className='leave-application-page'>
             <div className='leave-application-header'>
@@ -131,9 +146,11 @@ const LeaveApplication = () => {
                         onChange={(e) => handleChange(e)}
                         required
                     >
-                        <MenuItem value="Medical">Medical Leave</MenuItem>
-                        <MenuItem value="Paid">Paid Leave</MenuItem>
-                        <MenuItem value="Unpaid">Unpaid Leave</MenuItem>
+                        {
+                            leavetypes.map((el) => (
+                                <MenuItem key={el} value={el}>{el}</MenuItem>
+                            ))
+                        }
                     </Select>
                 </FormControl>
 

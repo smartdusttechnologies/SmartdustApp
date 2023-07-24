@@ -67,6 +67,16 @@ namespace SmartdustApp.Business.Services
             return result;
         }
 
+        public RequestResult<List<string>> GetLeaveTypes()
+        {
+            var leavetypes = _leaveRepository.GetLeaveTypes();
+            if (leavetypes == null)
+            {
+                return new RequestResult<List<string>>();
+            }
+            return new RequestResult<List<string>>(leavetypes);
+        }
+
         //private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)
         //{
         //    var currentDate = DateTime.Today;

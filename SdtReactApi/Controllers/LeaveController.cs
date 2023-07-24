@@ -47,5 +47,22 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet]
+        [Route("GetLeaveTypes")]
+        public IActionResult GetLeaveTypes()
+        {
+            var list = _leaveService.GetLeaveTypes();
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
     }
 }
