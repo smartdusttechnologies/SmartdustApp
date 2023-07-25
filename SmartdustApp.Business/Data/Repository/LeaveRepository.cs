@@ -31,7 +31,7 @@ namespace SmartdustApp.Business.Data.Repository
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // SQL query with JOIN to fetch data from both Leave and LeaveDates tables
-            var query = @"SELECT L.ID, L.UserID, L.UserName, L.LeaveType, L.Reason, L.AppliedDate, L.LeaveStatus, L.LeaveDays,
+            var query = @"SELECT L.ID, L.UserID, L.LeaveType, L.Reason, L.AppliedDate, L.LeaveStatus, L.LeaveDays,
                                  LD.LeaveDate as LeaveDates
                           FROM [Leave] L
                           LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
@@ -110,28 +110,28 @@ namespace SmartdustApp.Business.Data.Repository
             }
         }
 
-        public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays)
-        {
-            using IDbConnection db = _connectionFactory.GetConnection;
+        //public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays)
+        //{
+        //    using IDbConnection db = _connectionFactory.GetConnection;
 
-            string updateQuery = string.Empty;
-            if (leaveType == "Medical")
-            {
-                updateQuery = "UPDATE LeaveBalance SET MedicalLeave = MedicalLeave - @leaveDays WHERE UserID = @userID";
-            }
-            else if (leaveType == "Paid")
-            {
-                updateQuery = "UPDATE LeaveBalance SET PaidLeave = PaidLeave - @leaveDays WHERE UserID = @userID";
-            }
-            else
-            {
-                // Handle other leave types or throw an exception for unsupported types
-                throw new Exception("Unsupported leave type.");
-            }
+        //    string updateQuery = string.Empty;
+        //    if (leaveType == "Medical")
+        //    {
+        //        updateQuery = "UPDATE LeaveBalance SET MedicalLeave = MedicalLeave - @leaveDays WHERE UserID = @userID";
+        //    }
+        //    else if (leaveType == "Paid")
+        //    {
+        //        updateQuery = "UPDATE LeaveBalance SET PaidLeave = PaidLeave - @leaveDays WHERE UserID = @userID";
+        //    }
+        //    else
+        //    {
+        //        // Handle other leave types or throw an exception for unsupported types
+        //        throw new Exception("Unsupported leave type.");
+        //    }
 
-            var parameters = new { userID, leaveDays };
-            db.Execute(updateQuery, parameters);
-        }
+        //    var parameters = new { userID, leaveDays };
+        //    db.Execute(updateQuery, parameters);
+        //}
 
         // Method to fetch LeaveTypes from Lookup table
         public List<string> GetLeaveTypes()
@@ -143,10 +143,21 @@ namespace SmartdustApp.Business.Data.Repository
                 SELECT L.Name
                 FROM Lookup L
                 INNER JOIN LookupCategory LC ON L.LookupCategoryID = LC.ID
-                WHERE LC.Name = 'LeaveType' AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
+                WHERE LC.ID = 1 AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
 
             // Use Dapper's Query method to fetch the LeaveTypes as a list of strings
             return db.Query<string>(query).ToList();
         }
+        public int GetLeaveBalance(int userID, string leaveType)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string query = @"SELECT " + leaveType + " FROM LeaveBalance WHERE UserID = @userID";
+            var parameters = new { userID };
+
+            int leaveBalance = db.ExecuteScalar<int>(query, parameters);
+            return leaveBalance;
+        }
+
     }
 }

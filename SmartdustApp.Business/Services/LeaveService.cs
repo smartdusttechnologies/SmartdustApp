@@ -44,9 +44,16 @@ namespace SmartdustApp.Business.Services
             //}
 
             // Check if the leave type is Medical or Paid, and update the LeaveBalance accordingly
-            if (leave.LeaveType == "Medical" || leave.LeaveType == "Paid")
+            //if (leave.LeaveType == "Medical" || leave.LeaveType == "Paid")
+            //{
+            //    _leaveRepository.UpdateLeaveBalance(leave.UserID, leave.LeaveType, leave.LeaveDays);
+            //}
+
+            // Validate the leave balance before saving the leave application
+            var validation = ValidateLeaveBalance(leave);
+            if (!validation.IsSuccessful)
             {
-                _leaveRepository.UpdateLeaveBalance(leave.UserID, leave.LeaveType, leave.LeaveDays);
+                return validation;
             }
 
             var result = _leaveRepository.Save(leave);
@@ -75,6 +82,20 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<string>>();
             }
             return new RequestResult<List<string>>(leavetypes);
+        }
+        private RequestResult<bool> ValidateLeaveBalance(LeaveModel leave)
+        {
+            // Fetch the user's leave balance from the LeaveBalance table
+            int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
+
+            // Check if the leave balance is sufficient
+            if (leave.LeaveDays > leaveBalance)
+            {
+                return new RequestResult<bool>(false, new List<ValidationMessage> { new ValidationMessage { Reason = $"Insufficient {leave.LeaveType} Leave Balance", Severity = ValidationSeverity.Error } });
+            }
+
+            // Leave balance is sufficient, return successful result
+            return new RequestResult<bool>(true);
         }
 
         //private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)

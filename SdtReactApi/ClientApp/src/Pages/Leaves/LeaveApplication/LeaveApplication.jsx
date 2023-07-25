@@ -35,6 +35,9 @@ const LeaveApplication = () => {
             ...prevState,
             [name]: value
         }));
+        console.log(leaveData)
+        console.log(auth)
+
     };
 
     const handleLeaveDates = (e) => {
@@ -63,15 +66,12 @@ const LeaveApplication = () => {
         axios.post('api/leave/ApplyLeave', {
             id: 0,
             userId: auth.userId,
-            userName: auth.userName,
             leaveType: leaveData.leaveType,
-            leaveFrom: leaveData.leaveFrom,
-            leaveTill: leaveData.leaveTill,
             reason: leaveData.reason,
             appliedDate: new Date(),
             leaveStatus: 'Pending',
-            leaveDates: leaveData.leaveDates,
-            leaveDays: leaveData.leaveDates.length
+            leaveDays: leaveData.leaveDates.length,
+            leaveDates: leaveData.leaveDates
         })
             .then(response => {
                 console.log(response?.data.message[0].reason)

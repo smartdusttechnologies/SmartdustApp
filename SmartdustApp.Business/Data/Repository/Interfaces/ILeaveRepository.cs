@@ -7,7 +7,8 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
     {
         List<LeaveModel> Get(int userID);
         RequestResult<bool> Save(LeaveModel leave);
-        public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays);
+        //public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays);
         List<string> GetLeaveTypes();
+        int GetLeaveBalance(int userID, string leaveType);
     }
 }
