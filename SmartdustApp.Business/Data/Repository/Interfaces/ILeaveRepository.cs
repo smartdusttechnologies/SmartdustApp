@@ -10,5 +10,8 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         //public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays);
         List<string> GetLeaveTypes();
         int GetLeaveBalance(int userID, string leaveType);
+        List<LeaveBalance> GetLeaveBalance(int userID);
+        //List<LeaveModel> InsertDates(List<DateTime> leavedates);
+        //string InsertDates(List<DateTime> leavedates);
     }
 }

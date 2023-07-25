@@ -118,7 +118,7 @@ const LeaveApplication = () => {
                             shouldDisableDate={isWeekend}
                             closeOnSelect={false}
                             //orientation="landscape"
-                            value={leaveData.leaveTill}
+                            value={leaveData.leaveDates[0]}
                             onChange={(e) => handleLeaveDates(e)}
                         />
                     </DemoItem>

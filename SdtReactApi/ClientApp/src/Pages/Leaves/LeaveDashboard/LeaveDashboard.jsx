@@ -12,6 +12,7 @@ import AuthContext from '../../../context/AuthProvider'
 const LeaveDashboard = () => {
     const navigate = useNavigate();
     const [rows, setRows] = useState([]);
+    const [leavebalance, setLeavebalance] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const { auth } = useContext(AuthContext);
 
@@ -20,7 +21,6 @@ const LeaveDashboard = () => {
         setLoading(true)
         axios.get(`api/leave/GetLeave/${auth.userId}`)
             .then(response => {
-                console.log(response.data.requestedObject)
                 setRows(response?.data?.requestedObject)
                 setLoading(false)
             })
@@ -29,17 +29,29 @@ const LeaveDashboard = () => {
                 setLoading(false)
             })
     }
-
+    const handleGetLeaveBalance = () => {
+        axios.get(`api/leave/GetLeaveBalance/${auth.userId}`)
+            .then(response => {
+                console.log(response.data.requestedObject)
+                setLeavebalance(response?.data?.requestedObject)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
     useEffect(() => {
         handleGetLeaves()
+        handleGetLeaveBalance()
     }, [])
 
   return (
     <div className='leave-dashboard'>
         <div className='leaveboard-head'>
           <div className='leaveboard-options'>
-            <h1>LeaveBoard</h1>
-            <div> <LeaveBalanceMenu/> </div>
+                  <h1>LeaveBoard</h1>
+                  <div>
+                      <LeaveBalanceMenu rows={leavebalance} />
+                  </div>
             <div>
              <Button 
               variant="outlined"

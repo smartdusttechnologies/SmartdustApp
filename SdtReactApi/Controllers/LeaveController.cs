@@ -64,5 +64,22 @@ namespace SmartdustApp.Controllers
                 };
             return Json(new RequestResult<bool>(errors));
         }
+
+        [HttpGet]
+        [Route("GetLeaveBalance/{userID}")]
+        public IActionResult GetLeaveBalance(int userID)
+        {
+            var list = _leaveService.GetLeaveBalance(userID);
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SmartdustApp.Business.Common;
+﻿using Microsoft.AspNetCore.SignalR;
+using SmartdustApp.Business.Common;
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Core.Model;
 using SmartdustApp.Business.Data.Repository.Interfaces;
@@ -43,18 +44,12 @@ namespace SmartdustApp.Business.Services
             //    return validationResult;
             //}
 
-            // Check if the leave type is Medical or Paid, and update the LeaveBalance accordingly
-            //if (leave.LeaveType == "Medical" || leave.LeaveType == "Paid")
-            //{
-            //    _leaveRepository.UpdateLeaveBalance(leave.UserID, leave.LeaveType, leave.LeaveDays);
-            //}
-
             // Validate the leave balance before saving the leave application
-            var validation = ValidateLeaveBalance(leave);
-            if (!validation.IsSuccessful)
-            {
-                return validation;
-            }
+            //var validation = CheckLeaveBalance(leave);
+            //if (!validation.IsSuccessful)
+            //{
+            //    return validation;
+            //}
 
             var result = _leaveRepository.Save(leave);
             if (result.IsSuccessful)
@@ -83,7 +78,7 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<string>>(leavetypes);
         }
-        private RequestResult<bool> ValidateLeaveBalance(LeaveModel leave)
+        private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
         {
             // Fetch the user's leave balance from the LeaveBalance table
             int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
@@ -98,6 +93,15 @@ namespace SmartdustApp.Business.Services
             return new RequestResult<bool>(true);
         }
 
+        public RequestResult<List<LeaveBalance>> GetLeaveBalance(int userID)
+        {
+            var leaveBalance = _leaveRepository.GetLeaveBalance(userID);
+            if (leaveBalance == null)
+            {
+                return new RequestResult<List<LeaveBalance>>();
+            }
+            return new RequestResult<List<LeaveBalance>>(leaveBalance);
+        }
         //private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)
         //{
         //    var currentDate = DateTime.Today;

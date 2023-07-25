@@ -73,16 +73,19 @@ namespace SmartdustApp.Business.Data.Repository
         /// </summary>
         public RequestResult<bool> Save(LeaveModel leave)
         {
-
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // Insert data into the Leave table
-            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, UserName, LeaveType, Reason, AppliedDate, LeaveStatus, LeaveDays)
-                                       VALUES (@UserID, @UserName, @LeaveType, @Reason, @AppliedDate, @LeaveStatus, @LeaveDays);
-                                       SELECT CAST(SCOPE_IDENTITY() AS INT)";
+            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveType, Reason, AppliedDate, LeaveStatus, LeaveDays)
+                               VALUES (@UserID, @LeaveType, @Reason, @AppliedDate, @LeaveStatus, @LeaveDays);
+                               SELECT CAST(SCOPE_IDENTITY() AS INT)";
 
-            // Insert data into the LeaveDates table
-            string leaveDatesInsertQuery = "INSERT INTO LeaveDates (LeaveID, LeaveDate) VALUES (@LeaveID, @LeaveDate)";
+            // Prepare the parameters for LeaveDates
+            List<LeaveDateModel> leaveDatesParameters = null;
+            if (leave.LeaveDates != null && leave.LeaveDates.Any())
+            {
+                leaveDatesParameters = leave.LeaveDates.Select(leaveDate => new LeaveDateModel { LeaveID = 0, LeaveDate = leaveDate }).ToList();
+            }
 
             // Transaction to ensure both inserts are executed atomically
             using var transaction = db.BeginTransaction();
@@ -92,10 +95,14 @@ namespace SmartdustApp.Business.Data.Repository
                 // Insert into the Leave table and get the newly inserted LeaveID
                 int leaveID = db.QuerySingle<int>(leaveInsertQuery, leave, transaction);
 
-                // Insert each leave date into the LeaveDates table
-                foreach (DateTime leaveDate in leave.LeaveDates)
+                if (leaveDatesParameters != null && leaveDatesParameters.Any())
                 {
-                    db.Execute(leaveDatesInsertQuery, new { LeaveID = leaveID, LeaveDate = leaveDate }, transaction);
+                    // Set the LeaveID for all leave dates
+                    leaveDatesParameters.ForEach(d => d.LeaveID = leaveID);
+
+                    // Insert all leave dates into the LeaveDates table in a single batch
+                    string leaveDatesInsertQuery = "INSERT INTO LeaveDates (LeaveID, LeaveDate) VALUES (@LeaveID, @LeaveDate)";
+                    db.Execute(leaveDatesInsertQuery, leaveDatesParameters, transaction);
                 }
 
                 // If all inserts are successful, commit the transaction
@@ -110,6 +117,14 @@ namespace SmartdustApp.Business.Data.Repository
             }
         }
 
+        //public string InsertDates(List<DateTime> leavedates)
+        //public List<LeaveModel> InsertDates(List<DateTime> leavedates)
+        //{
+        //    string query = @"Insert into [LeaveDates] (LeaveID , LeaveDate)
+        //                                          values (@LeaveID , @LeaveDate )";
+        //    using IDbConnection db = _connectionFactory.GetConnection;
+        //    return db.Execute(query, leavedates);
+        //}
         //public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays)
         //{
         //    using IDbConnection db = _connectionFactory.GetConnection;
@@ -157,6 +172,13 @@ namespace SmartdustApp.Business.Data.Repository
 
             int leaveBalance = db.ExecuteScalar<int>(query, parameters);
             return leaveBalance;
+        }
+
+        ///get the data of the Leave Balance
+        public List<LeaveBalance> GetLeaveBalance(int UserID)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+            return db.Query<LeaveBalance>("select * from [LeaveBalance] WHERE UserID = @UserID", new { UserID }).ToList();
         }
 
     }
