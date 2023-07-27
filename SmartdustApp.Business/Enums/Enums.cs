@@ -8,9 +8,8 @@ namespace SmartdustApp.Business.Enums
 {
     public enum LeaveType
     {
-        //Medical,
-        //Paid,
-        // Add other leave types here
+        Medical,
+        Paid,
         LeaveOfAbsence
     }
 }

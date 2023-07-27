@@ -46,11 +46,11 @@ namespace SmartdustApp.Business.Services
             //}
 
             // Validate the leave balance before saving the leave application
-            //var validation = CheckLeaveBalance(leave);
-            //if (!validation.IsSuccessful)
-            //{
-            //    return validation;
-            //}
+            var validation = CheckLeaveBalance(leave);
+            if (!validation.IsSuccessful)
+            {
+                return validation;
+            }
 
             var result = _leaveRepository.Save(leave);
             if (result.IsSuccessful)
@@ -79,26 +79,26 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<LeaveTypes>>(leavetypes);
         }
-        //private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
-        //{
-        //    // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
-        //    if (leave.LeaveType == LeaveType.LeaveOfAbsence.ToString())
-        //    {
-        //        return new RequestResult<bool>(true);
-        //    }
+        private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
+        {
+            // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
+            if (leave.LeaveTypeID == LeaveTypeMapping.TypeToID[LeaveType.LeaveOfAbsence])
+            {
+                return new RequestResult<bool>(true);
+            }
 
-        //    // Fetch the user's leave balance from the LeaveBalance table
-        //    int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
+            // Fetch the user's leave balance from the LeaveBalance table
+            int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
 
-        //    // Check if the leave balance is sufficient
-        //    if (leave.LeaveDays > leaveBalance)
-        //    {
-        //        return new RequestResult<bool>(false, new List<ValidationMessage> { new ValidationMessage { Reason = $"Insufficient {leave.LeaveType} Leave Balance", Severity = ValidationSeverity.Error } });
-        //    }
+            // Check if the leave balance is sufficient
+            if (leave.LeaveDays > leaveBalance)
+            {
+                return new RequestResult<bool>(false, new List<ValidationMessage> { new ValidationMessage { Reason = $"Insufficient {leave.LeaveType} Leave Balance", Severity = ValidationSeverity.Error } });
+            }
 
-        //    // Leave balance is sufficient, return successful result
-        //    return new RequestResult<bool>(true);
-        //}
+            // Leave balance is sufficient, return successful result
+            return new RequestResult<bool>(true);
+        }
 
         public RequestResult<List<LeaveBalance>> GetLeaveBalance(int userID)
         {

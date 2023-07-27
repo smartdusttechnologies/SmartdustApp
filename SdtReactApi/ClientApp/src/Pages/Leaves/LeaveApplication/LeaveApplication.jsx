@@ -41,13 +41,31 @@ const LeaveApplication = () => {
     };
 
     const handleLeaveDates = (e) => {
-        setLeaveData((prevState) => ({
-            ...prevState,
-            leaveDates: [...prevState.leaveDates, new Date(e.$d)]
-        }));
-        console.log(leaveData.leaveDates)
-        console.log(leaveData)
+        const selectedDate = new Date(e.$d);
+
+        // Check if the selected date already exists in the leaveDates array
+        const dateExists = leaveData.leaveDates.some((date) =>
+            isSameDay(date, selectedDate)
+        );
+
+        // If the date doesn't exist, add it to the leaveDates array
+        if (!dateExists) {
+            setLeaveData((prevState) => ({
+                ...prevState,
+                leaveDates: [...prevState.leaveDates, selectedDate],
+            }));
+        }
+
+        console.log(leaveData.leaveDates);
+        console.log(leaveData);
     };
+
+    // Utility function to check if two dates have the same day, month, and year (ignoring time)
+    const isSameDay = (date1, date2) =>
+        date1.getDate() === date2.getDate() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getFullYear() === date2.getFullYear();
+
 
     //function calculateDateDifference(leaveTill, leaveFrom) {
     //    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
