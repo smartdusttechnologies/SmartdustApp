@@ -11,6 +11,7 @@ namespace SmartdustApp.Business.Core.Model
         public int ID { get; set; }
         public int UserID { get; set; }
         public string LeaveType { get; set; }
+        public int LeaveTypeID { get; set; }
         public string Reason { get; set; }
         public DateTime AppliedDate { get; set; }
         public string LeaveStatus { get; set; }

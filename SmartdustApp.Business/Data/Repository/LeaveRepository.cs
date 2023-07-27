@@ -31,11 +31,12 @@ namespace SmartdustApp.Business.Data.Repository
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // SQL query with JOIN to fetch data from both Leave and LeaveDates tables
-            var query = @"SELECT L.ID, L.UserID, L.LeaveType, L.Reason, L.AppliedDate, L.LeaveStatus, L.LeaveDays,
-                                 LD.LeaveDate as LeaveDates
+            var query = @"SELECT L.ID, L.UserID, LT.Name as LeaveType, L.Reason, L.AppliedDate, L.LeaveStatus, L.LeaveDays,
+                          LD.LeaveDate as LeaveDates
                           FROM [Leave] L
-                          LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
-                          WHERE L.UserID = @userID";
+                        LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
+                        LEFT JOIN Lookup LT ON L.LeaveTypeID = LT.ID
+                        WHERE L.UserID = @userID";
 
             var parameters = new { userID };
 
@@ -76,9 +77,9 @@ namespace SmartdustApp.Business.Data.Repository
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // Insert data into the Leave table
-            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveType, Reason, AppliedDate, LeaveStatus, LeaveDays)
-                               VALUES (@UserID, @LeaveType, @Reason, @AppliedDate, @LeaveStatus, @LeaveDays);
-                               SELECT CAST(SCOPE_IDENTITY() AS INT)";
+            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveTypeID, Reason, AppliedDate, LeaveStatus, LeaveDays)
+                           VALUES (@UserID, @LeaveTypeID, @Reason, @AppliedDate, @LeaveStatus, @LeaveDays);
+                           SELECT CAST(SCOPE_IDENTITY() AS INT)";
 
             // Prepare the parameters for LeaveDates
             List<LeaveDateModel> leaveDatesParameters = null;
@@ -117,68 +118,41 @@ namespace SmartdustApp.Business.Data.Repository
             }
         }
 
-        //public string InsertDates(List<DateTime> leavedates)
-        //public List<LeaveModel> InsertDates(List<DateTime> leavedates)
-        //{
-        //    string query = @"Insert into [LeaveDates] (LeaveID , LeaveDate)
-        //                                          values (@LeaveID , @LeaveDate )";
-        //    using IDbConnection db = _connectionFactory.GetConnection;
-        //    return db.Execute(query, leavedates);
-        //}
-        //public void UpdateLeaveBalance(int userID, string leaveType, int leaveDays)
-        //{
-        //    using IDbConnection db = _connectionFactory.GetConnection;
-
-        //    string updateQuery = string.Empty;
-        //    if (leaveType == "Medical")
-        //    {
-        //        updateQuery = "UPDATE LeaveBalance SET MedicalLeave = MedicalLeave - @leaveDays WHERE UserID = @userID";
-        //    }
-        //    else if (leaveType == "Paid")
-        //    {
-        //        updateQuery = "UPDATE LeaveBalance SET PaidLeave = PaidLeave - @leaveDays WHERE UserID = @userID";
-        //    }
-        //    else
-        //    {
-        //        // Handle other leave types or throw an exception for unsupported types
-        //        throw new Exception("Unsupported leave type.");
-        //    }
-
-        //    var parameters = new { userID, leaveDays };
-        //    db.Execute(updateQuery, parameters);
-        //}
-
         // Method to fetch LeaveTypes from Lookup table
-        public List<string> GetLeaveTypes()
+        public List<LeaveTypes> GetLeaveTypes()
         {
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // SQL query to fetch LeaveTypes from Lookup table based on LookupCategory name
             string query = @"
-                SELECT L.Name
-                FROM Lookup L
-                INNER JOIN LookupCategory LC ON L.LookupCategoryID = LC.ID
-                WHERE LC.ID = 1 AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
+        SELECT L.ID, L.Name
+        FROM Lookup L
+        INNER JOIN LookupCategory LC ON L.LookupCategoryID = LC.ID
+        WHERE LC.ID = 1 AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
 
-            // Use Dapper's Query method to fetch the LeaveTypes as a list of strings
-            return db.Query<string>(query).ToList();
+            // Use Dapper's Query method to fetch the LeaveTypes as a list of LeaveTypes objects
+            return db.Query<LeaveTypes>(query).ToList();
         }
+
         public int GetLeaveBalance(int userID, string leaveType)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
 
-            string query = @"SELECT " + leaveType + " FROM LeaveBalance WHERE UserID = @userID";
-            var parameters = new { userID };
+            string query = $"SELECT Available FROM LeaveBalance WHERE UserID = @userID AND LeaveType = @leaveType";
+            var parameters = new { userID, leaveType };
 
             int leaveBalance = db.ExecuteScalar<int>(query, parameters);
             return leaveBalance;
         }
 
         ///get the data of the Leave Balance
-        public List<LeaveBalance> GetLeaveBalance(int UserID)
+        public List<LeaveBalance> GetLeaveBalance(int userID)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
-            return db.Query<LeaveBalance>("select * from [LeaveBalance] WHERE UserID = @UserID", new { UserID }).ToList();
+            string query = "SELECT UserID, LeaveType, Available FROM [LeaveBalance] WHERE UserID = @userID";
+            var parameters = new { userID };
+
+            return db.Query<LeaveBalance>(query, parameters).ToList();
         }
 
     }

@@ -66,7 +66,8 @@ const LeaveApplication = () => {
         axios.post('api/leave/ApplyLeave', {
             id: 0,
             userId: auth.userId,
-            leaveType: leaveData.leaveType,
+            leaveType: '',
+            leaveTypeId: leaveData.leaveType,
             reason: leaveData.reason,
             appliedDate: new Date(),
             leaveStatus: 'Pending',
@@ -147,8 +148,8 @@ const LeaveApplication = () => {
                         required
                     >
                         {
-                            leavetypes.map((el) => (
-                                <MenuItem key={el} value={el}>{el}</MenuItem>
+                            leavetypes.map((el,index) => (
+                                <MenuItem key={index} value={el.id}>{el.name}</MenuItem>
                             ))
                         }
                     </Select>

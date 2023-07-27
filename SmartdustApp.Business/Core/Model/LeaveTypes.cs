@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SmartdustApp.Business.Core.Model
 {
-    public class LeaveBalance
+    public class LeaveTypes
     {
-        public int UserID { get; set; }
-        public string LeaveType { get; set; }
-        public int Available { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
     }
 }
