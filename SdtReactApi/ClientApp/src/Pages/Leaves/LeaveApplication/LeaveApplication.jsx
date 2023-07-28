@@ -41,7 +41,7 @@ const LeaveApplication = () => {
     };
 
     const handleLeaveDates = (e) => {
-        const selectedDate = new Date(e.$d);
+        const selectedDate = new Date(e?.$d);
 
         // Check if the selected date already exists in the leaveDates array
         const dateExists = leaveData.leaveDates.some((date) =>

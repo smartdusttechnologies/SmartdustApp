@@ -335,7 +335,18 @@ export default function LeavesDataTable({ rows }) {
                                         {/*</TableCell>*/}
                                         <TableCell align="right">{row.id}</TableCell>
                                         <TableCell align="right">{row.leaveType}</TableCell>
-                                        <TableCell align="right">{row.leaveDates[0]}</TableCell>
+                                        <TableCell align="right">
+                                            <Tooltip
+                                                title={
+                                                    <div style={{ fontSize: '16px', whiteSpace: 'pre-line' }}>
+                                                        {row.leaveDates.map((date) => new Date(date).toISOString().slice(0, 10)).join('\n')}
+                                                    </div>
+                                                }
+                                                arrow
+                                            >
+                                                <span style={{ fontSize: '20px' }}>{row.leaveDates.length} Days</span>
+                                            </Tooltip>
+                                        </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
                                         <TableCell align="right">{row.leaveStatus}</TableCell>
                                     </TableRow>
