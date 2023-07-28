@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting.Internal;
 using SmartdustApp.Business.Common;
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Core.Model;
@@ -10,16 +13,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestingAndCalibrationLabs.Business.Core.Interfaces;
+using TestingAndCalibrationLabs.Business.Services;
 
 namespace SmartdustApp.Business.Services
 {
     public class LeaveService : ILeaveService
     {
         private readonly ILeaveRepository _leaveRepository;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IUserRepository _userRepository;
 
-        public LeaveService(ILeaveRepository leaveRepository)
+        public LeaveService(ILeaveRepository leaveRepository, IEmailService emailservice, IConfiguration configuration , IWebHostEnvironment hostingEnvironment, IUserRepository userRepository)
         {
             _leaveRepository = leaveRepository;
+            _emailService = emailservice;
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
+            _userRepository = userRepository;
         }
 
         public RequestResult<List<LeaveModel>> Get(int userID)
@@ -52,8 +65,29 @@ namespace SmartdustApp.Business.Services
                 return validation;
             }
 
+            // Get the manager's email using the employee ID GetManagerAndEmployeeDetails
+            string managerEmail = _leaveRepository.GetManagerEmailByEmployeeId(leave.UserID);
+            var user = _userRepository.Get(leave.UserID);
+
+            // Create the email model and replace placeholders with data
+            EmailModel model = new EmailModel();
+            model.EmailTemplate = _configuration["SmartdustAppLeave:ManagerTemplate"];
+            model.Subject = "Employee Leave Details";
+
+            model.HtmlMsg = CreateManagerBody(model.EmailTemplate);
+            model.HtmlMsg = model.HtmlMsg.Replace("*EmployeeName*", user.UserName);
+            model.HtmlMsg = model.HtmlMsg.Replace("*LeaveType*", leave.LeaveType);
+            model.HtmlMsg = model.HtmlMsg.Replace("*LeaveDays*", leave.LeaveDays.ToString());
+
+            model.Email = new List<string>();
+            model.Email.Add(managerEmail);
+
             var result = _leaveRepository.Save(leave);
-            if (result.IsSuccessful)
+
+            // Send the email
+            var isEmailSendSuccessfully = _emailService.Sendemail(model);
+
+            if (result.IsSuccessful && isEmailSendSuccessfully.IsSuccessful)
             {
                 List<ValidationMessage> success = new List<ValidationMessage>()
                 {
@@ -78,26 +112,6 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<LeaveTypes>>();
             }
             return new RequestResult<List<LeaveTypes>>(leavetypes);
-        }
-        private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
-        {
-            // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
-            if (leave.LeaveTypeID == LeaveTypeMapping.TypeToID[LeaveType.LeaveOfAbsence])
-            {
-                return new RequestResult<bool>(true);
-            }
-
-            // Fetch the user's leave balance from the LeaveBalance table
-            int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
-
-            // Check if the leave balance is sufficient
-            if (leave.LeaveDays > leaveBalance)
-            {
-                return new RequestResult<bool>(false, new List<ValidationMessage> { new ValidationMessage { Reason = $"Insufficient {leave.LeaveType} Leave Balance", Severity = ValidationSeverity.Error } });
-            }
-
-            // Leave balance is sufficient, return successful result
-            return new RequestResult<bool>(true);
         }
 
         public RequestResult<List<LeaveBalance>> GetLeaveBalance(int userID)
@@ -141,5 +155,40 @@ namespace SmartdustApp.Business.Services
 
         //    return new RequestResult<bool>(true);
         //}
+
+        // <summary>
+        // To Check the Leave Balance.
+        private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
+        {
+            // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
+            if (leave.LeaveTypeID == LeaveTypeMapping.TypeToID[LeaveType.LeaveOfAbsence])
+            {
+                return new RequestResult<bool>(true);
+            }
+
+            // Fetch the user's leave balance from the LeaveBalance table
+            int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
+
+            // Check if the leave balance is sufficient
+            if (leave.LeaveDays > leaveBalance)
+            {
+                return new RequestResult<bool>(false, new List<ValidationMessage> { new ValidationMessage { Reason = $"Insufficient {leave.LeaveType} Leave Balance", Severity = ValidationSeverity.Error } });
+            }
+
+            // Leave balance is sufficient, return successful result
+            return new RequestResult<bool>(true);
+        }
+
+        // <summary>
+        // To use the email Template to send mail to the Manager.
+        private string CreateManagerBody(string emailTemplate)
+        {
+            string body = string.Empty;
+            using (StreamReader reader = new StreamReader(Path.Combine(_hostingEnvironment.WebRootPath, _configuration["SmartdustAppLeave:ManagerTemplate"])))
+            {
+                body = reader.ReadToEnd();
+            }
+            return body;
+        }
     }
 }

@@ -73,7 +73,7 @@ const Signup = () => {
 
                         setTimeout(() => {
                             navigate('/login')
-                        }, 3000);
+                        }, 2000);
                     }
 
                 })

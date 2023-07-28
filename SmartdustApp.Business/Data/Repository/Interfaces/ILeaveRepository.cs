@@ -11,7 +11,6 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         List<LeaveTypes> GetLeaveTypes();
         int GetLeaveBalance(int userID, string leaveType);
         List<LeaveBalance> GetLeaveBalance(int userID);
-        //List<LeaveModel> InsertDates(List<DateTime> leavedates);
-        //string InsertDates(List<DateTime> leavedates);
+        string GetManagerEmailByEmployeeId(int employeeId);
     }
 }

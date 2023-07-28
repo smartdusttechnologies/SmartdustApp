@@ -125,10 +125,10 @@ namespace SmartdustApp.Business.Data.Repository
 
             // SQL query to fetch LeaveTypes from Lookup table based on LookupCategory name
             string query = @"
-        SELECT L.ID, L.Name
-        FROM Lookup L
-        INNER JOIN LookupCategory LC ON L.LookupCategoryID = LC.ID
-        WHERE LC.ID = 1 AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
+                           SELECT L.ID, L.Name
+                           FROM Lookup L
+                           INNER JOIN LookupCategory LC ON L.LookupCategoryID = LC.ID
+                           WHERE LC.ID = 1 AND LC.IsDeleted = 0 AND L.IsDeleted = 0";
 
             // Use Dapper's Query method to fetch the LeaveTypes as a list of LeaveTypes objects
             return db.Query<LeaveTypes>(query).ToList();
@@ -145,7 +145,7 @@ namespace SmartdustApp.Business.Data.Repository
             return leaveBalance;
         }
 
-        ///get the data of the Leave Balance
+        //get the data of the Leave Balance
         public List<LeaveBalance> GetLeaveBalance(int userID)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -153,6 +153,18 @@ namespace SmartdustApp.Business.Data.Repository
             var parameters = new { userID };
 
             return db.Query<LeaveBalance>(query, parameters).ToList();
+        }
+
+        //get the Email of the Manager
+        public string GetManagerEmailByEmployeeId(int employeeId)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string query = @"SELECT Email FROM [User] WHERE Id IN 
+                             (SELECT ManagerId FROM Employee WHERE EmployeeId = @employeeId)";
+
+            var parameters = new { employeeId };
+            return db.QuerySingleOrDefault<string>(query, parameters);
         }
 
     }
