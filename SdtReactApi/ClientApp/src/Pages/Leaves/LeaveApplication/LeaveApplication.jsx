@@ -83,27 +83,29 @@ const LeaveApplication = () => {
         setLoading(true)
         axios.post('api/leave/ApplyLeave', {
             id: 0,
-            userId: auth.userId,
+            userId: auth?.userId,
+            userName: auth?.userName,
             leaveType: '',
-            leaveTypeId: leaveData.leaveType,
-            reason: leaveData.reason,
+            leaveTypeId: leaveData?.leaveType,
+            reason: leaveData?.reason,
             appliedDate: new Date(),
             leaveStatus: 'Pending',
-            leaveDays: leaveData.leaveDates.length,
-            leaveDates: leaveData.leaveDates
+            leaveStatusId: 6,
+            leaveDays: leaveData?.leaveDates?.length,
+            leaveDates: leaveData?.leaveDates
         })
             .then(response => {
-                console.log(response?.data.message[0].reason)
-                toast.success(response?.data.message[0].reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: response?.data.message[0].reason, success: true }])
+                console.log(response?.data?.message[0]?.reason)
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
                 setLoading(false)
                 setLeaveData(initialState)
             })
             .catch(error => {
                 setLoading(false)
                 console.log(error)
-                toast.error(error?.response?.data.message[0].reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: error.response?.data.message[0].reason, success: false }])
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
     };
 

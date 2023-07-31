@@ -103,7 +103,35 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
+        {
+            var leave = _leaveRepository.GetEmployeeLeave(userID);
+            if (leave == null)
+            {
+                return new RequestResult<List<LeaveModel>>();
+            }
+            return new RequestResult<List<LeaveModel>>(leave);
+        }
+        public RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID)
+        {
+            var result = _leaveRepository.UpdateLeaveStatus(leaveID , statusID);
 
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Updated Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
         public RequestResult<List<LeaveTypes>> GetLeaveTypes()
         {
             var leavetypes = _leaveRepository.GetLeaveTypes();
@@ -112,6 +140,16 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<LeaveTypes>>();
             }
             return new RequestResult<List<LeaveTypes>>(leavetypes);
+        }
+
+        public RequestResult<List<LeaveStatusActions>> GetManagerLeaveStatusActions()
+        {
+            var leavestatusactions = _leaveRepository.GetManagerLeaveStatusActions();
+            if (leavestatusactions == null)
+            {
+                return new RequestResult<List<LeaveStatusActions>>();
+            }
+            return new RequestResult<List<LeaveStatusActions>>(leavestatusactions);
         }
 
         public RequestResult<List<LeaveBalance>> GetLeaveBalance(int userID)

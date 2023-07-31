@@ -49,10 +49,56 @@ namespace SmartdustApp.Controllers
         }
 
         [HttpGet]
+        [Route("GetEmployeeLeave/{userID}")]
+        public IActionResult GetEmployeeLeave(int userID)
+        {
+            var list = _leaveService.GetEmployeeLeave(userID);
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
+
+        [HttpPost]
+        [Route("UpdateLeaveStatus")]
+        public IActionResult UpdateLeaveStatus(int leaveID, int statusID)
+        {
+            var result = _leaveService.UpdateLeaveStatus(leaveID , statusID);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet]
         [Route("GetLeaveTypes")]
         public IActionResult GetLeaveTypes()
         {
             var list = _leaveService.GetLeaveTypes();
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
+
+        [HttpGet]
+        [Route("GetManagerLeaveStatusActions")]
+        public IActionResult GetManagerLeaveStatusActions()
+        {
+            var list = _leaveService.GetManagerLeaveStatusActions();
             if (list.IsSuccessful)
             {
                 return Ok(list);

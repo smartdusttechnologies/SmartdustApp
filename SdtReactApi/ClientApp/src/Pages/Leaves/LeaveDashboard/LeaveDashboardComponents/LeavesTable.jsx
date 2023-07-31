@@ -69,8 +69,8 @@ const headCells = [
         label: 'Leave Type',
     },
     {
-        id: 'leaveDates',
-        numeric: false,
+        id: 'leaveDays',
+        numeric: true,
         disablePadding: false,
         label: 'Leave Dates',
     },
@@ -344,7 +344,7 @@ export default function LeavesDataTable({ rows }) {
                                                 }
                                                 arrow
                                             >
-                                                <span style={{ fontSize: '20px' }}>{row.leaveDates.length} Days</span>
+                                                <span style={{ fontSize: '20px' }}>{row.leaveDays} Days</span>
                                             </Tooltip>
                                         </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>

@@ -12,5 +12,8 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         int GetLeaveBalance(int userID, string leaveType);
         List<LeaveBalance> GetLeaveBalance(int userID);
         string GetManagerEmailByEmployeeId(int employeeId);
+        List<LeaveModel> GetEmployeeLeave(int managerId);
+        List<LeaveStatusActions> GetManagerLeaveStatusActions();
+        RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID);
     }
 }

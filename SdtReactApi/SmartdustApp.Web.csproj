@@ -37,6 +37,10 @@
     <ProjectReference Include="..\SmartdustApp.Business\SmartdustApp.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClientApp\src\Pages\Leaves\LeaveDashboard\LeaveDashboardComponents\" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
