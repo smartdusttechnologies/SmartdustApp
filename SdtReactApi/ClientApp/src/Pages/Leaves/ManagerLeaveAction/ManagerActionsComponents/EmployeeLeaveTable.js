@@ -218,7 +218,7 @@ const NoDataTableRows = (rows) => {
     }
 };
 
-export default function EmployeeLeaveTable({ rows }) {
+export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatus }) {
     console.log(rows, 'props')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -356,7 +356,14 @@ export default function EmployeeLeaveTable({ rows }) {
                                             </Tooltip>
                                         </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
-                                        <TableCell align="right"> <ManagerLeaveStatusActionsMenu/> </TableCell>
+                                        <TableCell align="right">
+                                            <ManagerLeaveStatusActionsMenu
+                                                leaveStatus={row.leaveStatus}
+                                                rows={actionRows}
+                                                LeaveID={row.id}
+                                                handleUpdatestatus={handleUpdatestatus }
+                                            />
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}

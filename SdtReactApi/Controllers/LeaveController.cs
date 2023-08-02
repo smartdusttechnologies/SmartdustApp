@@ -67,9 +67,9 @@ namespace SmartdustApp.Controllers
 
         [HttpPost]
         [Route("UpdateLeaveStatus")]
-        public IActionResult UpdateLeaveStatus(int leaveID, int statusID)
+        public IActionResult UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
-            var result = _leaveService.UpdateLeaveStatus(leaveID , statusID);
+            var result = _leaveService.UpdateLeaveStatus(updateStatus);
             if (result.IsSuccessful)
             {
                 return Ok(result);

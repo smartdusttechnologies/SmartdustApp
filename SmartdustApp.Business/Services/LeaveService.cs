@@ -112,9 +112,9 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<LeaveModel>>(leave);
         }
-        public RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID)
+        public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
-            var result = _leaveRepository.UpdateLeaveStatus(leaveID , statusID);
+            var result = _leaveRepository.UpdateLeaveStatus(updateStatus.LeaveID , updateStatus.StatusID);
 
             if (result.IsSuccessful)
             {
