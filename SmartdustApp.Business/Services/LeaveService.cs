@@ -114,6 +114,11 @@ namespace SmartdustApp.Business.Services
         }
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
+            if (updateStatus.StatusID == LookupMapping.TypeToID[Lookup.Approve])
+            {
+                _leaveRepository.UpdateLeaveBalance(updateStatus.LeaveID);
+            }
+
             var result = _leaveRepository.UpdateLeaveStatus(updateStatus.LeaveID , updateStatus.StatusID);
 
             if (result.IsSuccessful)
@@ -161,51 +166,16 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<LeaveBalance>>(leaveBalance);
         }
-        //private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)
-        //{
-        //    var currentDate = DateTime.Today;
-        //    if (leave.LeaveFrom.Date < currentDate)
-        //    {
-        //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-        //        {
-        //            new ValidationMessage() { Reason = "Leave From Date cannot be before the current date.", Severity = ValidationSeverity.Error }
-        //        };
-        //        return new RequestResult<bool>(false, validationMessages);
-        //    }
-
-        //    if (leave.LeaveTill.Date < currentDate)
-        //    {
-        //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-        //        {
-        //            new ValidationMessage() { Reason = "Leave Till Date cannot be before the current date.", Severity = ValidationSeverity.Error }
-        //        };
-        //        return new RequestResult<bool>(false, validationMessages);
-        //    }
-
-        //    if (leave.LeaveTill.Date < leave.LeaveFrom.Date)
-        //    {
-        //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-        //        {
-        //            new ValidationMessage() { Reason = "Leave Till Date cannot be before Leave From Date.", Severity = ValidationSeverity.Error }
-        //        };
-        //        return new RequestResult<bool>(false, validationMessages);
-        //    }
-
-        //    return new RequestResult<bool>(true);
-        //}
-
-        // <summary>
-        // To Check the Leave Balance.
         private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
         {
             // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
-            if (leave.LeaveTypeID == LeaveTypeMapping.TypeToID[LeaveType.LeaveOfAbsence])
+            if (leave.LeaveTypeID == LookupMapping.TypeToID[Lookup.LeaveOfAbsence])
             {
                 return new RequestResult<bool>(true);
             }
 
             // Fetch the user's leave balance from the LeaveBalance table
-            int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveType);
+            int leaveBalance = _leaveRepository.GetLeaveBalance(leave.UserID, leave.LeaveTypeID);
 
             // Check if the leave balance is sufficient
             if (leave.LeaveDays > leaveBalance)

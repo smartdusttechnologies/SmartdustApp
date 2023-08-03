@@ -4,10 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
-import axios from 'axios'
-import AuthContext from '../../../../context/AuthProvider';
 import { TextField } from '@mui/material'
 
 export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, LeaveID, handleUpdatestatus }) {

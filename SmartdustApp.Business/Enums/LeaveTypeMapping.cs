@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace SmartdustApp.Business.Enums
 {
-    public class LeaveTypeMapping
+    public class LookupMapping
     {
-        public static Dictionary<LeaveType, int> TypeToID = new Dictionary<LeaveType, int>
+        public static Dictionary<Lookup, int> TypeToID = new Dictionary<Lookup, int>
         {
-        { LeaveType.Medical, 1 },   // Assuming Medical has LeaveTypeID 1
-        { LeaveType.Paid, 2 },      // Assuming Paid has LeaveTypeID 2
-        { LeaveType.LeaveOfAbsence, 3 } // Assuming LeaveOfAbsence has LeaveTypeID 3
+        { Lookup.Medical, 1 },
+        { Lookup.Paid, 2 },
+        { Lookup.LeaveOfAbsence, 3 },
+        { Lookup.Approve, 5 },
+        { Lookup.Pending, 6 },
+        { Lookup.Decline, 7 }
         };
     }
 }

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace SmartdustApp.Business.Enums
 {
-    public enum LeaveType
+    public enum Lookup
     {
         Medical,
         Paid,
-        LeaveOfAbsence
+        LeaveOfAbsence,
+        Approve,
+        Pending,
+        Decline
     }
 }

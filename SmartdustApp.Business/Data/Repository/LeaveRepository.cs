@@ -137,12 +137,16 @@ namespace SmartdustApp.Business.Data.Repository
         }
 
         //get the Leave Balance of the Particular Leave Type
-        public int GetLeaveBalance(int userID, string leaveType)
+        public int GetLeaveBalance(int userID, int leaveTypeID)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
 
-            string query = $"SELECT Available FROM LeaveBalance WHERE UserID = @userID AND LeaveType = @leaveType";
-            var parameters = new { userID, leaveType };
+            string query = @"
+            SELECT LB.Available 
+            FROM LeaveBalance LB
+            INNER JOIN Lookup LT ON LB.LeaveType = LT.Name
+            WHERE LB.UserID = @userID AND LT.ID = @leaveTypeID";
+            var parameters = new { userID, leaveTypeID };
 
             int leaveBalance = db.ExecuteScalar<int>(query, parameters);
             return leaveBalance;
@@ -251,6 +255,23 @@ namespace SmartdustApp.Business.Data.Repository
                 }
             }
         }
+        public void UpdateLeaveBalance(int leaveID)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            // Update the LeaveBalance table in a single query
+            string updateLeaveBalanceQuery = @"
+            UPDATE LB
+            SET LB.Available = LB.Available - L.LeaveDays
+            FROM LeaveBalance LB
+            INNER JOIN [Leave] L ON LB.UserID = L.UserID
+            INNER JOIN Lookup LT ON L.LeaveTypeID = LT.ID
+            WHERE L.ID = @leaveID AND LB.LeaveType = LT.Name";
+
+            var parameters = new { leaveID };
+            db.Execute(updateLeaveBalanceQuery, parameters);
+        }
+
 
     }
 }
