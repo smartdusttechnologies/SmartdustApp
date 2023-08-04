@@ -16,5 +16,6 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         List<LeaveStatusActions> GetManagerLeaveStatusActions();
         RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID);
         void UpdateLeaveBalance(int leaveID);
+        LeaveModel GetLeaveDetails(int leaveID);
     }
 }

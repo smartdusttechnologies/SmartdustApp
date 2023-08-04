@@ -9,6 +9,7 @@ import AuthContext from '../../../context/AuthProvider';
 import dayjs from 'dayjs';
 import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
 import { useEffect } from 'react';
+import Chip from '@mui/material/Chip';
 
 const initialState = {
     leaveDates:[],
@@ -59,7 +60,13 @@ const LeaveApplication = () => {
         console.log(leaveData.leaveDates);
         console.log(leaveData);
     };
-
+    const handleDeleteDate = (indexToDelete) => {
+        setLeaveData((prevState) => ({
+            ...prevState,
+            leaveDates: prevState?.leaveDates?.filter((date, index) => index !== indexToDelete),
+        }));
+        console.log(leaveData?.leaveDates, 'Deleted Date')
+    };
     // Utility function to check if two dates have the same day, month, and year (ignoring time)
     const isSameDay = (date1, date2) =>
         date1.getDate() === date2.getDate() &&
@@ -151,7 +158,13 @@ const LeaveApplication = () => {
                             <ol>
                                 {
                                     leaveData.leaveDates.map((leave, index) => (
-                                        <li key={index}>{leave.toDateString()}</li>
+                                        <li key={index}>
+                                            <Chip
+                                                label={leave.toDateString()}
+                                                variant="outlined"
+                                                //onDelete={() => handleDeleteDate(index)}
+                                            />
+                                        </li>
                                     ))
                                 }
                             </ol>

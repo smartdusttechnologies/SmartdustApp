@@ -271,7 +271,18 @@ namespace SmartdustApp.Business.Data.Repository
             var parameters = new { leaveID };
             db.Execute(updateLeaveBalanceQuery, parameters);
         }
+        public LeaveModel GetLeaveDetails(int leaveID)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
 
+            // SQL query with JOIN to fetch data from the Leave table
+            var query = @"
+        SELECT L.UserID, L.LeaveTypeID, L.Reason, L.AppliedDate, L.LeaveDays
+        FROM [Leave] L
+        WHERE L.ID = @leaveID";
 
+            var parameters = new { leaveID };
+            return db.QuerySingleOrDefault<LeaveModel>(query, parameters);
+        }
     }
 }

@@ -61,14 +61,17 @@ const LeaveDashboard = () => {
                           Apply a Leave
                       </Button>
                   </div>
-                  <div>
-                      <Button
-                          variant="outlined"
-                          onClick={() => navigate('/managerpendingapprovals')}
-                      >
-                          Pending Approvals
-                      </Button>
-                  </div>
+                  {
+                      auth.roleId == 4 && (
+                          <div>
+                              <Button
+                                  variant="outlined"
+                                  onClick={() => navigate('/managerpendingapprovals')}
+                              >
+                                  Pending Approvals
+                              </Button>
+                          </div>)
+                  }
           </div>
           </div>
           <div>

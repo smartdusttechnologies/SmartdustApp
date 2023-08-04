@@ -29,16 +29,17 @@ const Login = () => {
       .then(response=> {
         console.log(response?.data)
         console.log(response?.data.message[0].reason)
-        const isAuthenticated = response?.data.isSuccessful
+        const isAuthenticated = response?.data?.isSuccessful
 
         // For Success
         if(isAuthenticated){
-          const accessToken = response?.data.requestedObject.accessToken 
-          const userName = response?.data.requestedObject.userName
-          const userId = response?.data.requestedObject.userId
+            const accessToken = response?.data?.requestedObject?.accessToken 
+            const userName = response?.data?.requestedObject?.userName
+            const userId = response?.data?.requestedObject?.userId
+            const roleId = response?.data?.requestedObject?.roleId
           console.log(accessToken,userName,userId)
-          setAuth({accessToken , userName , userId , isAuthenticated})
-          toast.success(response?.data.message[0].reason,{
+            setAuth({roleId , accessToken , userName , userId , isAuthenticated})
+          toast.success(response?.data?.message[0]?.reason,{
             position: "bottom-center",
             autoClose: 5000,
             hideProgressBar: true,
@@ -60,11 +61,11 @@ const Login = () => {
       })
       .catch(error=>{
         console.log(error.response.data)
-        const isAuthenticated = error?.response?.data.isSuccessful
+        const isAuthenticated = error?.response?.data?.isSuccessful
 
         // For Error 
         if(!isAuthenticated){
-          toast.error(error.response?.data.message[0].reason,{
+          toast.error(error.response?.data?.message[0]?.reason,{
             position: "bottom-center",
             autoClose: 5000,
             hideProgressBar: true,
@@ -74,7 +75,7 @@ const Login = () => {
             progress: undefined,
             theme: "colored",
           });
-          setNotification([...notification, {message:error.response?.data.message[0].reason,success:isAuthenticated}])
+          setNotification([...notification, {message:error.response?.data?.message[0]?.reason,success:isAuthenticated}])
         }
       })
   }

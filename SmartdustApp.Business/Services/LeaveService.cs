@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestingAndCalibrationLabs.Business.Core.Interfaces;
 using TestingAndCalibrationLabs.Business.Services;
+using static SmartdustApp.Business.Core.Model.PolicyTypes;
 
 namespace SmartdustApp.Business.Services
 {
@@ -114,14 +115,34 @@ namespace SmartdustApp.Business.Services
         }
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
-            if (updateStatus.StatusID == LookupMapping.TypeToID[Lookup.Approve])
+            var leave = _leaveRepository.GetLeaveDetails(updateStatus.LeaveID);
+            var employee = _userRepository.Get(leave.UserID);
+
+            // Create the email model and replace placeholders with data
+            EmailModel model = new EmailModel();
+            model.EmailTemplate = _configuration["SmartdustAppLeave:EmployeeTemplate"];
+            model.Subject = "Updated Leave Status";
+
+            model.HtmlMsg = CreateEmployeemailBody(model.EmailTemplate);
+            model.HtmlMsg = model.HtmlMsg.Replace("*EmployeeName*", employee.UserName);
+            //model.HtmlMsg = model.HtmlMsg.Replace("*Status*", employee.UserName);
+            model.HtmlMsg = model.HtmlMsg.Replace("*LeaveID*", leave.LeaveTypeID.ToString());
+            model.HtmlMsg = model.HtmlMsg.Replace("*LeaveDays*", leave.LeaveDays.ToString());
+
+            model.Email = new List<string>();
+            model.Email.Add(employee.Email);
+
+            if (updateStatus.StatusID == LookupMapping.TypeToID[Lookup.Approve] && leave.LeaveTypeID != LookupMapping.TypeToID[Lookup.LeaveOfAbsence])
             {
                 _leaveRepository.UpdateLeaveBalance(updateStatus.LeaveID);
             }
 
             var result = _leaveRepository.UpdateLeaveStatus(updateStatus.LeaveID , updateStatus.StatusID);
 
-            if (result.IsSuccessful)
+            // Send the email to Employee
+            var isEmailSendSuccessfully = _emailService.Sendemail(model);
+
+            if (result.IsSuccessful && isEmailSendSuccessfully.IsSuccessful)
             {
                 List<ValidationMessage> success = new List<ValidationMessage>()
                 {
@@ -193,6 +214,17 @@ namespace SmartdustApp.Business.Services
         {
             string body = string.Empty;
             using (StreamReader reader = new StreamReader(Path.Combine(_hostingEnvironment.WebRootPath, _configuration["SmartdustAppLeave:ManagerTemplate"])))
+            {
+                body = reader.ReadToEnd();
+            }
+            return body;
+        }
+        // <summary>
+        // To use the email Template to send mail to the Employee.
+        private string CreateEmployeemailBody(string emailTemplate)
+        {
+            string body = string.Empty;
+            using (StreamReader reader = new StreamReader(Path.Combine(_hostingEnvironment.WebRootPath, _configuration["SmartdustAppLeave:EmployeeTemplate"])))
             {
                 body = reader.ReadToEnd();
             }

@@ -86,7 +86,7 @@ namespace SmartdustApp.Business.Repository
             db.Execute(passwordLoginInsertQuery, passwordLogin, transaction);
 
             // assign the general user role by default.
-            db.Execute(userRoleInsertQuery, new { UserId = insertedUserId, RoleId = 2 }, transaction);
+            db.Execute(userRoleInsertQuery, new { UserId = insertedUserId, RoleId = 5 }, transaction);
             transaction.Commit();
 
             return insertedUserId;
