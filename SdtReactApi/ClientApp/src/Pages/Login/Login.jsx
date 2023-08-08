@@ -37,8 +37,10 @@ const Login = () => {
             const userName = response?.data?.requestedObject?.userName
             const userId = response?.data?.requestedObject?.userId
             const roleId = response?.data?.requestedObject?.roleId
-          console.log(accessToken,userName,userId)
-            setAuth({roleId , accessToken , userName , userId , isAuthenticated})
+            console.log(accessToken,userName,userId)
+            setAuth({ roleId, accessToken, userName, userId, isAuthenticated })
+
+            navigate('/')
           toast.success(response?.data?.message[0]?.reason,{
             position: "bottom-center",
             autoClose: 5000,
@@ -54,9 +56,9 @@ const Login = () => {
           setEmail('')
           setPassword('')
           
-          setTimeout(() => {
-            navigate('/')
-          }, 1000);
+          //setTimeout(() => {
+          //  navigate('/')
+          //}, 1000);
         }
       })
       .catch(error=>{

@@ -93,6 +93,12 @@ const headCells = [
         disablePadding: false,
         label: 'Status',
     },
+    {
+        id: 'actions',
+        numeric: false,
+        disablePadding: false,
+        label: 'Action',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -353,9 +359,11 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
                                                 arrow
                                             >
                                                 <span style={{ fontSize: '20px' }}>{row.leaveDays} Days</span>
+
                                             </Tooltip>
                                         </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
+                                        <TableCell align="right">{row.leaveStatus}</TableCell>
                                         <TableCell align="right">
                                             <ManagerLeaveStatusActionsMenu
                                                 leaveStatus={row.leaveStatus}

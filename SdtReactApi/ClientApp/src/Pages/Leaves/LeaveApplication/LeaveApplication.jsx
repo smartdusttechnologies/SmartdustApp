@@ -13,7 +13,7 @@ import Chip from '@mui/material/Chip';
 
 const initialState = {
     leaveDates:[],
-    leaveType: '',
+    leaveType: 0,
     reason: ''
 }
 
@@ -29,7 +29,13 @@ const LeaveApplication = () => {
     const [leaveData, setLeaveData] = useState(initialState);
     const [isLoading, setLoading] = useState(false);
     const [leavetypes, setLeaveTypes] = useState([]);
+    const [file, setFile] = useState(null);
 
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files;
+        //setFile(selectedFile);
+        console.log(e.target.files)
+    };
     const handleChange = (event) => {
         const { name, value } = event.target;
         setLeaveData((prevState) => ({
@@ -176,7 +182,7 @@ const LeaveApplication = () => {
                         // size='small'
                         label='Leave Type'
                         name='leaveType'
-                        value={leaveData.leaveType}
+                        //value={leaveData.leaveType}
                         onChange={(e) => handleChange(e)}
                         required
                     >
@@ -187,12 +193,22 @@ const LeaveApplication = () => {
                         }
                     </Select>
                 </FormControl>
-
+                {leaveData.leaveType === 1 && (
+                    <div>
+                        <input 
+                            type="file"
+                            id="fileupload"
+                            //accept="image/*"
+                            //onChange={(e) => handleFileChange(e)}
+                        />
+                    </div>
+                )}
                 <TextField
                     label='Reason/Comments'
                     required
+                    multiline
+                    size='large'
                     type='text'
-                    sx={{ height: '50px' }}
                     name='reason'
                     value={leaveData.reason}
                     onChange={(e) => handleChange(e)}

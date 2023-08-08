@@ -4,7 +4,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
-import { TextField } from '@mui/material'
+import { TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
 
 export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, LeaveID, handleUpdatestatus }) {
     const [open, setOpen] = React.useState(false);
@@ -20,10 +22,11 @@ export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, Leave
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}
+            <IconButton disabled={leaveStatus !== "Pending"} variant="outlined" onClick={handleClickOpen}
             >
-                {leaveStatus}
-            </Button>
+                {/*{leaveStatus}*/}
+                <EditIcon/>
+            </IconButton>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -37,10 +40,12 @@ export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, Leave
                         <TextField
                             label='Reason/Comments'
                             required
+                            multiline
                             type='text'
-                            size='small'
+                            size='large'
                             name='comment'
                             value={comment}
+                            sx={{ width: '100%' }}
                             onChange={(e) => setComment(e.target.value)}
                         />
                     </div>

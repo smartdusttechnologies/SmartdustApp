@@ -70,7 +70,7 @@ const PendingApprovalsDashBoard = () => {
             </div>
             <div>
                 {
-                    isLoading ? <Box><LoadingProgress /></Box> : <EmployeeLeaveTable rows={employeeRows} actionRows={actionRows} handleUpdatestatus={handleUpdatestatus } />
+                    isLoading ? <Box><LoadingProgress /></Box> : <EmployeeLeaveTable rows={[...employeeRows].reverse()} actionRows={actionRows} handleUpdatestatus={handleUpdatestatus} />
                 }
             </div>
             <ToastContainer />

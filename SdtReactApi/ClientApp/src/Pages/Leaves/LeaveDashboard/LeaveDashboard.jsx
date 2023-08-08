@@ -76,7 +76,7 @@ const LeaveDashboard = () => {
           </div>
           <div>
               {
-                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={rows} />
+                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} />
               }
           </div>
     </div>

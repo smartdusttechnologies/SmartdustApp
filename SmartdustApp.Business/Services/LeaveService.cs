@@ -132,7 +132,7 @@ namespace SmartdustApp.Business.Services
             model.Email = new List<string>();
             model.Email.Add(employee.Email);
 
-            if (updateStatus.StatusID == LookupMapping.TypeToID[Lookup.Approve] && leave.LeaveTypeID != LookupMapping.TypeToID[Lookup.LeaveOfAbsence])
+            if (updateStatus.StatusID == (int)Lookup.Approve && leave.LeaveTypeID != (int)Lookup.LeaveOfAbsence)
             {
                 _leaveRepository.UpdateLeaveBalance(updateStatus.LeaveID);
             }
@@ -190,7 +190,7 @@ namespace SmartdustApp.Business.Services
         private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
         {
             // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
-            if (leave.LeaveTypeID == LookupMapping.TypeToID[Lookup.LeaveOfAbsence])
+            if (leave.LeaveTypeID == (int)Lookup.LeaveOfAbsence)
             {
                 return new RequestResult<bool>(true);
             }

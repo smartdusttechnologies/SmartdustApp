@@ -8,11 +8,11 @@ namespace SmartdustApp.Business.Enums
 {
     public enum Lookup
     {
-        Medical,
-        Paid,
-        LeaveOfAbsence,
-        Approve,
-        Pending,
-        Decline
+        Medical=1,
+        Paid=2,
+        LeaveOfAbsence=3,
+        Approve=5,
+        Pending=6,
+        Decline=7
     }
 }
