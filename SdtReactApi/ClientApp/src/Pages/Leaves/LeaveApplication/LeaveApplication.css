@@ -30,7 +30,10 @@
     justify-content: space-between; */
     gap: 20px;
 }
-
+.leavedateslist{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
 @media screen and (min-width:101px) and (max-width:600px) {
     .leave-application {
         width: 280px;
@@ -40,5 +43,8 @@
 
     .date-pickers {
         flex-direction: column;
+    }
+    .leavedateslist {
+        grid-template-columns: repeat(1,1fr);
     }
 }

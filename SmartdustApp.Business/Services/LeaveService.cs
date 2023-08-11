@@ -53,11 +53,11 @@ namespace SmartdustApp.Business.Services
 
         public RequestResult<bool> Save(LeaveModel leave)
         {
-            //var validationResult = ValidateLeaveDate(leave);
-            //if (!validationResult.IsSuccessful)
-            //{
-            //    return validationResult;
-            //}
+            var validationResult = ValidateLeaveDate(leave);
+            if (!validationResult.IsSuccessful)
+            {
+                return validationResult;
+            }
 
             // Validate the leave balance before saving the leave application
             var validation = CheckLeaveBalance(leave);
@@ -205,6 +205,46 @@ namespace SmartdustApp.Business.Services
             }
 
             // Leave balance is sufficient, return successful result
+            return new RequestResult<bool>(true);
+        }
+
+        // <summary>
+        // To Validate Leave Dates.
+        private RequestResult<bool> ValidateLeaveDate(LeaveModel leave)
+        {
+            if (leave.LeaveDates == null || leave.LeaveDates.Count == 0)
+            {
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "No leave dates are selected.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
+            }
+
+            //var currentDate = DateTime.Today;
+            //var distinctDates = new HashSet<DateTime>();
+
+            //foreach (var date in leave.LeaveDates)
+            //{
+            //    if (date.Date < currentDate)
+            //    {
+            //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+            //        {
+            //            new ValidationMessage() { Reason = $"Leave Date {date.Date.ToShortDateString()} cannot be before the current date.", Severity = ValidationSeverity.Error }
+            //        };
+            //        return new RequestResult<bool>(false, validationMessages);
+            //    }
+
+            //    if (!distinctDates.Add(date.Date))
+            //    {
+            //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+            //        {
+            //            new ValidationMessage() { Reason = $"Leave Date {date.Date.ToShortDateString()} is duplicated.", Severity = ValidationSeverity.Error }
+            //        };
+            //        return new RequestResult<bool>(false, validationMessages);
+            //    }
+            //}
+
             return new RequestResult<bool>(true);
         }
 

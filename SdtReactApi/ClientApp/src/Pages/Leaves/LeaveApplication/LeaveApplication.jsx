@@ -32,10 +32,11 @@ const LeaveApplication = () => {
     const [file, setFile] = useState(null);
 
     const handleFileChange = (e) => {
-        const selectedFile = e.target.files;
-        //setFile(selectedFile);
-        console.log(e.target.files)
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+        console.log(selectedFile)
     };
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setLeaveData((prevState) => ({
@@ -43,7 +44,6 @@ const LeaveApplication = () => {
             [name]: value
         }));
         console.log(leaveData)
-        console.log(auth)
 
     };
 
@@ -94,33 +94,74 @@ const LeaveApplication = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true)
-        axios.post('api/leave/ApplyLeave', {
-            id: 0,
-            userId: auth?.userId,
-            userName: auth?.userName,
-            leaveType: '',
-            leaveTypeId: leaveData?.leaveType,
-            reason: leaveData?.reason,
-            appliedDate: new Date(),
-            leaveStatus: 'Pending',
-            leaveStatusId: 6,
-            leaveDays: leaveData?.leaveDates?.length,
-            leaveDates: leaveData?.leaveDates
-        })
-            .then(response => {
-                console.log(response?.data?.message[0]?.reason)
-                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                setLoading(false)
-                setLeaveData(initialState)
+        const reader = new FileReader();
+
+        if (leaveData.leaveType === 1 && file) {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const base64Data = event.target.result.split(',')[1]; // Extract the base64 data
+                axios.post('api/leave/ApplyLeave', {
+                    id: 0,
+                    userId: auth?.userId,
+                    userName: auth?.userName,
+                    leaveType: '',
+                    leaveTypeId: leaveData?.leaveType,
+                    reason: leaveData?.reason,
+                    appliedDate: new Date(),
+                    leaveStatus: 'Pending',
+                    leaveStatusId: 6,
+                    leaveDays: leaveData?.leaveDates?.length,
+                    leaveDates: leaveData?.leaveDates,
+                    attachedFile: base64Data // Set the base64-encoded file data
+                })
+                    .then(response => {
+                        console.log(response?.data?.message[0]?.reason)
+                        toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                        setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                        setLoading(false)
+                        setLeaveData(initialState)
+                    })
+                    .catch(error => {
+                        setLoading(false)
+                        console.log(error)
+                        toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                        setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+                    })
+            };
+
+            // Read the file as base64 data
+            reader.readAsDataURL(file);
+        } else {
+            axios.post('api/leave/ApplyLeave', {
+                id: 0,
+                userId: auth?.userId,
+                userName: auth?.userName,
+                leaveType: '',
+                leaveTypeId: leaveData?.leaveType,
+                reason: leaveData?.reason,
+                appliedDate: new Date(),
+                leaveStatus: 'Pending',
+                leaveStatusId: 6,
+                leaveDays: leaveData?.leaveDates?.length,
+                leaveDates: leaveData?.leaveDates,
+                attachedFile: '' // Set the attachedFile to null when not applicable
             })
-            .catch(error => {
-                setLoading(false)
-                console.log(error)
-                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
-            })
-    };
+                .then(response => {
+                    console.log(response?.data?.message[0]?.reason)
+                    toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                    setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                    setLoading(false)
+                    setLeaveData(initialState)
+                })
+                .catch(error => {
+                    setLoading(false)
+                    console.log(error)
+                    toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                    setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+                })
+        }
+        };
 
     const handleGetLeaveTypes = () => {
         axios.get('api/leave/GetLeaveTypes')
@@ -161,7 +202,7 @@ const LeaveApplication = () => {
                     leaveData.leaveDates.length > 0 && (
                         <div>
                             <h4>Leave Dates:</h4>
-                            <ol>
+                            <ol className="leavedateslist">
                                 {
                                     leaveData.leaveDates.map((leave, index) => (
                                         <li key={index}>
@@ -199,7 +240,7 @@ const LeaveApplication = () => {
                             type="file"
                             id="fileupload"
                             //accept="image/*"
-                            //onChange={(e) => handleFileChange(e)}
+                            onChange={(e) => handleFileChange(e)}
                         />
                     </div>
                 )}

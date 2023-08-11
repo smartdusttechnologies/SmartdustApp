@@ -79,8 +79,8 @@ namespace SmartdustApp.Business.Data.Repository
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // Insert data into the Leave table
-            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveTypeID, LeaveStatusID, Reason, AppliedDate, LeaveDays)
-                           VALUES (@UserID, @LeaveTypeID, @LeaveStatusID, @Reason, @AppliedDate, @LeaveDays);
+            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveTypeID, LeaveStatusID, Reason, AppliedDate, LeaveDays, AttachedFile)
+                           VALUES (@UserID, @LeaveTypeID, @LeaveStatusID, @Reason, @AppliedDate, @LeaveDays, @AttachedFile);
                            SELECT CAST(SCOPE_IDENTITY() AS INT)";
 
             // Prepare the parameters for LeaveDates

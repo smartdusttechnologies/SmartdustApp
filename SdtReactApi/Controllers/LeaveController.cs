@@ -127,5 +127,38 @@ namespace SmartdustApp.Controllers
                 };
             return Json(new RequestResult<bool>(errors));
         }
+        //[HttpPost]
+        //[Route("UploadFile")]
+        //public async Task<IActionResult> UploadFile(IFormFile file)
+        //{
+        //    try
+        //    {
+        //        if (file == null || file.Length == 0)
+        //        {
+        //            return BadRequest("No file uploaded.");
+        //        }
+
+        //        byte[] fileBytes;
+        //        using (var ms = new MemoryStream())
+        //        {
+        //            await file.CopyToAsync(ms);
+        //            fileBytes = ms.ToArray();
+        //        }
+
+        //        // Call your service method to process the uploaded file
+        //        var result = _leaveService.UploadFile(fileBytes);
+
+        //        if (result.IsSuccessful)
+        //        {
+        //            return Ok(result);
+        //        }
+
+        //        return BadRequest(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {ex.Message}");
+        //    }
+        //}
     }
 }
