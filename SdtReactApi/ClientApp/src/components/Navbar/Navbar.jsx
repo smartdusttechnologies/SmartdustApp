@@ -3,6 +3,7 @@ import './Navbar.css'
 import { Link } from 'react-router-dom'
 import Drawer from '../ThreedotDrawer/Drawer'
 import UserAccountMenu from '../UserProfile/UserAccountMenu'
+import AbsenceMenu from '../AbsenceMenu/AbsenceMenu'
 import AuthContext from '../../context/AuthProvider'
 import NotificationBellMenu from '../NotificationBell/NotificationBellMenu'
 import logo from '../../assets/images/Smartdust_logo.webp'
@@ -25,6 +26,7 @@ const Navbar = () => {
         {!auth.isAuthenticated && (<Link to={'/login'}><div><a>Sign in</a> </div></Link>)} 
         <Link to={'/contact'}><div><a>Contact</a> </div></Link> 
         <Link to={'/about'}><div><a>About</a> </div></Link>
+        {auth.isAuthenticated && <AbsenceMenu/>}
         <NotificationBellMenu/>
         <UserAccountMenu/>
         </div>

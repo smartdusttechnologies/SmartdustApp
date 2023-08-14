@@ -53,25 +53,25 @@ const LeaveDashboard = () => {
                   <div>
                       <LeaveBalanceMenu rows={leavebalance} />
                   </div>
-                  <div>
-                      <Button
-                          variant="outlined"
-                          onClick={() => navigate('/leaveapplication')}
-                      >
-                          Apply a Leave
-                      </Button>
-                  </div>
-                  {
-                      auth.roleId == 4 && (
-                          <div>
-                              <Button
-                                  variant="outlined"
-                                  onClick={() => navigate('/managerpendingapprovals')}
-                              >
-                                  Pending Approvals
-                              </Button>
-                          </div>)
-                  }
+                  {/*<div>*/}
+                  {/*    <Button*/}
+                  {/*        variant="outlined"*/}
+                  {/*        onClick={() => navigate('/leaveapplication')}*/}
+                  {/*    >*/}
+                  {/*        Apply a Leave*/}
+                  {/*    </Button>*/}
+                  {/*</div>*/}
+                  {/*{*/}
+                  {/*    auth.roleId == 4 && (*/}
+                  {/*        <div>*/}
+                  {/*            <Button*/}
+                  {/*                variant="outlined"*/}
+                  {/*                onClick={() => navigate('/managerpendingapprovals')}*/}
+                  {/*            >*/}
+                  {/*                Pending Approvals*/}
+                  {/*            </Button>*/}
+                  {/*        </div>)*/}
+                  {/*}*/}
           </div>
           </div>
           <div>

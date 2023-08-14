@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\components\AbsenceMenu\" />
     <Folder Include="ClientApp\src\Pages\Leaves\LeaveDashboard\LeaveDashboardComponents\" />
   </ItemGroup>
 

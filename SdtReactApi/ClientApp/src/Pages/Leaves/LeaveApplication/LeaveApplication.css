@@ -34,6 +34,34 @@
     display: grid;
     grid-template-columns: repeat(3,1fr);
 }
+.documentupload{
+    display: inline-block;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* Style for the custom button appearance */
+.documentupload label {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.documentupload label:hover {
+    background-color: #2980b9;
+}
+
+.documentupload span {
+    margin-left: 10px;
+}
 @media screen and (min-width:101px) and (max-width:600px) {
     .leave-application {
         width: 280px;

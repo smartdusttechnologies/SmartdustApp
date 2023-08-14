@@ -235,9 +235,12 @@ const LeaveApplication = () => {
                     </Select>
                 </FormControl>
                 {leaveData.leaveType === 1 && (
-                    <div>
+                    <div className="documentupload">
+                        <label for="fileupload">Choose a file</label>
+                        <span>{file ? file.name : "No file chosen"}</span>
                         <input 
                             type="file"
+                            
                             id="fileupload"
                             //accept="image/*"
                             onChange={(e) => handleFileChange(e)}

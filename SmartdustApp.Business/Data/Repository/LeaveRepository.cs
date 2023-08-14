@@ -179,21 +179,21 @@ namespace SmartdustApp.Business.Data.Repository
 
             // SQL query with JOIN to fetch data from both Leave and LeaveDates tables for employees under the specified manager
             var query = @"
-                 SELECT L.ID, L.UserID, U.UserName, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
-                 LD.LeaveDate as LeaveDates
-                 FROM [Leave] L
-                 LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
-                 LEFT JOIN Lookup LT ON L.LeaveTypeID = LT.ID
-                 LEFT JOIN Lookup LS ON L.LeaveStatusID = LS.ID
-                 LEFT JOIN [User] U ON L.UserID = U.Id
-                 WHERE L.UserID IN (
-                     SELECT EmployeeId FROM Employee WHERE ManagerId = @managerId
-                 )";
+                         SELECT L.ID, L.UserID, U.UserName, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
+                         LD.LeaveDate as LeaveDates, L.AttachedFile
+                         FROM [Leave] L
+                         LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
+                         LEFT JOIN Lookup LT ON L.LeaveTypeID = LT.ID
+                         LEFT JOIN Lookup LS ON L.LeaveStatusID = LS.ID
+                         LEFT JOIN [User] U ON L.UserID = U.Id
+                         WHERE L.UserID IN (
+                             SELECT EmployeeId FROM Employee WHERE ManagerId = @managerId
+                         )";
 
             var parameters = new { managerId };
 
             // Use Dapper's Query method to map the data to the LeaveModel class
-            var result = db.Query<LeaveModel, DateTime?, LeaveModel>(query, (leave, leaveDate) =>
+            var result = db.Query<LeaveModel, DateTime?, byte[], LeaveModel>(query, (leave, leaveDate, attachedFileBytes) =>
             {
                 if (leaveDate != null)
                 {
@@ -204,8 +204,12 @@ namespace SmartdustApp.Business.Data.Repository
                     // If LeaveDate is not null, add it to the LeaveModel's LeaveDates list
                     leave.LeaveDates.Add(leaveDate.Value);
                 }
+
+                // Set the AttachedFile data
+                leave.AttachedFile = attachedFileBytes;
+
                 return leave;
-            }, parameters, splitOn: "LeaveDates");
+            }, parameters, splitOn: "LeaveDates,AttachedFile");
 
             // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
             return result.GroupBy(l => l.ID)
@@ -220,6 +224,7 @@ namespace SmartdustApp.Business.Data.Repository
                          })
                          .ToList();
         }
+
         public List<LeaveStatusActions> GetManagerLeaveStatusActions()
         {
             using IDbConnection db = _connectionFactory.GetConnection;
