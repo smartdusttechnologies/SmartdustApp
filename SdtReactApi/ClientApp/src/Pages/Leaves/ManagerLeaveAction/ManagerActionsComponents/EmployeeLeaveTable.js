@@ -22,7 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
-import ManagerLeaveStatusActionsMenu from './ManagerLeaveStatusActions'
+import ManagerLeaveStatusActionsMenu from './ManagerLeaveStatusActions';
+import SingleLeaveDetail from './SingleLeaveDetail';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -98,6 +99,12 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Action',
+    },
+    {
+        id: 'details',
+        numeric: false,
+        disablePadding: false,
+        label: 'Details',
     },
 ];
 
@@ -225,7 +232,7 @@ const NoDataTableRows = (rows) => {
 };
 
 export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatus }) {
-    console.log(rows, 'props')
+    console.log(rows, 'Employee Leaves')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
@@ -358,7 +365,7 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
                                                 }
                                                 arrow
                                             >
-                                                <span style={{ fontSize: '20px' }}>{row.leaveDays} Days</span>
+                                                <span style={{ fontSize: '20px' }}>{row.leaveDays} {row.leaveDays > 1 ? 'Days' : 'Day'}</span>
 
                                             </Tooltip>
                                         </TableCell>
@@ -369,7 +376,12 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
                                                 leaveStatus={row.leaveStatus}
                                                 rows={actionRows}
                                                 LeaveID={row.id}
-                                                handleUpdatestatus={handleUpdatestatus }
+                                                handleUpdatestatus={handleUpdatestatus}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <SingleLeaveDetail
+                                                rows={row}
                                             />
                                         </TableCell>
                                     </TableRow>

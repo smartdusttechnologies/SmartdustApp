@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, LeaveID, handleUpdatestatus }) {
     const [open, setOpen] = React.useState(false);
@@ -22,11 +23,13 @@ export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, Leave
 
     return (
         <div>
+            <Tooltip title="Edit Status">
             <IconButton disabled={leaveStatus !== "Pending"} variant="outlined" onClick={handleClickOpen}
             >
                 {/*{leaveStatus}*/}
                 <EditIcon/>
-            </IconButton>
+                </IconButton>
+            </Tooltip>
             <Dialog
                 open={open}
                 onClose={handleClose}

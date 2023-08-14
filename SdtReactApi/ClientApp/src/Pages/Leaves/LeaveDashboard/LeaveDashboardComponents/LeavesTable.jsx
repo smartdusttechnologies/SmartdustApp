@@ -344,7 +344,7 @@ export default function LeavesDataTable({ rows }) {
                                                 }
                                                 arrow
                                             >
-                                                <span style={{ fontSize: '20px' }}>{row.leaveDays} Days</span>
+                                                <span style={{ fontSize: '20px' }}>{row.leaveDays} {row.leaveDays > 1 ? 'Days' : 'Day'}</span>
                                             </Tooltip>
                                         </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
