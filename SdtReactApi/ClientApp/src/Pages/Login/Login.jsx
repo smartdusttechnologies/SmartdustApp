@@ -6,6 +6,7 @@ import AuthContext from '../../context/AuthProvider';
 import { TextField } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Button from '@mui/joy/Button';
 
 const loginurl = 'api/security/login';
 
@@ -14,12 +15,14 @@ const Login = () => {
   const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
 
   const [email , setEmail] = useState('');
-  const [password , setPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
   
   const handleSubmit = (e)=>{
-    e.preventDefault()
-    
+      e.preventDefault()
+      setLoading(true)
+
       axios.post(loginurl ,
       {
         userName:email,
@@ -53,6 +56,7 @@ const Login = () => {
           });
           setNotification([...notification, {message:response?.data.message[0].reason,success:isAuthenticated}])
 
+          setLoading(false)
           setEmail('')
           setPassword('')
           
@@ -62,6 +66,7 @@ const Login = () => {
         }
       })
       .catch(error=>{
+          setLoading(false)
         console.log(error.response.data)
         const isAuthenticated = error?.response?.data?.isSuccessful
 
@@ -115,7 +120,12 @@ const Login = () => {
            <div> <label htmlFor="">Remember me</label> <input type="checkbox" /></div>
           <Link to={'/forgotpassword'} className='forgot-pass'>Forgot password</Link>
           </div>
-          <input className='submit-btn' type="submit" value={'Sign in'}/>
+            <Button
+              type='submit'
+              loading={isLoading}
+            >
+              Sign in
+            </Button>
         </form>
         
         <div className='Or-div'>

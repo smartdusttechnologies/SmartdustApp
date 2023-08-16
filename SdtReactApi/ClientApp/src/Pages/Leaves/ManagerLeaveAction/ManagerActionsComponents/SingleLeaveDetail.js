@@ -38,7 +38,7 @@ export default function SingleLeaveDetail({ rows }) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle sx={{ width:'300px' }} >Leave Details</DialogTitle>
+                <DialogTitle sx={{ width:'350px' }} >Leave Details</DialogTitle>
                 <Divider />
                 {rows.attachedFile && (
                     <div>

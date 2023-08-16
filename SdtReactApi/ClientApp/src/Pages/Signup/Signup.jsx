@@ -6,6 +6,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider'
+import Button from '@mui/joy/Button';
 
 const signupapi = 'api/security/SignUp';
 
@@ -25,6 +26,7 @@ const Signup = () => {
     confirmpassword:""
   })
   const [organizations , setOrganizations] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
 
   const handleChange = (e)=>{
@@ -37,6 +39,7 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setLoading(true)
         if (validateForm()) {
             axios.post(signupapi, {
                 id: 0,
@@ -70,7 +73,7 @@ const Signup = () => {
                             theme: "colored",
                         });
                         setNotification([...notification, { message: response?.data.message[0].reason, success: isSuccessful }])
-
+                        setLoading(false)
                         setTimeout(() => {
                             navigate('/login')
                         }, 2000);
@@ -78,6 +81,7 @@ const Signup = () => {
 
                 })
                 .catch(error => {
+                    setLoading(false)
                     console.log(error)
                     const isSuccessful = error.response?.data.isSuccessful
 
@@ -167,7 +171,12 @@ const Signup = () => {
 
           <TextField size='small' onChange={(e)=>handleChange(e)} name='password' label='Enter Password' type="password"  required/>
           <TextField size='small' onChange={(e)=>handleChange(e)} name='confirmpassword' label='Re-Enter Password' type="password"  required/>
-          <button className='submit-btn'>Sign up</button>
+          <Button
+            type='submit'
+            loading={isLoading}
+          >
+            Sign in
+          </Button>
         </form>
         
         <div className='Or-div'>

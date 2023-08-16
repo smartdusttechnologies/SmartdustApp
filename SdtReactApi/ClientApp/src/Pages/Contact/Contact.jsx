@@ -26,7 +26,7 @@ const Contact = () => {
 
   // User Details 
   const [userdata , setUserdata] = useState(initialState)
-  const [loading , setLoading] = useState(false)
+  const [isLoading , setLoading] = useState(false)
 
   const handleChange = (e)=>{
     const newdata = {...userdata }
@@ -173,11 +173,12 @@ const Contact = () => {
             <input onChange={(e)=>handleChange(e)} id='message' value={userdata.message} type="text" placeholder='Type your message here' required />
           </div>
           <div  className='submit-user-details'>
-            {/* <input type="submit" /> */}
-            {
-              loading ? <Button loading></Button> : <Button type='submit'>Submit</Button>
-            }
-            
+            <Button
+              type='submit'
+              loading={isLoading}
+            >
+              Submit
+            </Button>
           </div>
           </form>
         </div>
