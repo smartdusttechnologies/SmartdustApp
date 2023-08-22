@@ -17,5 +17,6 @@ namespace SmartdustApp.Business.Core.Interfaces
         RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID);
         RequestResult<List<LeaveStatusActions>> GetManagerLeaveStatusActions();
         RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus);
+        int FileUpload(AttachedFileModel fileUpload);
     }
 }

@@ -72,22 +72,29 @@ namespace SmartdustApp.Business.Data.Repository
         }
 
         /// <summary>
-        /// Insert into Leave and LeaveDates Table
+        /// Insert the Leave 
         /// </summary>
         public RequestResult<bool> Save(LeaveModel leave)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
 
             // Insert data into the Leave table
-            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveTypeID, LeaveStatusID, Reason, AppliedDate, LeaveDays, AttachedFile)
-                           VALUES (@UserID, @LeaveTypeID, @LeaveStatusID, @Reason, @AppliedDate, @LeaveDays, @AttachedFile);
-                           SELECT CAST(SCOPE_IDENTITY() AS INT)";
+            string leaveInsertQuery = @"INSERT INTO [Leave] (UserID, LeaveTypeID, LeaveStatusID, Reason, AppliedDate, LeaveDays)
+                    VALUES (@UserID, @LeaveTypeID, @LeaveStatusID, @Reason, @AppliedDate, @LeaveDays);
+                    SELECT CAST(SCOPE_IDENTITY() AS INT)";
 
             // Prepare the parameters for LeaveDates
             List<LeaveDateModel> leaveDatesParameters = null;
             if (leave.LeaveDates != null && leave.LeaveDates.Any())
             {
                 leaveDatesParameters = leave.LeaveDates.Select(leaveDate => new LeaveDateModel { LeaveID = 0, LeaveDate = leaveDate }).ToList();
+            }
+
+            // Prepare the parameters for LeaveAttachedFiles
+            List<LeaveAttachedFilesModel> leaveAttachedFilesParameters = null;
+            if (leave.AttachedFileIDs != null && leave.AttachedFileIDs.Any())
+            {
+                leaveAttachedFilesParameters = leave.AttachedFileIDs.Select(attachedFileID => new LeaveAttachedFilesModel { LeaveID = 0, AttachedFileID = attachedFileID }).ToList();
             }
 
             // Transaction to ensure both inserts are executed atomically
@@ -108,6 +115,16 @@ namespace SmartdustApp.Business.Data.Repository
                     db.Execute(leaveDatesInsertQuery, leaveDatesParameters, transaction);
                 }
 
+                if (leaveAttachedFilesParameters != null && leaveAttachedFilesParameters.Any())
+                {
+                    // Set the LeaveID for all attached files
+                    leaveAttachedFilesParameters.ForEach(f => f.LeaveID = leaveID);
+
+                    // Insert all attached files into the LeaveAttachedFiles table in a single batch
+                    string leaveAttachedFilesInsertQuery = "INSERT INTO LeaveAttachedFiles (LeaveID, AttachedFileID) VALUES (@LeaveID, @AttachedFileID)";
+                    db.Execute(leaveAttachedFilesInsertQuery, leaveAttachedFilesParameters, transaction);
+                }
+
                 // If all inserts are successful, commit the transaction
                 transaction.Commit();
                 return new RequestResult<bool>(true);
@@ -120,6 +137,18 @@ namespace SmartdustApp.Business.Data.Repository
             }
         }
 
+        /// <summary>
+        /// Image Upload in DB
+        /// </summary>
+        public int FileUpload(AttachedFileModel File)
+        {
+            string query = @"INSERT INTO [AttachedFile](Name, FileType, DataFiles)
+                    VALUES (@Name, @FileType, @DataFiles);
+                    SELECT CAST(SCOPE_IDENTITY() AS INT)";
+
+            using IDbConnection db = _connectionFactory.GetConnection;
+            return db.QuerySingle<int>(query, File);
+        }
         // Method to fetch LeaveTypes from Lookup table
         public List<LeaveTypes> GetLeaveTypes()
         {
@@ -179,21 +208,21 @@ namespace SmartdustApp.Business.Data.Repository
 
             // SQL query with JOIN to fetch data from both Leave and LeaveDates tables for employees under the specified manager
             var query = @"
-                         SELECT L.ID, L.UserID, U.UserName, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
-                         LD.LeaveDate as LeaveDates, L.AttachedFile
-                         FROM [Leave] L
-                         LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
-                         LEFT JOIN Lookup LT ON L.LeaveTypeID = LT.ID
-                         LEFT JOIN Lookup LS ON L.LeaveStatusID = LS.ID
-                         LEFT JOIN [User] U ON L.UserID = U.Id
-                         WHERE L.UserID IN (
-                             SELECT EmployeeId FROM Employee WHERE ManagerId = @managerId
-                         )";
+                 SELECT L.ID, L.UserID, U.UserName, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
+                 LD.LeaveDate as LeaveDates
+                 FROM [Leave] L
+                 LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
+                 LEFT JOIN Lookup LT ON L.LeaveTypeID = LT.ID
+                 LEFT JOIN Lookup LS ON L.LeaveStatusID = LS.ID
+                 LEFT JOIN [User] U ON L.UserID = U.Id
+                 WHERE L.UserID IN (
+                     SELECT EmployeeId FROM Employee WHERE ManagerId = @managerId
+                 )";
 
             var parameters = new { managerId };
 
             // Use Dapper's Query method to map the data to the LeaveModel class
-            var result = db.Query<LeaveModel, DateTime?, byte[], LeaveModel>(query, (leave, leaveDate, attachedFileBytes) =>
+            var result = db.Query<LeaveModel, DateTime?, LeaveModel>(query, (leave, leaveDate) =>
             {
                 if (leaveDate != null)
                 {
@@ -204,12 +233,8 @@ namespace SmartdustApp.Business.Data.Repository
                     // If LeaveDate is not null, add it to the LeaveModel's LeaveDates list
                     leave.LeaveDates.Add(leaveDate.Value);
                 }
-
-                // Set the AttachedFile data
-                leave.AttachedFile = attachedFileBytes;
-
                 return leave;
-            }, parameters, splitOn: "LeaveDates,AttachedFile");
+            }, parameters, splitOn: "LeaveDates");
 
             // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
             return result.GroupBy(l => l.ID)

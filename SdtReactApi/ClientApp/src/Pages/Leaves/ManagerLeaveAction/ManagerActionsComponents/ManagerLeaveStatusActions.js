@@ -24,11 +24,13 @@ export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, Leave
     return (
         <div>
             <Tooltip title="Edit Status">
-            <IconButton disabled={leaveStatus !== "Pending"} variant="outlined" onClick={handleClickOpen}
-            >
-                {/*{leaveStatus}*/}
-                <EditIcon/>
-                </IconButton>
+                <span>
+                    <IconButton disabled={leaveStatus !== "Pending"} variant="outlined" onClick={handleClickOpen}
+                    >
+                        {/*{leaveStatus}*/}
+                        <EditIcon/>
+                    </IconButton>
+                </span>
             </Tooltip>
             <Dialog
                 open={open}

@@ -173,9 +173,10 @@ const Signup = () => {
           <TextField size='small' onChange={(e)=>handleChange(e)} name='confirmpassword' label='Re-Enter Password' type="password"  required/>
           <Button
             type='submit'
+            color='success'
             loading={isLoading}
           >
-            Sign in
+            Sign up
           </Button>
         </form>
         

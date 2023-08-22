@@ -21,6 +21,6 @@ namespace SmartdustApp.Business.Core.Model
         public int LeaveDays { get; set; }
 
         public List<DateTime> LeaveDates { get; set; }
-        public byte[] AttachedFile { get; set; }
+        public List<int> AttachedFileIDs { get; set; }
     }
 }

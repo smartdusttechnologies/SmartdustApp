@@ -17,16 +17,28 @@ export default function SingleLeaveDetail({ rows }) {
 
     const handleClickOpen = () => {
         setOpen(true);
-        console.log(rows , 'Single Leave Details')
+        console.log(rows, 'Single Leave Details')
+        console.log(rows.attachedFile, 'Base 64')
     };
 
     const handleClose = () => {
         setOpen(false);
     };
 
+    const downloadFile = (fileData, fileName) => {
+        const blob = new Blob([fileData], { type: 'image/png' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        // Clean up the URL.createObjectURL
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <div>
-            <Tooltip title="Edit Status">
+            <Tooltip title="Details">
                 <IconButton variant="outlined" onClick={handleClickOpen}
                 >
                     <VisibilityIcon />
@@ -45,8 +57,9 @@ export default function SingleLeaveDetail({ rows }) {
                         <Button
                             sx={{
                                 maxWidth: '200px',
-                                margin: '20px'
+                                margin: '15px'
                             }}
+                            onClick={() => downloadFile(rows.attachedFile, 'attached-file.png')}
                         >
                             Download Document
                         </Button>

@@ -127,38 +127,43 @@ namespace SmartdustApp.Controllers
                 };
             return Json(new RequestResult<bool>(errors));
         }
-        //[HttpPost]
-        //[Route("UploadFile")]
-        //public async Task<IActionResult> UploadFile(IFormFile file)
-        //{
-        //    try
-        //    {
-        //        if (file == null || file.Length == 0)
-        //        {
-        //            return BadRequest("No file uploaded.");
-        //        }
 
-        //        byte[] fileBytes;
-        //        using (var ms = new MemoryStream())
-        //        {
-        //            await file.CopyToAsync(ms);
-        //            fileBytes = ms.ToArray();
-        //        }
+        [HttpPost]
+        [Route("FileUpload")]
+        public IActionResult FileUpload()
+        {
+            List<string> imageId = new List<string>();
+            List<int> fileId = new List<int>();
 
-        //        // Call your service method to process the uploaded file
-        //        var result = _leaveService.UploadFile(fileBytes);
-
-        //        if (result.IsSuccessful)
-        //        {
-        //            return Ok(result);
-        //        }
-
-        //        return BadRequest(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"Internal server error: {ex.Message}");
-        //    }
-        //}
+            foreach (var item in Request.Form.Files)
+            {
+                if (item != null)
+                {
+                    if (item.Length > 0)
+                    {
+                        //Getting FileName
+                        var fileName = Path.GetFileName(item.FileName);
+                        //Getting file Extension
+                        var fileExtension = Path.GetExtension(fileName);
+                        // concatenating  FileName + FileExtension
+                        var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
+                        var objfiles = new AttachedFileModel()
+                        {
+                            Name = newFileName,
+                            FileType = fileExtension
+                        };
+                        using (var target = new MemoryStream())
+                        {
+                            item.CopyTo(target);
+                            objfiles.DataFiles = target.ToArray();
+                        }
+                        var result = _leaveService.FileUpload(objfiles);
+                        fileId.Add(result);
+                        imageId.Add(newFileName.ToString());
+                    }
+                }
+            }
+            return Ok(fileId);
+        }
     }
 }

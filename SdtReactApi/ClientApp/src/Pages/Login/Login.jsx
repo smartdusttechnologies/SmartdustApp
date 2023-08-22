@@ -122,6 +122,7 @@ const Login = () => {
           </div>
             <Button
               type='submit'
+              color='success'
               loading={isLoading}
             >
               Sign in

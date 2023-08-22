@@ -29,12 +29,12 @@ const LeaveApplication = () => {
     const [leaveData, setLeaveData] = useState(initialState);
     const [isLoading, setLoading] = useState(false);
     const [leavetypes, setLeaveTypes] = useState([]);
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState([]);
 
     const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        setFile(selectedFile);
-        console.log(selectedFile)
+        const filesArray = Array.from(e.target.files);
+        setFile(filesArray);
+        console.log(filesArray);
     };
 
     const handleChange = (event) => {
@@ -66,13 +66,7 @@ const LeaveApplication = () => {
         console.log(leaveData.leaveDates);
         console.log(leaveData);
     };
-    const handleDeleteDate = (indexToDelete) => {
-        setLeaveData((prevState) => ({
-            ...prevState,
-            leaveDates: prevState?.leaveDates?.filter((date, index) => index !== indexToDelete),
-        }));
-        console.log(leaveData?.leaveDates, 'Deleted Date')
-    };
+
     // Utility function to check if two dates have the same day, month, and year (ignoring time)
     const isSameDay = (date1, date2) =>
         date1.getDate() === date2.getDate() &&
@@ -80,88 +74,85 @@ const LeaveApplication = () => {
         date1.getFullYear() === date2.getFullYear();
 
 
-    //function calculateDateDifference(leaveTill, leaveFrom) {
-    //    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
-    //    const tillDate = new Date(leaveTill);
-    //    const fromDate = new Date(leaveFrom);
-
-    //    // Calculate the difference in days
-    //    const diffDays = Math.round(Math.abs((tillDate - fromDate) / oneDay)) + 1;
-
-    //    return diffDays;
-    //};
+    
+    const handleDeleteDate = (indexToDelete) => {
+        setLeaveData((prevState) => ({
+            ...prevState,
+            leaveDates: prevState?.leaveDates?.filter((date, index) => index !== indexToDelete),
+        }));
+        console.log(leaveData?.leaveDates, 'Deleted Date')
+    };
+    const handleDeleteFile = (indexToDelete) => {
+        setFile(file?.filter((file, index) => index !== indexToDelete));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true)
-        const reader = new FileReader();
 
-        if (leaveData.leaveType === 1 && file) {
-            const reader = new FileReader();
+        const formData = new FormData();
 
-            reader.onload = function (event) {
-                const base64Data = event.target.result.split(',')[1]; // Extract the base64 data
-                axios.post('api/leave/ApplyLeave', {
-                    id: 0,
-                    userId: auth?.userId,
-                    userName: auth?.userName,
-                    leaveType: '',
-                    leaveTypeId: leaveData?.leaveType,
-                    reason: leaveData?.reason,
-                    appliedDate: new Date(),
-                    leaveStatus: 'Pending',
-                    leaveStatusId: 6,
-                    leaveDays: leaveData?.leaveDates?.length,
-                    leaveDates: leaveData?.leaveDates,
-                    attachedFile: base64Data // Set the base64-encoded file data
-                })
-                    .then(response => {
-                        console.log(response?.data?.message[0]?.reason)
-                        toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                        setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                        setLoading(false)
-                        setLeaveData(initialState)
-                    })
-                    .catch(error => {
-                        setLoading(false)
-                        console.log(error)
-                        toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                        setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
-                    })
-            };
-
-            // Read the file as base64 data
-            reader.readAsDataURL(file);
-        } else {
-            axios.post('api/leave/ApplyLeave', {
-                id: 0,
-                userId: auth?.userId,
-                userName: auth?.userName,
-                leaveType: '',
-                leaveTypeId: leaveData?.leaveType,
-                reason: leaveData?.reason,
-                appliedDate: new Date(),
-                leaveStatus: 'Pending',
-                leaveStatusId: 6,
-                leaveDays: leaveData?.leaveDates?.length,
-                leaveDates: leaveData?.leaveDates,
-                attachedFile: '' // Set the attachedFile to null when not applicable
-            })
+        // Check if there are files to upload
+        if (file && file.length > 0) {
+            file.forEach(file => {
+                const fileName = file.name;
+                const fileExtension = fileName.split('.').pop().toLowerCase();
+                // Check for allowed file extensions
+                if (['jpg', 'jpeg', 'png', 'xlsx', 'pdf'].includes(fileExtension)) {
+                    formData.append('files', file);
+                } else {
+                    toast.warn('Wrong File Type!', { position: "bottom-center" });
+                    return;
+                }
+            });
+            // Upload files and get AttachedFileIDs
+            axios.post('api/leave/FileUpload', formData)
                 .then(response => {
-                    console.log(response?.data?.message[0]?.reason)
-                    toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                    setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                    setLoading(false)
-                    setLeaveData(initialState)
+                    console.log(response.data);
+                    // Call ApplyLeave with AttachedFileIDs
+                    ApplyLeave(response.data);
                 })
                 .catch(error => {
-                    setLoading(false)
-                    console.log(error)
-                    toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                    setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
-                })
+                    console.error(error);
+                });
+        } else {
+            // Call ApplyLeave without AttachedFileIDs
+            ApplyLeave([]);
         }
+        
+
         };
+
+    const ApplyLeave = (attachedFileIDs) => {
+        axios.post('api/leave/ApplyLeave', {
+            id: 0,
+            userId: auth?.userId,
+            userName: auth?.userName,
+            leaveType: '',
+            leaveTypeId: leaveData?.leaveType,
+            reason: leaveData?.reason,
+            appliedDate: new Date(),
+            leaveStatus: 'Pending',
+            leaveStatusId: 6,
+            leaveDays: leaveData?.leaveDates?.length,
+            leaveDates: leaveData?.leaveDates,
+            attachedFileIDs: attachedFileIDs
+        })
+            .then(response => {
+                console.log(response?.data?.message[0]?.reason)
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                setLoading(false)
+                setLeaveData(initialState)
+            })
+            .catch(error => {
+                setLoading(false)
+                console.log(error)
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+            })
+
+    }
 
     const handleGetLeaveTypes = () => {
         axios.get('api/leave/GetLeaveTypes')
@@ -204,7 +195,7 @@ const LeaveApplication = () => {
                             <h4>Leave Dates:</h4>
                             <ol className="leavedateslist">
                                 {
-                                    leaveData.leaveDates.map((leave, index) => (
+                                    leaveData?.leaveDates && leaveData?.leaveDates?.length > 0 && leaveData?.leaveDates.map((leave, index) => (
                                         <li key={index}>
                                             <Chip
                                                 label={leave.toDateString()}
@@ -236,12 +227,28 @@ const LeaveApplication = () => {
                 </FormControl>
                 {leaveData.leaveType === 1 && (
                     <div className="documentupload">
-                        <label for="fileupload">Choose a file</label>
-                        <span>{file ? file.name : "No file chosen"}</span>
+                        <label htmlFor="fileupload">Choose files</label>
+                        <span>
+                            {file.length > 0
+                                ? <ol className="fileslist">
+                                    {
+                                        file?.map((el, index) => (
+                                            <li key={index}>
+                                                <Chip
+                                                    label={el.name}
+                                                    variant="outlined"
+                                                    onDelete={() => handleDeleteFile(index)}
+                                                />
+                                            </li>
+                                        ))
+                                    }
+                                </ol>
+                                : "No files chosen"}
+                        </span>
                         <input 
                             type="file"
-                            
                             id="fileupload"
+                            multiple
                             //accept="image/*"
                             onChange={(e) => handleFileChange(e)}
                         />

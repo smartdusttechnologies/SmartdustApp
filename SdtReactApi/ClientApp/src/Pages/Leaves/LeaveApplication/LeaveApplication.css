@@ -34,7 +34,11 @@
     display: grid;
     grid-template-columns: repeat(3,1fr);
 }
-.documentupload{
+.fileslist {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+.documentupload {
     display: inline-block;
     background-color: #f0f0f0;
     padding: 10px;

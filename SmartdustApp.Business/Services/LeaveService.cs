@@ -104,6 +104,12 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        public int FileUpload(AttachedFileModel fileUpload)
+        {
+            var dataDownloaded = _leaveRepository.FileUpload(fileUpload);
+            return dataDownloaded;
+
+        }
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
             var leave = _leaveRepository.GetEmployeeLeave(userID);
