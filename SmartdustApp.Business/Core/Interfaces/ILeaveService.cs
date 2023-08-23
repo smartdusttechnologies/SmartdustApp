@@ -1,4 +1,5 @@
-﻿using SmartdustApp.Business.Common;
+﻿using Microsoft.AspNetCore.Http;
+using SmartdustApp.Business.Common;
 using SmartdustApp.Business.Core.Model;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,6 @@ namespace SmartdustApp.Business.Core.Interfaces
         RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID);
         RequestResult<List<LeaveStatusActions>> GetManagerLeaveStatusActions();
         RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus);
-        int FileUpload(AttachedFileModel fileUpload);
+        List<int> UploadFiles(IFormFileCollection files);
     }
 }

@@ -99,22 +99,30 @@ const LeaveApplication = () => {
                 const fileExtension = fileName.split('.').pop().toLowerCase();
                 // Check for allowed file extensions
                 if (['jpg', 'jpeg', 'png', 'xlsx', 'pdf'].includes(fileExtension)) {
-                    formData.append('files', file);
+                    if (file.size <= 1024 * 1024) { // Check file size
+                        formData.append('files', file);
+                    } else {
+                        toast.warn('File size should not exceed 1MB.', { position: "bottom-center" });
+                        setLoading(false)
+                    }
                 } else {
                     toast.warn('Wrong File Type!', { position: "bottom-center" });
-                    return;
+                    setLoading(false)
                 }
             });
-            // Upload files and get AttachedFileIDs
-            axios.post('api/leave/FileUpload', formData)
-                .then(response => {
-                    console.log(response.data);
-                    // Call ApplyLeave with AttachedFileIDs
-                    ApplyLeave(response.data);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+
+            if (formData.has('files')) {
+                // Upload files and get AttachedFileIDs
+                axios.post('api/leave/FileUpload', formData)
+                    .then(response => {
+                        console.log(response.data);
+                        // Call ApplyLeave with AttachedFileIDs
+                        ApplyLeave(response.data);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
         } else {
             // Call ApplyLeave without AttachedFileIDs
             ApplyLeave([]);

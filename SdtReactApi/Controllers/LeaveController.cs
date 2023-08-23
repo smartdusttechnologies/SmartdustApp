@@ -132,38 +132,8 @@ namespace SmartdustApp.Controllers
         [Route("FileUpload")]
         public IActionResult FileUpload()
         {
-            List<string> imageId = new List<string>();
-            List<int> fileId = new List<int>();
-
-            foreach (var item in Request.Form.Files)
-            {
-                if (item != null)
-                {
-                    if (item.Length > 0)
-                    {
-                        //Getting FileName
-                        var fileName = Path.GetFileName(item.FileName);
-                        //Getting file Extension
-                        var fileExtension = Path.GetExtension(fileName);
-                        // concatenating  FileName + FileExtension
-                        var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
-                        var objfiles = new AttachedFileModel()
-                        {
-                            Name = newFileName,
-                            FileType = fileExtension
-                        };
-                        using (var target = new MemoryStream())
-                        {
-                            item.CopyTo(target);
-                            objfiles.DataFiles = target.ToArray();
-                        }
-                        var result = _leaveService.FileUpload(objfiles);
-                        fileId.Add(result);
-                        imageId.Add(newFileName.ToString());
-                    }
-                }
-            }
-            return Ok(fileId);
+            var uploadedFileIds = _leaveService.UploadFiles(Request.Form.Files);
+            return Ok(uploadedFileIds);
         }
     }
 }

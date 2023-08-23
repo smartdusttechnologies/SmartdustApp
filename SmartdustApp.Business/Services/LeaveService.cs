@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting.Internal;
@@ -104,11 +105,61 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
-        public int FileUpload(AttachedFileModel fileUpload)
-        {
-            var dataDownloaded = _leaveRepository.FileUpload(fileUpload);
-            return dataDownloaded;
+        //public int FileUpload(AttachedFileModel fileUpload)
+        //{
+        //    var dataDownloaded = _leaveRepository.FileUpload(fileUpload);
+        //    return dataDownloaded;
 
+        //}
+        public List<int> UploadFiles(IFormFileCollection files)
+        {
+            List<int> uploadedFileIds = new List<int>();
+
+            foreach (var file in files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var uploadedFileId = UploadSingleFile(file);
+                    uploadedFileIds.Add(uploadedFileId);
+                }
+            }
+
+            return uploadedFileIds;
+        }
+
+        private int UploadSingleFile(IFormFile file)
+        {
+            var newFileName = GenerateUniqueFileName(file.FileName);
+            var fileModel = new DocumentModel
+            {
+                Name = newFileName,
+                FileType = Path.GetExtension(newFileName)
+            };
+            // Validate file extension
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".xlsx", ".pdf" };
+            if (!allowedExtensions.Contains(fileModel.FileType.ToLower()))
+            {
+                throw new InvalidOperationException("Unsupported file type.");
+            }
+
+            // Validate file size
+            if (file.Length > 1024 * 1024) // 1 MB
+            {
+                throw new InvalidOperationException("File size should not exceed 1MB.");
+            }
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                fileModel.DataFiles = memoryStream.ToArray();
+            }
+
+            return _leaveRepository.FileUpload(fileModel);
+        }
+
+        private string GenerateUniqueFileName(string originalFileName)
+        {
+            var fileExtension = Path.GetExtension(originalFileName);
+            return $"{Guid.NewGuid()}{fileExtension}";
         }
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {

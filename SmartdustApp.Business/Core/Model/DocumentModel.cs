@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartdustApp.Business.Core.Model
 {
-    public class AttachedFileModel
+    public class DocumentModel
     {
         public int ID { get; set; }
         // Image Name 
