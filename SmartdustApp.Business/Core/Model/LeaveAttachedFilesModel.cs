@@ -9,6 +9,6 @@ namespace SmartdustApp.Business.Core.Model
     public class LeaveAttachedFilesModel
     {
         public int LeaveID { get; set; }
-        public int AttachedFileID { get; set; }
+        public int DocumentID { get; set; }
     }
 }

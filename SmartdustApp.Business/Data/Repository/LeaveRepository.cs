@@ -94,7 +94,7 @@ namespace SmartdustApp.Business.Data.Repository
             List<LeaveAttachedFilesModel> leaveAttachedFilesParameters = null;
             if (leave.AttachedFileIDs != null && leave.AttachedFileIDs.Any())
             {
-                leaveAttachedFilesParameters = leave.AttachedFileIDs.Select(attachedFileID => new LeaveAttachedFilesModel { LeaveID = 0, AttachedFileID = attachedFileID }).ToList();
+                leaveAttachedFilesParameters = leave.AttachedFileIDs.Select(DocumentID => new LeaveAttachedFilesModel { LeaveID = 0, DocumentID = DocumentID }).ToList();
             }
 
             // Transaction to ensure both inserts are executed atomically
@@ -121,7 +121,7 @@ namespace SmartdustApp.Business.Data.Repository
                     leaveAttachedFilesParameters.ForEach(f => f.LeaveID = leaveID);
 
                     // Insert all attached files into the LeaveAttachedFiles table in a single batch
-                    string leaveAttachedFilesInsertQuery = "INSERT INTO LeaveAttachedFile (LeaveID, DocumentID) VALUES (@LeaveID, @AttachedFileID)";
+                    string leaveAttachedFilesInsertQuery = "INSERT INTO LeaveAttachedFile (LeaveID, DocumentID) VALUES (@LeaveID, @DocumentID)";
                     db.Execute(leaveAttachedFilesInsertQuery, leaveAttachedFilesParameters, transaction);
                 }
 
@@ -224,7 +224,7 @@ namespace SmartdustApp.Business.Data.Repository
             var parameters = new { managerId };
 
             // Use Dapper's Query method to map the data to the LeaveModel class
-            var result = db.Query<LeaveModel, DateTime?, List<int>, LeaveModel>(query, (leave, leaveDate, attachedFileIDs) =>
+            var result = db.Query<LeaveModel, DateTime?, int?, LeaveModel>(query, (leave, leaveDate, attachedFileID) =>
             {
                 if (leaveDate != null)
                 {
@@ -236,10 +236,13 @@ namespace SmartdustApp.Business.Data.Repository
                     leave.LeaveDates.Add(leaveDate.Value);
                 }
 
-                if (attachedFileIDs != null)
+                if (attachedFileID.HasValue)
                 {
                     // Set AttachedFileIDs for the LeaveModel
-                    leave.AttachedFileIDs = attachedFileIDs;
+                    if (leave.AttachedFileIDs == null)
+                        leave.AttachedFileIDs = new List<int>();
+
+                    leave.AttachedFileIDs.Add(attachedFileID.Value);
                 }
 
                 return leave;
@@ -247,16 +250,19 @@ namespace SmartdustApp.Business.Data.Repository
 
             // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
             return result.GroupBy(l => l.ID)
-                         .Select(g =>
-                         {
-                             var leave = g.First();
+             .Select(g =>
+             {
+                 var leave = g.First();
 
-                             // Handle case where g.SelectMany(l => l.LeaveDates) returns null
-                             leave.LeaveDates = g.Where(l => l.LeaveDates != null).SelectMany(l => l.LeaveDates).ToList();
+                 // Handle case where g.SelectMany(l => l.LeaveDates) returns null
+                 leave.LeaveDates = g.Where(l => l.LeaveDates != null).SelectMany(l => l.LeaveDates).ToList();
 
-                             return leave;
-                         })
-                         .ToList();
+                 // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
+                 leave.AttachedFileIDs = g.Where(l => l.AttachedFileIDs != null).SelectMany(l => l.AttachedFileIDs).ToList();
+
+                 return leave;
+             })
+             .ToList();
         }
 
 

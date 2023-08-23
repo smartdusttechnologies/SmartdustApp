@@ -18,22 +18,10 @@ export default function SingleLeaveDetail({ rows }) {
     const handleClickOpen = () => {
         setOpen(true);
         console.log(rows, 'Single Leave Details')
-        console.log(rows.attachedFile, 'Base 64')
     };
 
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const downloadFile = (fileData, fileName) => {
-        const blob = new Blob([fileData], { type: 'image/png' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        // Clean up the URL.createObjectURL
-        URL.revokeObjectURL(url);
     };
 
     return (
@@ -50,16 +38,17 @@ export default function SingleLeaveDetail({ rows }) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle sx={{ width:'350px' }} >Leave Details</DialogTitle>
+                <DialogTitle sx={{ width:'350px' }}>Leave Details</DialogTitle>
                 <Divider />
-                {rows.attachedFile && (
+                {   rows.attachedFileIDs != null &&
+                    rows.attachedFileIDs.length > 0 &&
+                    (
                     <div>
                         <Button
                             sx={{
                                 maxWidth: '200px',
                                 margin: '15px'
                             }}
-                            onClick={() => downloadFile(rows.attachedFile, 'attached-file.png')}
                         >
                             Download Document
                         </Button>
