@@ -135,5 +135,23 @@ namespace SmartdustApp.Controllers
             var uploadedFileIds = _leaveService.UploadFiles(Request.Form.Files);
             return Ok(uploadedFileIds);
         }
+
+        /// <summary>
+        /// Method To download Document 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("DownloadDocument/{documentID}")]
+        public IActionResult DownloadDocument(int documentID)
+        {
+
+            DocumentModel attachment = _leaveService.DownloadDocument(documentID);
+
+            if (attachment != null)
+            {
+                return File(new MemoryStream(attachment.DataFiles), Helpers.GetMimeTypes()[attachment.FileType], attachment.Name);
+            }
+            return Ok("Can't find the Document");
+        }
     }
 }

@@ -18,5 +18,6 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         void UpdateLeaveBalance(int leaveID);
         LeaveModel GetLeaveDetails(int leaveID);
         int FileUpload(DocumentModel File);
+        DocumentModel DownloadDocument(int documentID);
     }
 }

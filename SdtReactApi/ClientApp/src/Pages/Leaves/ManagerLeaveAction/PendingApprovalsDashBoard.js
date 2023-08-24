@@ -10,7 +10,6 @@ const PendingApprovalsDashBoard = () => {
     const [isLoading, setLoading] = useState(false);
     const [employeeRows, setEmployeeRows] = useState([]);
     const [actionRows, setActionsRows] = useState([]);
-    //const [isLoading, setLoading] = useState(false);
     const { auth, setNotification, notification } = useContext(AuthContext);
 
     const handleGetEmployeeLeave = () => {

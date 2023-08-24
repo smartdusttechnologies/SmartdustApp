@@ -19,5 +19,6 @@ namespace SmartdustApp.Business.Core.Interfaces
         RequestResult<List<LeaveStatusActions>> GetManagerLeaveStatusActions();
         RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus);
         List<int> UploadFiles(IFormFileCollection files);
+        DocumentModel DownloadDocument(int documentID);
     }
 }

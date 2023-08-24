@@ -161,6 +161,17 @@ namespace SmartdustApp.Business.Services
             var fileExtension = Path.GetExtension(originalFileName);
             return $"{Guid.NewGuid()}{fileExtension}";
         }
+
+        /// <summary>
+        /// Method To download Document 
+        /// </summary>
+        /// <returns></returns>
+        public DocumentModel DownloadDocument(int documentID)
+        {
+            var document = _leaveRepository.DownloadDocument(documentID);
+            return document;
+
+        }
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
             var leave = _leaveRepository.GetEmployeeLeave(userID);

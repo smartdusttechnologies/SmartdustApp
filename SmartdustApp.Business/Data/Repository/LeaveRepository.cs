@@ -149,6 +149,16 @@ namespace SmartdustApp.Business.Data.Repository
             using IDbConnection db = _connectionFactory.GetConnection;
             return db.QuerySingle<int>(query, File);
         }
+
+        /// <summary>
+        /// Image download
+        /// </summary>
+        public DocumentModel DownloadDocument(int documentID)
+        {
+            using IDbConnection con = _connectionFactory.GetConnection;
+            return con.Query<DocumentModel>(@"select * from [DocumentTable] where ID = @ID ", new { ID = documentID }).FirstOrDefault();
+        }
+
         // Method to fetch LeaveTypes from Lookup table
         public List<LeaveTypes> GetLeaveTypes()
         {

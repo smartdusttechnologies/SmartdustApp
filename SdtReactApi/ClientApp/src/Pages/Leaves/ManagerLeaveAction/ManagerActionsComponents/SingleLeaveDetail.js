@@ -10,10 +10,11 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+import axios from 'axios'
 
 export default function SingleLeaveDetail({ rows }) {
     const [open, setOpen] = React.useState(false);
-    const [comment, setComment] = React.useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,6 +23,30 @@ export default function SingleLeaveDetail({ rows }) {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const DownloadButton = ({ documentID, index }) => {
+        const handleDownloadClick = () => {
+            const downloadUrl = `/api/leave/DownloadDocument/${documentID}`;
+
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.style.display = 'none';
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+        };
+
+        return (
+            <Chip
+                label={`Document ${index + 1}`}
+                variant="outlined"
+                onClick={handleDownloadClick}
+            />
+        );
     };
 
     return (
@@ -44,14 +69,13 @@ export default function SingleLeaveDetail({ rows }) {
                     rows.attachedFileIDs.length > 0 &&
                     (
                     <div>
-                        <Button
-                            sx={{
-                                maxWidth: '200px',
-                                margin: '15px'
-                            }}
-                        >
-                            Download Document
-                        </Button>
+                        <div style={{ display: 'grid', gridTemplateColumns: "repeat(3,1fr)", gap:'3px', margin: '5px' }}>
+                            {
+                                rows.attachedFileIDs.map((el, index) => (
+                                    <DownloadButton documentID={el} index={index } />
+                                ))
+                            }
+                        </div>
                         <Divider />
                     </div>
                 )}
