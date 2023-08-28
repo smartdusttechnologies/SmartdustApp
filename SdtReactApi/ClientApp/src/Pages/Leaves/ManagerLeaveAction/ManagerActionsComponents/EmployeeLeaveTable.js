@@ -29,6 +29,8 @@ import Popover from '@mui/material/Popover';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Divider from '@mui/material/Divider';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -107,12 +109,103 @@ const headCells = [
     },
 ];
 
+const TableMenu = ({ Id, label, handleSearchChange, searchTerms, createSortHandler }) => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    return (
+        <React.Fragment>
+            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                <Tooltip title="Menu">
+                    <IconButton
+                        onClick={handleClick}
+                        size="small"
+                        aria-controls={open ? 'account-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        sx={{
+                            opacity: 0,
+                            '&:hover': {
+                                opacity: 0.9,
+                            },
+                        }}
+                    >
+                        <MoreVertIcon sx={{ width: 25, height: 25 }}></MoreVertIcon>
+                    </IconButton>
+                </Tooltip>
+            </Box>
+               <Menu
+                    anchorEl={anchorEl}
+                    id="account-menu"
+                    open={open}
+                    onClose={handleClose}
+                    //onClick={handleClose}
+                    PaperProps={{
+                        elevation: 0,
+                        sx: {
+                            overflow: 'visible',
+                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.12))',
+                            mt: 1.5,
+                            '& .MuiAvatar-root': {
+                                width: 32,
+                                height: 32,
+                                ml: -0.5,
+                                mr: 1,
+                            },
+                            '&:before': {
+                                content: '""',
+                                display: 'block',
+                                position: 'absolute',
+                                top: 0,
+                                right: 14,
+                                width: 10,
+                                height: 10,
+                                bgcolor: 'background.paper',
+                                zIndex: 0,
+                            },
+                        },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+                <MenuItem sx={{ fontSize: "20px", fontWeight: "500", display: 'block' }} onClick={handleClose}>Column Options</MenuItem>
+                <Divider />
+                <MenuItem
+                    onClick={createSortHandler(Id)}
+                    sx={{ fontSize: "18px" }}
+                >
+                    <ArrowUpwardIcon sx={{ width: 20, height: 20 }} /> Sort
+                </MenuItem>
+                <Divider/>
+                    <MenuItem >
+                        <TextField
+                            variant="outlined"
+                            size="small"
+                            type="text"
+                            value={searchTerms[Id] || ''}
+                            onChange={(event) => handleSearchChange(event, Id)}
+                            placeholder={`Search ${label}`}
+                        />
+                    </MenuItem>
+                </Menu>
+        </React.Fragment>
+    )
+
+};
+
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, handleSearchChange, searchTerms } =
         props;
+
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+
     return (
         <TableHead>
             <TableRow>
@@ -133,44 +226,31 @@ function EnhancedTableHead(props) {
                         align="right"
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        sx={{
-                            position: 'relative',
-                            cursor: 'pointer',
-                            '&:hover .search-field': {
-                                opacity: 1,
-                            },
-                        }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
                         >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
+                            <Box
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <Box component="span" sx={visuallyHidden}>
+                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    </Box>
+                                ) : null}
+                            </Box>
+                            {
+                                <TableMenu
+                                    Id={headCell.id}
+                                    label={headCell.label}
+                                    handleSearchChange={handleSearchChange}
+                                    searchTerms={searchTerms}
+                                    createSortHandler={createSortHandler }
+                                />
+                            }
                         </TableSortLabel>
-                        <TextField
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            value={searchTerms[headCell.id] || ''}
-                            onChange={(event) => handleSearchChange(event, headCell.id)}
-                            placeholder={`Search ${headCell.label}`}
-                            className="search-field"
-                            sx={{
-                                position: 'absolute',
-                                top: '-10px',
-                                left: 0,
-                                width: '100%',
-                                opacity: 0,
-                                transition: 'opacity 0.3s',
-                                width: '90%',
-                            }}
-                        />
                     </TableCell>
                 ))}
             </TableRow>
