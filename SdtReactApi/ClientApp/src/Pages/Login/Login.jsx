@@ -12,7 +12,7 @@ const loginurl = 'api/security/login';
 
 const Login = () => {
   const navigate = useNavigate()
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+    const { auth, setAuth, notification, setNotification } = useContext(AuthContext);
 
   const [email , setEmail] = useState('');
   const [password, setPassword] = useState('');

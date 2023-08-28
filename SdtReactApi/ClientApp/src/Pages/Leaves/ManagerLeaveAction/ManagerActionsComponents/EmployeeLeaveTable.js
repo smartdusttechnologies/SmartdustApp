@@ -24,6 +24,11 @@ import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
 import ManagerLeaveStatusActionsMenu from './ManagerLeaveStatusActions';
 import SingleLeaveDetail from './SingleLeaveDetail';
+import { TextField } from '@mui/material'
+import Popover from '@mui/material/Popover';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -100,21 +105,14 @@ const headCells = [
         disablePadding: false,
         label: 'Action',
     },
-    {
-        id: 'details',
-        numeric: false,
-        disablePadding: false,
-        label: 'Details',
-    },
 ];
 
 function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, handleSearchChange, searchTerms } =
         props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
-
     return (
         <TableHead>
             <TableRow>
@@ -135,6 +133,13 @@ function EnhancedTableHead(props) {
                         align="right"
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
+                        sx={{
+                            position: 'relative',
+                            cursor: 'pointer',
+                            '&:hover .search-field': {
+                                opacity: 1,
+                            },
+                        }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -148,6 +153,24 @@ function EnhancedTableHead(props) {
                                 </Box>
                             ) : null}
                         </TableSortLabel>
+                        <TextField
+                            variant="outlined"
+                            size="small"
+                            type="text"
+                            value={searchTerms[headCell.id] || ''}
+                            onChange={(event) => handleSearchChange(event, headCell.id)}
+                            placeholder={`Search ${headCell.label}`}
+                            className="search-field"
+                            sx={{
+                                position: 'absolute',
+                                top: '-10px',
+                                left: 0,
+                                width: '100%',
+                                opacity: 0,
+                                transition: 'opacity 0.3s',
+                                width: '90%',
+                            }}
+                        />
                     </TableCell>
                 ))}
             </TableRow>
@@ -239,11 +262,18 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [searchTerms, setSearchTerms] = React.useState({}); 
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
+    };
+    const handleSearchChange = (event, columnId) => {
+        setSearchTerms((prevSearchTerms) => ({
+            ...prevSearchTerms,
+            [columnId]: event.target.value,
+        }));
     };
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -293,14 +323,28 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [order, orderBy, page, rowsPerPage],
-    );
+    //const visibleRows = React.useMemo(
+    //    () =>
+    //        stableSort(rows, getComparator(order, orderBy)).slice(
+    //            page * rowsPerPage,
+    //            page * rowsPerPage + rowsPerPage,
+    //        ),
+    //    [order, orderBy, page, rowsPerPage],
+    //);
+    const visibleRows = React.useMemo(() => {
+        const filteredData = rows.filter((row) => {
+            return Object.keys(searchTerms).every((columnId) => {
+                const cellValue = String(row[columnId]);
+                const searchTerm = (searchTerms[columnId] || '').toLowerCase();
+                return cellValue.toLowerCase().includes(searchTerm);
+            });
+        });
+
+        return stableSort(filteredData, getComparator(order, orderBy)).slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage
+        );
+    }, [order, orderBy, page, rowsPerPage, searchTerms]);
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -319,6 +363,8 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            handleSearchChange={handleSearchChange}
+                            searchTerms={searchTerms} 
                         />
                         <TableBody>
                             {rows.length === 0 ? NoDataTableRows(rows) : visibleRows.map((row, index) => {
@@ -371,17 +417,15 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
                                         </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
                                         <TableCell align="right">{row.leaveStatus}</TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" sx={{display:'flex'} } >
+                                            <SingleLeaveDetail
+                                                rows={row}
+                                            />
                                             <ManagerLeaveStatusActionsMenu
                                                 leaveStatus={row.leaveStatus}
                                                 rows={actionRows}
                                                 LeaveID={row.id}
                                                 handleUpdatestatus={handleUpdatestatus}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <SingleLeaveDetail
-                                                rows={row}
                                             />
                                         </TableCell>
                                     </TableRow>

@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthProvider';
 
 export default function UserAccountMenu() {
-  const {setAuth , auth} = React.useContext(AuthContext);
+    const { auth, setAuth, setNotification } = React.useContext(AuthContext);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -24,7 +24,11 @@ export default function UserAccountMenu() {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
+    };
+    const handleLogout = () => {
+        setAuth({ ...auth, isAuthenticated: false })
+        setNotification([])
+    }
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -98,7 +102,7 @@ export default function UserAccountMenu() {
           Settings
         </MenuItem>
         {
-         auth.isAuthenticated && (<MenuItem onClick={()=>setAuth({...auth , isAuthenticated : false})}>
+         auth.isAuthenticated && (<MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
