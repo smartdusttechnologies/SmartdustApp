@@ -13,6 +13,7 @@ import LeaveApplication from '../../Pages/Leaves/LeaveApplication/LeaveApplicati
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import PendingApprovalsDashBoard from '../../Pages/Leaves/ManagerLeaveAction/PendingApprovalsDashBoard'
+import LeaveReport from '../../Pages/Leaves/LeaveReport/LeaveReport'
 
 const AllRoutes = () => {
   return (
@@ -54,6 +55,16 @@ const AllRoutes = () => {
               element={
                   <PrivateRoute>
                       <PendingApprovalsDashBoard />
+                  </PrivateRoute>
+              }
+          ></Route>
+          <Route
+              path='/leavereport'
+              element={
+                  <PrivateRoute>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <LeaveReport />
+                      </LocalizationProvider>
                   </PrivateRoute>
               }
           ></Route>

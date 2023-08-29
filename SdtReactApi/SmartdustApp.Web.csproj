@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\components\AbsenceMenu\" />
+    <Folder Include="ClientApp\src\components\GridTable\" />
     <Folder Include="ClientApp\src\Pages\Leaves\LeaveDashboard\LeaveDashboardComponents\" />
   </ItemGroup>
 

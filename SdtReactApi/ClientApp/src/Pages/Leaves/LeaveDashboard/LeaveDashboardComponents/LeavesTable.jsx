@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
+import ColumnMenu from '../../../../components/GridTable/ColumnMenu';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -89,7 +90,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, handleSearchChange, searchTerms } =
         props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -119,14 +120,26 @@ function EnhancedTableHead(props) {
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
                         >
+                            <Box
+                                onClick={createSortHandler(headCell.id)}
+                            >
                             {headCell.label}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>
-                            ) : null}
+                                ) : null}
+                            </Box>
+                            {
+                                <ColumnMenu
+                                    Id={headCell.id}
+                                    label={headCell.label}
+                                    handleSearchChange={handleSearchChange}
+                                    searchTerms={searchTerms}
+                                    createSortHandler={createSortHandler}
+                                />
+                            }
                         </TableSortLabel>
                     </TableCell>
                 ))}
@@ -219,11 +232,18 @@ export default function LeavesDataTable({ rows }) {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [searchTerms, setSearchTerms] = React.useState({}); 
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
+    };
+    const handleSearchChange = (event, columnId) => {
+        setSearchTerms((prevSearchTerms) => ({
+            ...prevSearchTerms,
+            [columnId]: event.target.value,
+        }));
     };
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -273,14 +293,21 @@ export default function LeavesDataTable({ rows }) {
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [order, orderBy, page, rowsPerPage],
-    );
+
+    const visibleRows = React.useMemo(() => {
+        const filteredData = rows.filter((row) => {
+            return Object.keys(searchTerms).every((columnId) => {
+                const cellValue = String(row[columnId]);
+                const searchTerm = (searchTerms[columnId] || '').toLowerCase();
+                return cellValue.toLowerCase().includes(searchTerm);
+            });
+        });
+
+        return stableSort(filteredData, getComparator(order, orderBy)).slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage
+        );
+    }, [order, orderBy, page, rowsPerPage, searchTerms]);
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -299,6 +326,8 @@ export default function LeavesDataTable({ rows }) {
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            handleSearchChange={handleSearchChange}
+                            searchTerms={searchTerms} 
                         />
                         <TableBody>
                             {rows.length === 0 ? NoDataTableRows(rows) : visibleRows.map((row, index) => {
