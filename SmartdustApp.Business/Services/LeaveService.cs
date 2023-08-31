@@ -105,12 +105,27 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
-        //public int FileUpload(AttachedFileModel fileUpload)
-        //{
-        //    var dataDownloaded = _leaveRepository.FileUpload(fileUpload);
-        //    return dataDownloaded;
+        public RequestResult<bool> Update(LeaveModel leave)
+        {
+            var result = _leaveRepository.Update(leave);
 
-        //}
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Leave Updated Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
         public List<int> UploadFiles(IFormFileCollection files)
         {
             List<int> uploadedFileIds = new List<int>();

@@ -192,7 +192,7 @@ const LeaveApplication = () => {
                             shouldDisableDate={isWeekend}
                             closeOnSelect={false}
                             //orientation="landscape"
-                            value={leaveData.leaveDates[0]}
+                            value={dayjs(leaveData.leaveDates[0])}
                             onChange={(e) => handleLeaveDates(e)}
                         />
                     </DemoItem>
@@ -238,19 +238,19 @@ const LeaveApplication = () => {
                         <label htmlFor="fileupload">Choose files</label>
                         <span>
                             {file.length > 0
-                                ? <ol className="fileslist">
+                                ? <div className="fileslist">
                                     {
                                         file?.map((el, index) => (
-                                            <li key={index}>
+                                            <div key={index}>
                                                 <Chip
                                                     label={el.name}
                                                     variant="outlined"
                                                     onDelete={() => handleDeleteFile(index)}
                                                 />
-                                            </li>
+                                            </div>
                                         ))
                                     }
-                                </ol>
+                                </div>
                                 : "No files chosen"}
                         </span>
                         <input 

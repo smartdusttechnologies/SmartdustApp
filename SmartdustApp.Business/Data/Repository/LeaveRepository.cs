@@ -138,6 +138,78 @@ namespace SmartdustApp.Business.Data.Repository
         }
 
         /// <summary>
+        /// Update Leave
+        /// </summary>
+        public RequestResult<bool> Update(LeaveModel leave)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            // Update data in the Leave table
+            string leaveUpdateQuery = @"UPDATE [Leave]
+                                SET LeaveTypeID = @LeaveTypeID,
+                                    Reason = @Reason,
+                                    AppliedDate = @AppliedDate,
+                                    LeaveDays = @LeaveDays
+                                WHERE ID = @ID";
+
+            // Prepare the parameters for LeaveDates
+            List<LeaveDateModel> leaveDatesParameters = null;
+            if (leave.LeaveDates != null && leave.LeaveDates.Any())
+            {
+                leaveDatesParameters = leave.LeaveDates.Select(leaveDate => new LeaveDateModel { LeaveID = leave.ID, LeaveDate = leaveDate }).ToList();
+            }
+
+            // Prepare the parameters for LeaveAttachedFiles
+            List<LeaveAttachedFilesModel> leaveAttachedFilesParameters = null;
+            if (leave.AttachedFileIDs != null && leave.AttachedFileIDs.Any())
+            {
+                leaveAttachedFilesParameters = leave.AttachedFileIDs.Select(DocumentID => new LeaveAttachedFilesModel { LeaveID = leave.ID, DocumentID = DocumentID }).ToList();
+            }
+
+            // Transaction to ensure both updates are executed atomically
+            using var transaction = db.BeginTransaction();
+
+            try
+            {
+                // Update the Leave table
+                db.Execute(leaveUpdateQuery, leave, transaction);
+
+                if (leaveDatesParameters != null && leaveDatesParameters.Any())
+                {
+                    // Delete existing leave dates
+                    string leaveDatesDeleteQuery = "DELETE FROM LeaveDates WHERE LeaveID = @LeaveID";
+                    db.Execute(leaveDatesDeleteQuery, new { LeaveID = leave.ID }, transaction);
+
+                    // Insert updated leave dates
+                    string leaveDatesInsertQuery = "INSERT INTO LeaveDates (LeaveID, LeaveDate) VALUES (@LeaveID, @LeaveDate)";
+                    db.Execute(leaveDatesInsertQuery, leaveDatesParameters, transaction);
+                }
+
+                if (leaveAttachedFilesParameters != null && leaveAttachedFilesParameters.Any())
+                {
+                    // Delete existing attached files
+                    string leaveAttachedFilesDeleteQuery = "DELETE FROM LeaveAttachedFile WHERE LeaveID = @LeaveID";
+                    db.Execute(leaveAttachedFilesDeleteQuery, new { LeaveID = leave.ID }, transaction);
+
+                    // Insert updated attached files
+                    string leaveAttachedFilesInsertQuery = "INSERT INTO LeaveAttachedFile (LeaveID, DocumentID) VALUES (@LeaveID, @DocumentID)";
+                    db.Execute(leaveAttachedFilesInsertQuery, leaveAttachedFilesParameters, transaction);
+                }
+
+                // If all updates are successful, commit the transaction
+                transaction.Commit();
+                return new RequestResult<bool>(true);
+            }
+            catch (Exception ex)
+            {
+                // If any update fails, roll back the transaction and return an error
+                transaction.Rollback();
+                return new RequestResult<bool>(false, new List<ValidationMessage> { new ValidationMessage { Reason = ex.Message, Severity = ValidationSeverity.Error } });
+            }
+        }
+
+
+        /// <summary>
         /// Image Upload in DB
         /// </summary>
         public int FileUpload(DocumentModel File)

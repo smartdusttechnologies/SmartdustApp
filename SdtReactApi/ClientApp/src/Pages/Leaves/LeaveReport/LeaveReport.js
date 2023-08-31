@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import './LeaveReport.css'
 import axios from 'axios'
-import { Divider, FormControl, InputLabel, MenuItem, Select, TextField, Box } from '@mui/material'
+import { Divider, InputLabel, TextField, Box } from '@mui/material'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/joy/Button';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,7 +10,7 @@ import Chip from '@mui/material/Chip';
 import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
 import AuthContext from '../../../context/AuthProvider'
 import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
-import EmployeeLeaveTable from '../ManagerLeaveAction/ManagerActionsComponents/EmployeeLeaveTable';
+import EmployeeLeaveTable from './LeaveReportComponents/EmployeeLeaveTable';
 
 const LeaveReport = () => {
     const [isLoading, setLoading] = useState(false);
@@ -88,6 +88,7 @@ const LeaveReport = () => {
             filterEmployeeRows();
         }
     }, [selectedStartDate, selectedEndDate]);
+
     return (
         <div className='leave-report-page'>
             <div className='heading'>
@@ -97,12 +98,6 @@ const LeaveReport = () => {
                     <h4>
                         DATE RANGE
                     </h4>
-                    <Button>
-                        Last 7 Days
-                    </Button>
-                    <Button>
-                        Last 15 Days
-                    </Button>
                 <div className='range-pickers'>
                     <DemoItem label="From" className='date-range-pickers'>
                         <DatePicker
@@ -129,6 +124,7 @@ const LeaveReport = () => {
                     isLoading ? <Box><LoadingProgress /></Box> : <EmployeeLeaveTable rows={[...employeeRows].reverse()} actionRows={actionRows} handleUpdatestatus={handleUpdatestatus} />
                 }
             </div>
+            <ToastContainer />
         </div>
     )
 }

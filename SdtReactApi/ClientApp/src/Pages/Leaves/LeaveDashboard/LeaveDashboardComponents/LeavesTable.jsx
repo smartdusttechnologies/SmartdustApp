@@ -23,6 +23,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
 import ColumnMenu from '../../../../components/GridTable/ColumnMenu';
+import EditLeave from './EditLeave';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -86,6 +87,12 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Status',
+    },
+    {
+        id: 'actions',
+        numeric: false,
+        disablePadding: false,
+        label: 'Action',
     },
 ];
 
@@ -224,7 +231,7 @@ const NoDataTableRows = (rows) => {
     }
 };
 
-export default function LeavesDataTable({ rows }) {
+export default function LeavesDataTable({ rows, handleGetLeaves }) {
     console.log(rows , 'props')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -378,6 +385,12 @@ export default function LeavesDataTable({ rows }) {
                                         </TableCell>
                                         <TableCell align="right">{row.reason}</TableCell>
                                         <TableCell align="right">{row.leaveStatus}</TableCell>
+                                        <TableCell align="right">
+                                            <EditLeave
+                                                rowData={row}
+                                                handleGetLeaves={handleGetLeaves}
+                                            />
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}

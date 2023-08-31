@@ -94,14 +94,6 @@ export default function AbsenceMenu() {
                 }
                 {
                     auth.isAuthenticated && auth.roleId == 4 &&
-                    (<Link to={'/managerpendingapprovals'} style={{ textDecoration: "none", color: "grey" }}>
-                        <MenuItem >
-                            Pending Approvals
-                        </MenuItem>
-                    </Link>)
-                }
-                {
-                    auth.isAuthenticated && auth.roleId == 4 &&
                     (<Link to={'/leavereport'} style={{ textDecoration: "none", color: "grey" }}>
                         <MenuItem >
                             Leave Report

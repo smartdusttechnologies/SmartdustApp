@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './LeaveDashboard.css'
+import { ToastContainer, toast } from 'react-toastify';
 import LeaveBalanceMenu from './LeaveDashboardComponents/LeaveBalance'
 import { Button, Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +15,7 @@ const LeaveDashboard = () => {
     const [rows, setRows] = useState([]);
     const [leavebalance, setLeavebalance] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const { auth } = useContext(AuthContext);
+    const { auth, setNotification, notification } = useContext(AuthContext);
 
 
     const handleGetLeaves = () => {
@@ -40,6 +41,39 @@ const LeaveDashboard = () => {
             })
     }
 
+
+    //const handleUpdate = (id, updatedLeaveType, updatedReason, updatedLeaveDates) => {
+    //    console.log(updatedLeaveDates, 'updatedLeaveDates')
+    //    //console.log(rowData?.leaveDates)
+    //    axios.post('api/leave/UpdateLeave', {
+    //        id: id,
+    //        userId: auth?.userId,
+    //        userName: auth?.userName,
+    //        leaveType: updatedLeaveType,
+    //        leaveTypeId: 1,
+    //        reason: updatedReason,
+    //        appliedDate: new Date(),
+    //        leaveStatus: '',
+    //        leaveStatusId: 6,
+    //        leaveDays: updatedLeaveDates?.length,
+    //        leaveDates: updatedLeaveDates,
+    //        attachedFileIDs: []
+    //    })
+    //        .then(response => {
+    //            console.log(response?.data?.message[0]?.reason)
+    //            toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+    //            setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+    //            //handleGetLeaves()
+    //            //setLoading(false)
+    //        })
+    //        .catch(error => {
+    //            //setLoading(false)
+    //            console.log(error)
+    //            toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+    //            setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+    //        })
+    //};
+
     useEffect(() => {
         handleGetLeaves()
         handleGetLeaveBalance()
@@ -53,30 +87,11 @@ const LeaveDashboard = () => {
                   <div>
                       <LeaveBalanceMenu rows={leavebalance} />
                   </div>
-                  {/*<div>*/}
-                  {/*    <Button*/}
-                  {/*        variant="outlined"*/}
-                  {/*        onClick={() => navigate('/leaveapplication')}*/}
-                  {/*    >*/}
-                  {/*        Apply a Leave*/}
-                  {/*    </Button>*/}
-                  {/*</div>*/}
-                  {/*{*/}
-                  {/*    auth.roleId == 4 && (*/}
-                  {/*        <div>*/}
-                  {/*            <Button*/}
-                  {/*                variant="outlined"*/}
-                  {/*                onClick={() => navigate('/managerpendingapprovals')}*/}
-                  {/*            >*/}
-                  {/*                Pending Approvals*/}
-                  {/*            </Button>*/}
-                  {/*        </div>)*/}
-                  {/*}*/}
           </div>
           </div>
           <div>
               {
-                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} />
+                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} handleGetLeaves={handleGetLeaves} />
               }
           </div>
     </div>

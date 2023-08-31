@@ -47,6 +47,17 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost]
+        [Route("UpdateLeave")]
+        public IActionResult UpdateLeave(LeaveModel leave)
+        {
+            var result = _leaveService.Update(leave);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
         [HttpGet]
         [Route("GetEmployeeLeave/{userID}")]

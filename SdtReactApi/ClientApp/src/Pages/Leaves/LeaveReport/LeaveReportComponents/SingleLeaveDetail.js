@@ -12,6 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import axios from 'axios'
+import DownloadIcon from '@mui/icons-material/Download';
 
 export default function SingleLeaveDetail({ rows }) {
     const [open, setOpen] = React.useState(false);
@@ -42,6 +43,7 @@ export default function SingleLeaveDetail({ rows }) {
 
         return (
             <Chip
+                icon={<DownloadIcon />}
                 label={`Document ${index + 1}`}
                 variant="outlined"
                 onClick={handleDownloadClick}
