@@ -32,18 +32,20 @@ namespace SmartdustApp.Business.Data.Repository
 
             // SQL query with JOIN to fetch data from both Leave and LeaveDates tables
             var query = @"
-                         SELECT L.ID, L.UserID, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
-                                LD.LeaveDate as LeaveDates
+                         SELECT L.ID, L.UserID, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,L.LeaveTypeID,
+                         LD.LeaveDate as LeaveDates,
+                         LAF.DocumentID as AttachedFileIDs
                          FROM [Leave] L
                          LEFT JOIN LeaveDates LD ON L.ID = LD.LeaveID
                          LEFT JOIN Lookup LT ON L.LeaveTypeID = LT.ID
                          LEFT JOIN Lookup LS ON L.LeaveStatusID = LS.ID
+                         LEFT JOIN LeaveAttachedFile LAF ON L.ID = LAF.LeaveID
                          WHERE L.UserID = @userID";
 
             var parameters = new { userID };
 
             // Use Dapper's Query method to map the data to the LeaveModel class
-            var result = db.Query<LeaveModel, DateTime?, LeaveModel>(query, (leave, leaveDate) =>
+            var result = db.Query<LeaveModel, DateTime?, int?, LeaveModel>(query, (leave, leaveDate, attachedFileID) =>
             {
                 if (leaveDate != null)
                 {
@@ -54,8 +56,16 @@ namespace SmartdustApp.Business.Data.Repository
                         // If LeaveDate is not null, add it to the LeaveModel's LeaveDates list
                         leave.LeaveDates.Add(leaveDate.Value);
                 }
+                if (attachedFileID.HasValue)
+                {
+                    // Set AttachedFileIDs for the LeaveModel
+                    if (leave.AttachedFileIDs == null)
+                        leave.AttachedFileIDs = new List<int>();
+
+                    leave.AttachedFileIDs.Add(attachedFileID.Value);
+                }
                 return leave;
-            }, parameters, splitOn: "LeaveDates");
+            }, parameters, splitOn: "LeaveDates,AttachedFileIDs");
 
             // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
             return result.GroupBy(l => l.ID)
@@ -65,6 +75,9 @@ namespace SmartdustApp.Business.Data.Repository
 
                              // Handle case where g.SelectMany(l => l.LeaveDates) returns null
                              leave.LeaveDates = g.Where(l => l.LeaveDates != null).SelectMany(l => l.LeaveDates).ToList();
+
+                             // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
+                             leave.AttachedFileIDs = g.Where(l => l.AttachedFileIDs != null).SelectMany(l => l.AttachedFileIDs).ToList();
 
                              return leave;
                          })

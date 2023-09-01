@@ -107,6 +107,11 @@ namespace SmartdustApp.Business.Services
         }
         public RequestResult<bool> Update(LeaveModel leave)
         {
+            var validationResult = ValidateLeaveDate(leave);
+            if (!validationResult.IsSuccessful)
+            {
+                return validationResult;
+            }
             var result = _leaveRepository.Update(leave);
 
 

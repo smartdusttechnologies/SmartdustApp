@@ -36,6 +36,9 @@ const LeaveApplication = () => {
         setFile(filesArray);
         console.log(filesArray);
     };
+    const handleDeleteFile = (indexToDelete) => {
+        setFile(file?.filter((file, index) => index !== indexToDelete));
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -81,9 +84,6 @@ const LeaveApplication = () => {
             leaveDates: prevState?.leaveDates?.filter((date, index) => index !== indexToDelete),
         }));
         console.log(leaveData?.leaveDates, 'Deleted Date')
-    };
-    const handleDeleteFile = (indexToDelete) => {
-        setFile(file?.filter((file, index) => index !== indexToDelete));
     };
 
     const handleSubmit = (e) => {
@@ -191,7 +191,6 @@ const LeaveApplication = () => {
                             disablePast
                             shouldDisableDate={isWeekend}
                             closeOnSelect={false}
-                            //orientation="landscape"
                             value={dayjs(leaveData.leaveDates[0])}
                             onChange={(e) => handleLeaveDates(e)}
                         />
@@ -208,7 +207,7 @@ const LeaveApplication = () => {
                                             <Chip
                                                 label={leave.toDateString()}
                                                 variant="outlined"
-                                                //onDelete={() => handleDeleteDate(index)}
+                                                onDelete={() => handleDeleteDate(index)}
                                             />
                                         </li>
                                     ))
@@ -219,7 +218,6 @@ const LeaveApplication = () => {
                 <FormControl className='leave-type'>
                     <InputLabel id="demo-select-small-label">Leave Type</InputLabel>
                     <Select
-                        // size='small'
                         label='Leave Type'
                         name='leaveType'
                         //value={leaveData.leaveType}
@@ -257,7 +255,6 @@ const LeaveApplication = () => {
                             type="file"
                             id="fileupload"
                             multiple
-                            //accept="image/*"
                             onChange={(e) => handleFileChange(e)}
                         />
                     </div>

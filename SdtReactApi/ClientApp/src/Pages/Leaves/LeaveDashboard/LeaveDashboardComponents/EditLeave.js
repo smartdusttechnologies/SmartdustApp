@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
 import { TextField, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
@@ -12,50 +13,137 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
 import AuthContext from '../../../../context/AuthProvider';
+import Chip from '@mui/material/Chip';
+import DownloadIcon from '@mui/icons-material/Download';
+
+const isWeekend = (date) => {
+    const day = date.day();
+
+    return day === 0 || day === 6;
+};
 
 export default function EditLeave({ rowData, handleGetLeaves }) {
     const [open, setOpen] = React.useState(false);
+    const [isLoading, setLoading] = useState(false);
     const { auth, setNotification, notification } = useContext(AuthContext);
     const [updatedLeaveDates, setUpdatedLeaveDates] = useState(rowData?.leaveDates);
-    const [updatedLeaveType, setUpdatedLeaveType] = useState(rowData.leaveType);
+    const [updatedAttachedFileIDs, setUpdatedAttachedFileIDs] = useState(rowData?.attachedFileIDs);
+    const [updatedLeaveType, setUpdatedLeaveType] = useState(rowData.leaveTypeID);
     const [updatedReason, setUpdatedReason] = useState(rowData.reason);
     const [leavetypes, setLeaveTypes] = useState([]);
+    const [file, setFile] = useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
         console.log(rowData,'editable data')
+        console.log(updatedLeaveType,'updatedLeaveType')
     };
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    const handleDateChange = (newValue, index) => {
-        const updatedDates = [...updatedLeaveDates];
-        updatedDates[index] = newValue;
-        setUpdatedLeaveDates(updatedDates);
+    const handleFileChange = (e) => {
+        const filesArray = Array.from(e.target.files);
+        setFile(filesArray);
+        console.log(filesArray);
+    };
+    const handleDeleteFile = (indexToDelete) => {
+        setFile(file?.filter((file, index) => index !== indexToDelete));
+    };
+
+    const handleLeaveDates = (e) => {
+        const selectedDate = e instanceof Date ? e : new Date(e.$d);
+
+        // Check if the selected date already exists in the leaveDates array
+        const dateExists = updatedLeaveDates.some((date) =>
+            isSameDay(date, selectedDate)
+        );
+
+        // If the date doesn't exist, add it to the leaveDates array
+        if (!dateExists) {
+            setUpdatedLeaveDates([...updatedLeaveDates, selectedDate]);
+        }
+    };
+
+    const handleDeleteDate = (indexToDelete) => {
+        setUpdatedLeaveDates(updatedLeaveDates?.filter((date, index) => index !== indexToDelete));
+    };
+
+    // Utility function to check if two dates have the same day, month, and year (ignoring time)
+    const isSameDay = (date1, date2) =>
+        date1 instanceof Date &&
+        date2 instanceof Date &&
+        date1.getDate() === date2.getDate() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getFullYear() === date2.getFullYear();
+
+
+    const handleDeleteFileID = (indexToDelete) => {
+        setUpdatedAttachedFileIDs(updatedAttachedFileIDs?.filter((date, index) => index !== indexToDelete));
     };
 
     const handleUpdate = () => {
-        console.log(updatedLeaveDates,'updatedLeaveDates')
-        console.log(rowData?.leaveDates)
+
+        const formData = new FormData();
+
+        // Check if there are files to upload
+        if (file && file.length > 0) {
+            file.forEach(file => {
+                const fileName = file.name;
+                const fileExtension = fileName.split('.').pop().toLowerCase();
+                // Check for allowed file extensions
+                if (['jpg', 'jpeg', 'png', 'xlsx', 'pdf'].includes(fileExtension)) {
+                    if (file.size <= 1024 * 1024) { // Check file size
+                        formData.append('files', file);
+                    } else {
+                        toast.warn('File size should not exceed 1MB.', { position: "bottom-center" });
+                        setLoading(false)
+                    }
+                } else {
+                    toast.warn('Wrong File Type!', { position: "bottom-center" });
+                    setLoading(false)
+                }
+            });
+
+            if (formData.has('files')) {
+                // Upload files and get AttachedFileIDs
+                axios.post('api/leave/FileUpload', formData)
+                    .then(response => {
+                        console.log(response.data);
+                        // Call ApplyLeave with AttachedFileIDs
+                        UpdateLeave(response.data);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        } else {
+            // Call ApplyLeave without AttachedFileIDs
+            UpdateLeave(updatedAttachedFileIDs);
+        }
+
+    };
+
+    const UpdateLeave = (attachedFileIDs) => {
         axios.post('api/leave/UpdateLeave', {
             id: rowData.id,
             userId: auth?.userId,
             userName: auth?.userName,
-            leaveType: updatedLeaveType,
-            leaveTypeId: 1,
+            leaveType: '',
+            leaveTypeId: updatedLeaveType,
             reason: updatedReason,
             appliedDate: new Date(),
             leaveStatus: rowData.leaveStatus,
             leaveStatusId: 6,
             leaveDays: updatedLeaveDates?.length,
             leaveDates: updatedLeaveDates,
-            attachedFileIDs: []
+            attachedFileIDs: attachedFileIDs
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
@@ -70,6 +158,32 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
+
+    }
+    const DownloadButton = ({ documentID, index }) => {
+        const handleDownloadClick = () => {
+            const downloadUrl = `/api/leave/DownloadDocument/${documentID}`;
+
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.style.display = 'none';
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+        };
+
+        return (
+            <Chip
+                icon={<DownloadIcon />}
+                label={`Document ${index + 1}`}
+                variant="outlined"
+                onClick={handleDownloadClick}
+                onDelete={() => handleDeleteFileID(index)}
+            />
+        );
     };
 
     const handleGetLeaveTypes = () => {
@@ -112,29 +226,90 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                            gap: '20px',
-                            minWidth: '400px'
+                        gap: '20px',
+                        minWidth: '400px'
                     }} >
                         <div
                             style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(2,1fr)',
                                 gap:'10px'
                             }} >
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                {
-                                    updatedLeaveDates.map((el, index) => (
-                                        <DemoContainer key={index} components={['DateField']}>
-                                            <DateField
-                                                value={dayjs(el)}
-                                                onChange={(newValue) => handleDateChange(newValue, index)}
-                                                format="YYYY/MM/DD"
-                                            />
-                                        </DemoContainer>
-                                    ))
-                                }
+                                <DemoItem label="Select Dates">
+                                    <MobileDatePicker
+                                        label={'Select Dates'}
+                                        format="YYYY/MM/DD"
+                                        disablePast
+                                        shouldDisableDate={isWeekend}
+                                        closeOnSelect={false}
+                                        //value={dayjs(leaveData.leaveDates[0])}
+                                        onChange={(e) => handleLeaveDates(e)}
+                                    />
+                                </DemoItem>
                             </LocalizationProvider>
+                                <ol
+                                    style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(2,1fr)',
+                                        gap: '5px'
+                                    }}
+                                >
+                                    {
+                                        updatedLeaveDates.map((el, index) => (
+                                            <li
+                                                key={index}>
+                                                <Chip
+                                                    label={dayjs(el).format('YYYY-MM-DD')}
+                                                    variant="outlined"
+                                                    onDelete={() => handleDeleteDate(index)}
+                                                />
+                                            </li>
+                                        ))
+                                    }
+                                </ol>
                         </div>
+                        <Divider />
+                        <div className="documentupload">
+                            <label htmlFor="fileupload">Choose files</label>
+                            <span>
+                                {file.length > 0
+                                    ? <div className="fileslist">
+                                        {
+                                            file?.map((el, index) => (
+                                                <div key={index}>
+                                                    <Chip
+                                                        label={el.name}
+                                                        variant="outlined"
+                                                        onDelete={() => handleDeleteFile(index)}
+                                                    />
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                    : "No files chosen"}
+                            </span>
+                            <input
+                                type="file"
+                                id="fileupload"
+                                multiple
+                                onChange={(e) => handleFileChange(e)}
+                            />
+                        </div>
+                        {updatedAttachedFileIDs != null &&
+                            updatedAttachedFileIDs.length > 0 &&
+                            (
+                            <div>
+                                <div style={{ display: 'grid', gridTemplateColumns: "repeat(3,1fr)", gap: '3px', margin: '5px', marginBottom:'15px' }}>
+                                        {
+                                        updatedAttachedFileIDs.map((el, index) => (
+                                                <DownloadButton documentID={el} index={index} />
+                                            ))
+                                        }
+                                    </div>
+                                    <Divider />
+                                </div>
+                            )
+                        }
+
                         <FormControl className='leave-type'>
                             <InputLabel id="demo-select-small-label">Leave Type</InputLabel>
                             <Select
@@ -146,13 +321,14 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
                             >
                                 {
                                     leavetypes.map((el, index) => (
-                                        <MenuItem key={index} value={el.name}>{el.name}</MenuItem>
+                                        <MenuItem key={index} value={el.id}>{el.name}</MenuItem>
                                     ))
                                 }
                             </Select>
                         </FormControl>
                         <TextField
                             label="Reason"
+                            multiline
                             value={updatedReason}
                             onChange={(e) => setUpdatedReason(e.target.value)}
                         />
