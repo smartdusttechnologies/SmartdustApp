@@ -390,7 +390,12 @@ export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatu
                                             <Tooltip
                                                 title={
                                                     <div style={{ fontSize: '16px', whiteSpace: 'pre-line' }}>
-                                                        {row.leaveDates.map((date) => new Date(date).toISOString().slice(0, 10)).join('\n')}
+                                                        {row.leaveDates.map((date) => {
+                                                            const utcDate = new Date(date);
+                                                            utcDate.setHours(utcDate.getHours() + 5); // Add 5 hours for UTC+5
+                                                            utcDate.setMinutes(utcDate.getMinutes() + 30); // Add 30 minutes for UTC+5:30
+                                                            return utcDate.toISOString().slice(0, 10);
+                                                        }).join('\n')}
                                                     </div>
                                                 }
                                                 arrow

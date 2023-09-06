@@ -114,7 +114,6 @@ namespace SmartdustApp.Business.Services
             }
             var result = _leaveRepository.Update(leave);
 
-
             if (result.IsSuccessful)
             {
                 List<ValidationMessage> success = new List<ValidationMessage>()

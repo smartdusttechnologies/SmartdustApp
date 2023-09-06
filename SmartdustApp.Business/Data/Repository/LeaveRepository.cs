@@ -69,19 +69,29 @@ namespace SmartdustApp.Business.Data.Repository
 
             // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
             return result.GroupBy(l => l.ID)
-                         .Select(g =>
-                         {
-                             var leave = g.First();
-
-                             // Handle case where g.SelectMany(l => l.LeaveDates) returns null
-                             leave.LeaveDates = g.Where(l => l.LeaveDates != null).SelectMany(l => l.LeaveDates).ToList();
-
-                             // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
-                             leave.AttachedFileIDs = g.Where(l => l.AttachedFileIDs != null).SelectMany(l => l.AttachedFileIDs).ToList();
-
-                             return leave;
-                         })
-                         .ToList();
+                   .Select(g =>
+                   {
+                       var leave = g.First();
+                   
+                       // Handle case where g.SelectMany(l => l.LeaveDates) returns null
+                       leave.LeaveDates = g
+                           .Where(l => l.LeaveDates != null)
+                           .SelectMany(l => l.LeaveDates)
+                           .Where(d => d != null)
+                           .Distinct() // Filter out duplicates
+                           .ToList();
+                   
+                       // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
+                       leave.AttachedFileIDs = g
+                           .Where(l => l.AttachedFileIDs != null)
+                           .SelectMany(l => l.AttachedFileIDs)
+                           .Where(id => id != null)
+                           .Distinct() // Filter out duplicates
+                           .ToList();
+                   
+                       return leave;
+                   })
+                   .ToList();
         }
 
         /// <summary>
@@ -344,20 +354,31 @@ namespace SmartdustApp.Business.Data.Repository
             }, parameters, splitOn: "LeaveDates,AttachedFileIDs");
 
             // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
+            // Use LINQ GroupBy to group the results by Leave ID to avoid duplicates
             return result.GroupBy(l => l.ID)
-             .Select(g =>
-             {
-                 var leave = g.First();
+                   .Select(g =>
+                   {
+                       var leave = g.First();
 
-                 // Handle case where g.SelectMany(l => l.LeaveDates) returns null
-                 leave.LeaveDates = g.Where(l => l.LeaveDates != null).SelectMany(l => l.LeaveDates).ToList();
+                       // Handle case where g.SelectMany(l => l.LeaveDates) returns null
+                       leave.LeaveDates = g
+                           .Where(l => l.LeaveDates != null)
+                           .SelectMany(l => l.LeaveDates)
+                           .Where(d => d != null)
+                           .Distinct() // Filter out duplicates
+                           .ToList();
 
-                 // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
-                 leave.AttachedFileIDs = g.Where(l => l.AttachedFileIDs != null).SelectMany(l => l.AttachedFileIDs).ToList();
+                       // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
+                       leave.AttachedFileIDs = g
+                           .Where(l => l.AttachedFileIDs != null)
+                           .SelectMany(l => l.AttachedFileIDs)
+                           .Where(id => id != null)
+                           .Distinct() // Filter out duplicates
+                           .ToList();
 
-                 return leave;
-             })
-             .ToList();
+                       return leave;
+                   })
+                   .ToList();
         }
 
 

@@ -89,7 +89,7 @@ const LeaveApplication = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true)
-
+        console.log(leaveData?.leaveDates,'leaveData?.leaveDates')
         const formData = new FormData();
 
         // Check if there are files to upload

@@ -41,7 +41,6 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
     const handleClickOpen = () => {
         setOpen(true);
         console.log(rowData,'editable data')
-        console.log(updatedLeaveType,'updatedLeaveType')
     };
 
     const handleClose = () => {
@@ -58,12 +57,16 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
     };
 
     const handleLeaveDates = (e) => {
-        const selectedDate = e instanceof Date ? e : new Date(e.$d);
+        const selectedDate = new Date(e?.$d);
 
         // Check if the selected date already exists in the leaveDates array
         const dateExists = updatedLeaveDates.some((date) =>
-            isSameDay(date, selectedDate)
+            isSameDay(new Date(date), selectedDate)
         );
+
+        // Apply IST timezone offset to the selected date
+        selectedDate.setHours(selectedDate.getHours() + 5); // Add 5 hours for UTC+5
+        selectedDate.setMinutes(selectedDate.getMinutes() + 30); 
 
         // If the date doesn't exist, add it to the leaveDates array
         if (!dateExists) {
@@ -77,8 +80,6 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
 
     // Utility function to check if two dates have the same day, month, and year (ignoring time)
     const isSameDay = (date1, date2) =>
-        date1 instanceof Date &&
-        date2 instanceof Date &&
         date1.getDate() === date2.getDate() &&
         date1.getMonth() === date2.getMonth() &&
         date1.getFullYear() === date2.getFullYear();
@@ -89,7 +90,7 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
     };
 
     const handleUpdate = () => {
-
+        console.log(updatedLeaveDates, 'updatedLeaveDates during api call')
         const formData = new FormData();
 
         // Check if there are files to upload
@@ -117,7 +118,7 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
                     .then(response => {
                         console.log(response.data);
                         // Call ApplyLeave with AttachedFileIDs
-                        UpdateLeave(response.data);
+                        UpdateLeave([...updatedAttachedFileIDs, ...response.data ] );
                     })
                     .catch(error => {
                         console.error(error);
