@@ -27,7 +27,7 @@ const isWeekend = (date) => {
     return day === 0 || day === 6;
 };
 
-export default function EditLeave({ rowData, handleGetLeaves }) {
+export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setLoading] = useState(false);
     const { auth, setNotification, notification } = useContext(AuthContext);
@@ -35,7 +35,6 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
     const [updatedAttachedFileIDs, setUpdatedAttachedFileIDs] = useState(rowData?.attachedFileIDs);
     const [updatedLeaveType, setUpdatedLeaveType] = useState(rowData.leaveTypeID);
     const [updatedReason, setUpdatedReason] = useState(rowData.reason);
-    const [leavetypes, setLeaveTypes] = useState([]);
     const [file, setFile] = useState([]);
 
     const handleClickOpen = () => {
@@ -90,7 +89,7 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
     };
 
     const handleUpdate = () => {
-        console.log(updatedLeaveDates, 'updatedLeaveDates during api call')
+        setLoading(true)
         const formData = new FormData();
 
         // Check if there are files to upload
@@ -148,15 +147,15 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
-                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center"});
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
                 handleGetLeaves()
-                //setLoading(false)
+                setLoading(false)
             })
             .catch(error => {
-                //setLoading(false)
+                setLoading(false)
                 console.log(error)
-                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
 
@@ -183,30 +182,17 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
                 variant="outlined"
                 onClick={handleDownloadClick}
                 onDelete={() => handleDeleteFileID(index)}
+                key={index}
             />
         );
     };
-
-    const handleGetLeaveTypes = () => {
-        axios.get('api/leave/GetLeaveTypes')
-            .then(response => {
-                console.log(response?.data?.requestedObject)
-                setLeaveTypes(response?.data?.requestedObject)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
-
-    useEffect(() => {
-        handleGetLeaveTypes()
-    }, [])
 
     return (
         <div>
             <Tooltip title="Edit">
                 <span>
                     <IconButton
+                        disabled={rowData.leaveStatus !== "Pending" && rowData.leaveStatus !== "Deny"}
                         variant="outlined"
                         onClick={handleClickOpen}
                     >
@@ -338,6 +324,7 @@ export default function EditLeave({ rowData, handleGetLeaves }) {
                 <Divider />
                 <Button
                     onClick={handleUpdate}
+                    loading={isLoading}
                     sx={{
                         width: '90%',
                         margin: 'auto',

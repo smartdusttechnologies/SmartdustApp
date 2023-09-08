@@ -12,6 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import axios from 'axios'
+import dayjs from 'dayjs';
 import DownloadIcon from '@mui/icons-material/Download';
 
 export default function SingleLeaveDetail({ rows }) {
@@ -67,21 +68,44 @@ export default function SingleLeaveDetail({ rows }) {
             >
                 <DialogTitle sx={{ width:'350px' }}>Leave Details</DialogTitle>
                 <Divider />
-                {   rows.attachedFileIDs != null &&
-                    rows.attachedFileIDs.length > 0 &&
-                    (
-                    <div>
-                        <div style={{ display: 'grid', gridTemplateColumns: "repeat(3,1fr)", gap:'3px', margin: '5px' }}>
-                            {
-                                rows.attachedFileIDs.map((el, index) => (
-                                    <DownloadButton documentID={el} index={index } />
-                                ))
-                            }
-                        </div>
-                        <Divider />
-                    </div>
-                )}
                 <DialogContent>
+                    {rows.attachedFileIDs != null &&
+                        rows.attachedFileIDs.length > 0 &&
+                        (
+                            <div>
+                                <Typography variant="subtitle1" style={{ marginTop: '5px' }}>Attached Documents:</Typography>
+                                <div style={{ display: 'grid', gridTemplateColumns: "repeat(3,1fr)", gap: '3px', margin: '5px' }}>
+                                    {
+                                        rows.attachedFileIDs.map((el, index) => (
+                                            <DownloadButton documentID={el} index={index} />
+                                        ))
+                                    }
+                                </div>
+                                <Divider />
+                            </div>
+                        )}
+                    <Typography variant="subtitle1" style={{ marginTop: '5px' }}>Leave Dates:</Typography>
+                    <ol
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(2,1fr)',
+                            gap: '5px'
+                        }}
+                    >
+                        {
+                            rows.leaveDates.map((el, index) => (
+                                <li
+                                    key={index}>
+                                    <Chip
+                                        label={dayjs(el).format('YYYY-MM-DD')}
+                                        variant="outlined"
+                                    //onDelete={() => handleDeleteDate(index)}
+                                    />
+                                </li>
+                            ))
+                        }
+                    </ol>
+                    <Divider />
                     <div>
                         <Typography>User Name : {rows.userName}</Typography>
                     </div>

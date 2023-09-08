@@ -16,6 +16,7 @@ BEGIN
     INSERT INTO [dbo].[User]
                ([Id], [UserName], [FirstName], [LastName], [Email], [Mobile], [Country], [ISDCode], [TwoFactor], [Locked], [IsActive], [EmailValidationStatus], [MobileValidationStatus], [OrgId], [AdminLevel], [IsDeleted])
          VALUES
+              (0, N'sysadmin', N'sysadmin', N'sysadmin', N'sysadmin@gmail.com', N'1234567899', N'INDIA', N'91', 0, 0, 1, 0, 0, 0, 0, 0),
                (4, N'Yashraj', N'string', N'string', N'string', N'string', N'string', N'string', 1, 0, 1, 0, 0, 0, 0, 0)
 
     SET IDENTITY_INSERT [dbo].[User]  OFF
@@ -185,3 +186,31 @@ BEGIN
     SET IDENTITY_INSERT [dbo].[PermissionModuleType]  OFF
 END
 GO
+IF NOT EXISTS (SELECT 1 FROM [LookupCategory] WHERE Id = 0)
+BEGIN
+    SET IDENTITY_INSERT [dbo].[LookupCategory]  ON
+
+    INSERT INTO [dbo].[LookupCategory]
+               ([Id], [Name], [IsDeleted])
+			   VALUES
+              (1, N'LeaveType', 0),
+			  (3, N'LeaveStatus', 0)
+    SET IDENTITY_INSERT [dbo].[LookupCategory]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [Lookup] WHERE Id = 0)
+BEGIN
+    SET IDENTITY_INSERT [dbo].[Lookup]  ON
+
+    INSERT INTO [dbo].[Lookup]
+                ([Id], [Name], [LookupCategoryId], [IsDeleted])
+			   VALUES
+             (1, N'MedicalLeave', 1, 0),
+			 (2, N'PaidLeave', 1, 0),
+			 (3, N'LeaveofAbsence', 1, 0),
+			 (5, N'Approve', 3, 0),
+			 (6, N'Pending', 3, 0),
+			 (7, N'Decline', 3, 0),
+			 (8, N'Deny', 3, 0)
+    SET IDENTITY_INSERT [dbo].[Lookup]  OFF
+END

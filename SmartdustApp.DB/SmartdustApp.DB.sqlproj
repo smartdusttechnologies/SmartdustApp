@@ -72,9 +72,16 @@
     <Build Include="dbo\Tables\LoginTokenLog.sql" />
     <Build Include="dbo\Tables\LoginToken.sql" />
     <Build Include="dbo\Tables\LoginLog.sql" />
-    <Build Include="dbo\Tables\Leaves.sql" />
     <Build Include="dbo\Tables\Contact.sql" />
     <Build Include="dbo\Tables\ClaimType.sql" />
+    <Build Include="dbo\Tables\LookupCategory.sql" />
+    <Build Include="dbo\Tables\Lookup.sql" />
+    <Build Include="dbo\Tables\LeaveDates.sql" />
+    <Build Include="dbo\Tables\LeaveBalance.sql" />
+    <Build Include="dbo\Tables\LeaveAttachedFile.sql" />
+    <Build Include="dbo\Tables\Leave.sql" />
+    <Build Include="dbo\Tables\Employee.sql" />
+    <Build Include="dbo\Tables\DocumentTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData.sql" />

@@ -15,6 +15,7 @@ const LeaveDashboard = () => {
     const [rows, setRows] = useState([]);
     const [leavebalance, setLeavebalance] = useState([]);
     const [isLoading, setLoading] = useState(false);
+    const [leavetypes, setLeaveTypes] = useState([]);
     const { auth, setNotification, notification } = useContext(AuthContext);
 
 
@@ -41,6 +42,16 @@ const LeaveDashboard = () => {
             })
     }
 
+    const handleGetLeaveTypes = () => {
+        axios.get('api/leave/GetLeaveTypes')
+            .then(response => {
+                console.log(response?.data?.requestedObject, 'GetLeaveTypes')
+                setLeaveTypes(response?.data?.requestedObject)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    };
 
     //const handleUpdate = (id, updatedLeaveType, updatedReason, updatedLeaveDates) => {
     //    console.log(updatedLeaveDates, 'updatedLeaveDates')
@@ -77,6 +88,7 @@ const LeaveDashboard = () => {
     useEffect(() => {
         handleGetLeaves()
         handleGetLeaveBalance()
+        handleGetLeaveTypes()
     }, [])
 
   return (
@@ -91,7 +103,7 @@ const LeaveDashboard = () => {
           </div>
           <div>
               {
-                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} handleGetLeaves={handleGetLeaves} />
+                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} handleGetLeaves={handleGetLeaves} leavetypes={leavetypes} />
               }
           </div>
     </div>

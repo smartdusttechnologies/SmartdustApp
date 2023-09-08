@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react'
 import './ChangePassword.css'
 import axios from 'axios'
-import { Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import AuthContext from '../../context/AuthProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/joy/Button';
 
 const api = 'api/security/ChangePassword';
 
@@ -13,7 +14,7 @@ const ChangePassword = () => {
   const navigate = useNavigate()
   const {auth ,setAuth ,notification ,setNotification} = useContext(AuthContext)
 
-
+  const [isLoading, setLoading] = useState(false);
   const [oldPassword , setOldpassword] = useState('');
   const [newPassword , setNewpassword] = useState('');
   const [confirmPassword , setConfirmpassword] = useState('');
@@ -22,6 +23,7 @@ const ChangePassword = () => {
 
   const handleSubmit = (e)=>{
     e.preventDefault()
+    setLoading(true)
     console.log(oldPassword,newPassword,confirmPassword,auth.userName,auth.userId)
 
     axios.post(api , {
@@ -50,15 +52,13 @@ const ChangePassword = () => {
           progress: undefined,
           theme: "colored",
         });
-        setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
-
-        setTimeout(() => {
-          navigate('/')
-        }, 3000);
+          setNotification([...notification, { message: response?.data.message[0].reason, success: isSuccessful }])
+          setLoading(false)
       }
     })
     .catch(error =>{
-      console.log(error)
+        console.log(error)
+        setLoading(false)
       const isSuccessful = error.response?.data.isSuccessful
 
       // For Error 
@@ -91,12 +91,15 @@ const ChangePassword = () => {
           <TextField onChange={(e)=> setNewpassword(e.target.value)} label='NewPassword' required size='small' type="password" />
           <TextField onChange={(e)=> setConfirmpassword(e.target.value)} label='ConfirmPassword' required size='small' type="password" />
           </div>
-          {/* <div>
-            {msg}
-          </div> */}
           <div className='changepass-save'>
             <div>
-              <Button type='submit' id='save-btn'>Save</Button>
+                 <Button
+                     loading={isLoading}
+                     type='submit'
+                     id='save-btn'
+                 >
+                     Save
+                 </Button>
             </div>
             <div>
               <Button onClick={()=> navigate('/')} id='cancel-btn'>Cancel</Button>
