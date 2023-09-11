@@ -130,6 +130,26 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
+        {
+            var result = _leaveRepository.CreateLeaveBalance(leavebalance);
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Created Leave Balance Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
         public List<int> UploadFiles(IFormFileCollection files)
         {
             List<int> uploadedFileIds = new List<int>();
@@ -199,6 +219,15 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<LeaveModel>>();
             }
             return new RequestResult<List<LeaveModel>>(leave);
+        }
+        public RequestResult<List<UserModel>> GetEmployeeDetails(int userID)
+        {
+            var EmployeeDetails = _leaveRepository.GetEmployeeDetails(userID);
+            if(EmployeeDetails == null)
+            {
+                return new RequestResult<List<UserModel>>();
+            }
+            return new RequestResult<List<UserModel>>(EmployeeDetails);
         }
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {

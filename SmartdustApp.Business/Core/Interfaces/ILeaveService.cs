@@ -21,5 +21,7 @@ namespace SmartdustApp.Business.Core.Interfaces
         RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus);
         List<int> UploadFiles(IFormFileCollection files);
         DocumentModel DownloadDocument(int documentID);
+        RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance);
+        RequestResult<List<UserModel>> GetEmployeeDetails(int userID);
     }
 }

@@ -13,6 +13,7 @@ import LeaveApplication from '../../Pages/Leaves/LeaveApplication/LeaveApplicati
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import LeaveReport from '../../Pages/Leaves/LeaveReport/LeaveReport'
+import LeaveBalancePage from '../../Pages/Leaves/LeaveBalance/LeaveBalance'
 
 const AllRoutes = () => {
   return (
@@ -56,6 +57,14 @@ const AllRoutes = () => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <LeaveReport />
                       </LocalizationProvider>
+                  </PrivateRoute>
+              }
+          ></Route>
+          <Route
+              path='/leavebalance'
+              element={
+                  <PrivateRoute>
+                          <LeaveBalancePage />
                   </PrivateRoute>
               }
           ></Route>

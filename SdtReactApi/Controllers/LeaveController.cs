@@ -150,7 +150,6 @@ namespace SmartdustApp.Controllers
         /// <summary>
         /// Method To download Document 
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("DownloadDocument/{documentID}")]
         public IActionResult DownloadDocument(int documentID)
@@ -163,6 +162,34 @@ namespace SmartdustApp.Controllers
                 return File(new MemoryStream(attachment.DataFiles), Helpers.GetMimeTypes()[attachment.FileType], attachment.Name);
             }
             return Ok("Can't find the Document");
+        }
+        [HttpPost]
+        [Route("CreateLeaveBalance")]
+        public IActionResult CreateLeaveBalance(LeaveBalance leavebalance)
+        {
+            var result = _leaveService.CreateLeaveBalance(leavebalance);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet]
+        [Route("GetEmployeeDetails/{userID}")]
+        public IActionResult GetEmployeeDetails(int userID)
+        {
+            var list = _leaveService.GetEmployeeDetails(userID);
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
         }
     }
 }

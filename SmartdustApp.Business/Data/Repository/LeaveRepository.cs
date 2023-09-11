@@ -4,6 +4,7 @@ using SmartdustApp.Business.Core.Model;
 using SmartdustApp.Business.Data.Repository.Interfaces;
 using SmartdustApp.Business.Infrastructure;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -49,12 +50,12 @@ namespace SmartdustApp.Business.Data.Repository
             {
                 if (leaveDate != null)
                 {
-                        // Initialize LeaveDates property if not already initialized
-                        if (leave.LeaveDates == null)
-                            leave.LeaveDates = new List<DateTime>();
+                    // Initialize LeaveDates property if not already initialized
+                    if (leave.LeaveDates == null)
+                        leave.LeaveDates = new List<DateTime>();
 
-                        // If LeaveDate is not null, add it to the LeaveModel's LeaveDates list
-                        leave.LeaveDates.Add(leaveDate.Value);
+                    // If LeaveDate is not null, add it to the LeaveModel's LeaveDates list
+                    leave.LeaveDates.Add(leaveDate.Value);
                 }
                 if (attachedFileID.HasValue)
                 {
@@ -72,7 +73,7 @@ namespace SmartdustApp.Business.Data.Repository
                    .Select(g =>
                    {
                        var leave = g.First();
-                   
+
                        // Handle case where g.SelectMany(l => l.LeaveDates) returns null
                        leave.LeaveDates = g
                            .Where(l => l.LeaveDates != null)
@@ -80,7 +81,7 @@ namespace SmartdustApp.Business.Data.Repository
                            .Where(d => d != null)
                            .Distinct() // Filter out duplicates
                            .ToList();
-                   
+
                        // Handle case where g.SelectMany(l => l.AttachedFileIDs) returns null
                        leave.AttachedFileIDs = g
                            .Where(l => l.AttachedFileIDs != null)
@@ -88,7 +89,7 @@ namespace SmartdustApp.Business.Data.Repository
                            .Where(id => id != null)
                            .Distinct() // Filter out duplicates
                            .ToList();
-                   
+
                        return leave;
                    })
                    .ToList();
@@ -380,7 +381,21 @@ namespace SmartdustApp.Business.Data.Repository
                    })
                    .ToList();
         }
+        public List<UserModel> GetEmployeeDetails(int managerId)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
 
+            var query = @"
+                 SELECT U.Id, U.UserName
+                 FROM [User] U
+                 WHERE U.Id IN (
+                     SELECT EmployeeId FROM Employee WHERE ManagerId = @managerId
+                 )";
+            var parameters = new { managerId };
+
+            return db.Query<UserModel>(query, parameters).ToList();
+
+        }
 
         public List<LeaveStatusActions> GetManagerLeaveStatusActions()
         {
@@ -445,6 +460,25 @@ namespace SmartdustApp.Business.Data.Repository
 
             var parameters = new { leaveID };
             return db.QuerySingleOrDefault<LeaveModel>(query, parameters);
+        }
+
+        public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+            string insertQuery = @"
+                                  INSERT INTO [LeaveBalance] (UserID, LeaveType, Available)
+                                  VALUES (@UserID, @LeaveType, @Available);
+                                  SELECT CAST(SCOPE_IDENTITY() as int);";
+
+            int result = db.Execute(insertQuery, leavebalance);
+            if (result > 0)
+            {
+                return new RequestResult<bool>(true);
+            }
+            else
+            {
+                return new RequestResult<bool>(false);
+            }
         }
     }
 }

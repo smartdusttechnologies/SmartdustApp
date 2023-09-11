@@ -100,6 +100,14 @@ export default function AbsenceMenu() {
                         </MenuItem>
                     </Link>)
                 }
+                {
+                    auth.isAuthenticated && auth.roleId == 4 &&
+                    (<Link to={'/leavebalance'} style={{ textDecoration: "none", color: "grey" }}>
+                        <MenuItem >
+                            Leave Balance
+                        </MenuItem>
+                    </Link>)
+                }
                 <Divider />
             </Menu>
         </React.Fragment>
