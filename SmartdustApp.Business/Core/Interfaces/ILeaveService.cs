@@ -23,5 +23,8 @@ namespace SmartdustApp.Business.Core.Interfaces
         DocumentModel DownloadDocument(int documentID);
         RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance);
         RequestResult<List<UserModel>> GetEmployeeDetails(int userID);
+        RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID);
+        RequestResult<bool> UpdateLeaveBalance(LeaveBalance leavebalance);
+        RequestResult<bool> DeleteLeaveBalance(int id);
     }
 }

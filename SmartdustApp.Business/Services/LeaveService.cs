@@ -150,6 +150,46 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        public RequestResult<bool> UpdateLeaveBalance(LeaveBalance leavebalance)
+        {
+            var result = _leaveRepository.UpdateLeaveBalance(leavebalance);
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Updated Leave Balance Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
+        public RequestResult<bool> DeleteLeaveBalance(int id)
+        {
+            var result = _leaveRepository.DeleteLeaveBalance(id);
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Deleted Leave Balance Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
         public List<int> UploadFiles(IFormFileCollection files)
         {
             List<int> uploadedFileIds = new List<int>();
@@ -228,6 +268,15 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<UserModel>>();
             }
             return new RequestResult<List<UserModel>>(EmployeeDetails);
+        }
+        public RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID)
+        {
+            var EmployeeLeaveBalance = _leaveRepository.GetEmployeeLeaveBalance(userID);
+            if(EmployeeLeaveBalance == null)
+            {
+                return new RequestResult<List<LeaveBalance>>();
+            }
+            return new RequestResult<List<LeaveBalance>>(EmployeeLeaveBalance);
         }
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {

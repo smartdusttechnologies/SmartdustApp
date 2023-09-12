@@ -396,6 +396,23 @@ namespace SmartdustApp.Business.Data.Repository
             return db.Query<UserModel>(query, parameters).ToList();
 
         }
+        
+        public List<LeaveBalance> GetEmployeeLeaveBalance(int managerId)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            var query = @"
+                 SELECT LB.ID, LB.UserId, LB.LeaveType, LB.Available, U.UserName
+                 FROM [LeaveBalance] LB
+                 INNER JOIN [User] U ON LB.UserId = U.Id
+                 WHERE LB.UserId IN (
+                     SELECT EmployeeId FROM Employee WHERE ManagerId = @managerId
+                 )";
+            var parameters = new { managerId };
+
+            return db.Query<LeaveBalance>(query, parameters).ToList();
+
+        }
 
         public List<LeaveStatusActions> GetManagerLeaveStatusActions()
         {
@@ -454,9 +471,9 @@ namespace SmartdustApp.Business.Data.Repository
 
             // SQL query with JOIN to fetch data from the Leave table
             var query = @"
-        SELECT L.UserID, L.LeaveTypeID, L.Reason, L.AppliedDate, L.LeaveDays
-        FROM [Leave] L
-        WHERE L.ID = @leaveID";
+                        SELECT L.UserID, L.LeaveTypeID, L.Reason, L.AppliedDate, L.LeaveDays
+                        FROM [Leave] L
+                        WHERE L.ID = @leaveID";
 
             var parameters = new { leaveID };
             return db.QuerySingleOrDefault<LeaveModel>(query, parameters);
@@ -480,5 +497,46 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+        public RequestResult<bool> UpdateLeaveBalance(LeaveBalance leaveBalance)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string updateQuery = @"
+                                  UPDATE [LeaveBalance]
+                                  SET UserID = @UserID, LeaveType = @LeaveType, Available = @Available
+                                  WHERE ID = @ID";
+
+            int result = db.Execute(updateQuery, leaveBalance);
+
+            if (result > 0)
+            {
+                return new RequestResult<bool>(true);
+            }
+            else
+            {
+                return new RequestResult<bool>(false);
+            }
+        }
+        public RequestResult<bool> DeleteLeaveBalance(int id)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string deleteQuery = @"
+                                  DELETE FROM [LeaveBalance]
+                                  WHERE ID = @ID";
+
+            int result = db.Execute(deleteQuery, new { ID = id });
+
+            if (result > 0)
+            {
+                return new RequestResult<bool>(true);
+            }
+            else
+            {
+                return new RequestResult<bool>(false);
+            }
+        }
+
+
     }
 }

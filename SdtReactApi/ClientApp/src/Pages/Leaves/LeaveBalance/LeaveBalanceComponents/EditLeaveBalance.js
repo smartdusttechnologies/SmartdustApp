@@ -1,27 +1,31 @@
 import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
-import { Divider, InputLabel, TextField, Box, FormControl, MenuItem, Select } from '@mui/material'
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
-import Button from '@mui/joy/Button';
 import { ToastContainer, toast } from 'react-toastify';
-import dayjs from 'dayjs';
-import Chip from '@mui/material/Chip';
+import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
-import AddIcon from '@mui/icons-material/Add';
+import { TextField, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 
-const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
+export default function EditLeaveBalance({ data, leavetypes, employeeDetails, handleUpdate }) {
     const [open, setOpen] = React.useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        user: '',
-        leaveType: '',
-        balance: 0,
+        Id: data?.id,
+        user: data?.userID,
+        leaveType: data?.leaveType,
+        balance: data?.available,
     });
+
     const handleClickOpen = () => {
         setOpen(true);
+        console.log(data, 'EditLeaveBalance Data')
     };
 
     const handleClose = () => {
@@ -36,20 +40,23 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
             [name]: value,
         });
     };
-    const handleCreateClick = () => {
+    const handleUpdateClick = () => {
         console.log(formData, 'formData create leavebalance')
-        handleCreate(formData);
+        handleUpdate(formData);
         //handleClose();
     };
+
+
     return (
         <div>
-            <Tooltip title="Create">
+            <Tooltip title="Edit">
                 <span>
                     <IconButton
+                        //disabled={rowData.leaveStatus !== "Pending" && rowData.leaveStatus !== "Deny"}
                         variant="outlined"
                         onClick={handleClickOpen}
                     >
-                        <AddIcon />
+                        <EditIcon />
                     </IconButton>
                 </span>
             </Tooltip>
@@ -59,11 +66,10 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle>Create</DialogTitle>
+                <DialogTitle>Edit</DialogTitle>
                 <Divider />
                 <DialogContent>
                     <div
-                        //onSubmit={() => handleCreateClick }
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -110,27 +116,19 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
                             name='balance'
                             value={formData.balance}
                             onChange={(e) => handleChange(e)}
-                            inputProps={{
-                                inputMode: 'numeric',
-                                pattern: '^[1-9]\\d*$',
-                            }}
                             required
                         />
                         <Divider />
                         <Button
                             type='submit'
-                            onClick={() => handleCreateClick()}
-                            //loading={isLoading}
+                            onClick={handleUpdateClick}
                         >
-                            Create
+                            Update
                         </Button>
                     </div>
                 </DialogContent>
             </Dialog>
             <ToastContainer />
         </div>
-    )
+    );
 }
-
-
-export default CreateLeaveBalance

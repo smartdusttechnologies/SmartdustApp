@@ -174,12 +174,51 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost]
+        [Route("UpdateLeaveBalance")]
+        public IActionResult UpdateLeaveBalance(LeaveBalance leavebalance)
+        {
+            var result = _leaveService.UpdateLeaveBalance(leavebalance);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost]
+        [Route("DeleteLeaveBalance/{id}")]
+        public IActionResult DeleteLeaveBalance(int id)
+        {
+            var result = _leaveService.DeleteLeaveBalance(id);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
         [HttpGet]
         [Route("GetEmployeeDetails/{userID}")]
         public IActionResult GetEmployeeDetails(int userID)
         {
             var list = _leaveService.GetEmployeeDetails(userID);
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
+
+        [HttpGet]
+        [Route("GetEmployeeLeaveBalance/{userID}")]
+        public IActionResult GetEmployeeLeaveBalance(int userID)
+        {
+            var list = _leaveService.GetEmployeeLeaveBalance(userID);
             if (list.IsSuccessful)
             {
                 return Ok(list);
