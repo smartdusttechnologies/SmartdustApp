@@ -28,12 +28,19 @@ const Contact = () => {
   const [userdata , setUserdata] = useState(initialState)
   const [isLoading , setLoading] = useState(false)
 
-  const handleChange = (e)=>{
-    const newdata = {...userdata }
-    newdata[e.target.id] = e.target.value
-    setUserdata(newdata);
-    console.log(userdata);
-  }
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        const newdata = { ...userdata };
+
+        // Check if the field is 'phone' and convert its value to a number
+        if (id === 'phone') {
+            newdata[id] = parseInt(value, 10);
+        } else {
+            newdata[id] = value;
+        }
+
+        setUserdata(newdata);
+    }
 
   const handleSubmit = (e)=>{
     e.preventDefault()
