@@ -552,7 +552,7 @@ namespace SmartdustApp.Business.Data.Repository
             using IDbConnection db = _connectionFactory.GetConnection;
 
             var query = @"
-                         SELECT E.EmployeeId, E.ManagerId, M.UserName as ManagerName, U.UserName as EmployeeName
+                         SELECT E.ID, E.EmployeeId, E.ManagerId, M.UserName as ManagerName, U.UserName as EmployeeName
                          FROM Employee E
                          LEFT JOIN [User] M ON E.ManagerId = M.Id
                          LEFT JOIN [User] U ON E.EmployeeId = U.Id";
@@ -580,7 +580,45 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
-        
+        public RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string updateQuery = @"
+                                  UPDATE [Employee]
+                                  SET EmployeeId = @EmployeeId, ManagerId = @ManagerId
+                                  WHERE ID = @ID";
+
+            int result = db.Execute(updateQuery, employeeData);
+
+            if (result > 0)
+            {
+                return new RequestResult<bool>(true);
+            }
+            else
+            {
+                return new RequestResult<bool>(false);
+            }
+        }
+        public RequestResult<bool> DeleteManagerAndEmployeeData(int id)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string deleteQuery = @"
+                                  DELETE FROM [Employee]
+                                  WHERE ID = @ID";
+
+            int result = db.Execute(deleteQuery, new { ID = id });
+
+            if (result > 0)
+            {
+                return new RequestResult<bool>(true);
+            }
+            else
+            {
+                return new RequestResult<bool>(false);
+            }
+        }
 
     }
 }

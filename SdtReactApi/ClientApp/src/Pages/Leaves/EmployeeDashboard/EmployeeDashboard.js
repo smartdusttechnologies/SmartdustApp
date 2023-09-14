@@ -24,6 +24,7 @@ const EmployeeDashboardPage = () => {
     const handleCreate = (formData) => {
 
         axios.post('api/leave/CreateManagerAndEmployeeData', {
+            id:0,
             managerId: formData.setmanager,
             managerName: '',
             employeeId: formData.setemployee,
@@ -46,12 +47,12 @@ const EmployeeDashboardPage = () => {
     }
     const handleUpdate = (formData) => {
 
-        axios.post('api/leave/UpdateLeaveBalance', {
+        axios.post('api/leave/EditManagerAndEmployeeData', {
             id: formData.Id,
-            userId: formData.user,
-            leavetype: formData.leaveType,
-            available: formData.balance,
-            userName: ''
+            managerId: formData.setmanager,
+            managerName: '',
+            employeeId: formData.setemployee,
+            employeeName: ''
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
@@ -69,17 +70,14 @@ const EmployeeDashboardPage = () => {
             })
     }
     const handleDelete = (id) => {
-        axios.post(`api/leave/DeleteLeaveBalance/${id}`)
+        axios.post(`api/leave/DeleteManagerAndEmployeeData/${id}`)
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                //setLoading(false)
-                //setLeaveData(initialState)
             })
             .catch(error => {
-                //setLoading(false)
                 console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
@@ -131,7 +129,7 @@ const EmployeeDashboardPage = () => {
             </div>
             <div>
                 {
-                    isLoading ? <Box><LoadingProgress /></Box> : <EmployeeManagerTable rows={managerAndEmployeeData} employeeDetails={employeeDetails} handleUpdate={handleUpdate} handleDelete={handleDelete} />
+                    isLoading ? <Box><LoadingProgress /></Box> : <EmployeeManagerTable rows={managerAndEmployeeData} users={users} handleUpdate={handleUpdate} handleDelete={handleDelete} />
                 }
             </div>
             <ToastContainer />

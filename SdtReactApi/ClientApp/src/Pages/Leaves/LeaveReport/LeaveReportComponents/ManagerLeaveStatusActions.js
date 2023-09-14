@@ -21,6 +21,10 @@ export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, Leave
         setOpen(false);
     };
 
+    const handleUpdateClick = (id) => {
+        handleUpdatestatus(LeaveID, id, comment)
+        handleClose();
+    };
     return (
         <div>
             <Tooltip title="Edit Status">
@@ -62,7 +66,7 @@ export default function ManagerLeaveStatusActionsMenu({ rows, leaveStatus, Leave
                             <Button
                                 key={index}
                                 color={row.id === 5 ? 'success' : 'danger'}
-                                onClick={() => handleUpdatestatus(LeaveID, row.id, comment )}
+                                onClick={() => handleUpdateClick(row.id)}
                             >
                                 {row.name}
                             </Button>

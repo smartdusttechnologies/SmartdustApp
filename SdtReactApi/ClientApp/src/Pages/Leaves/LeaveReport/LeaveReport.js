@@ -67,9 +67,9 @@ const LeaveReport = () => {
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
+                handleGetEmployeeLeave()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                handleGetEmployeeLeave()
             })
             .catch(error => {
                 console.log(error)

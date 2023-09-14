@@ -18,7 +18,7 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
     const [formData, setFormData] = useState({
         user: '',
         leaveType: '',
-        balance: 0,
+        balance: undefined,
     });
     const handleClickOpen = () => {
         setOpen(true);
@@ -40,7 +40,7 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
         // Validate the form data
         if (formData.user && formData.leaveType && formData.balance > 0) {
             handleCreate(formData);
-            // handleClose();
+            handleClose();
         } else {
             toast.warn('Please fill in all required fields and ensure the balance is not smaller than 0.', { position: "bottom-center", theme: "dark" });
         }

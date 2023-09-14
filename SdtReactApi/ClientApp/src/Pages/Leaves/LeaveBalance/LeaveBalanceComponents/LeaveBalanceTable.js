@@ -24,6 +24,7 @@ import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
 import ColumnMenu from '../../../../components/GridTable/ColumnMenu';
 import EditLeaveBalance from './EditLeaveBalance';
+import DeleteComponent from '../../../../components/DeleteComponent/DeleteComponent';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -363,12 +364,10 @@ export default function LeavesBalanceTable({ rows, leavetypes, employeeDetails, 
                                         <TableCell align="right" sx={{
                                             display:'flex'
                                         }} >
-                                            <IconButton
-                                                variant="outlined"
-                                                onClick={() => handleDelete(row.id)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            <DeleteComponent
+                                                onDelete={handleDelete}
+                                                id={row.id}
+                                            />
                                             <EditLeaveBalance
                                                 data={row}
                                                 leavetypes={leavetypes}

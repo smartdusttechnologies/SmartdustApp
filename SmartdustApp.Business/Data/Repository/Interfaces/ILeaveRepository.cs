@@ -26,6 +26,8 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         RequestResult<bool> DeleteLeaveBalance(int id);
         List<EmployeeTable> GetManagerAndEmployeeData();
         RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData);
+        RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData);
+        RequestResult<bool> DeleteManagerAndEmployeeData(int id);
         List<UserModel> GetUsers();
     }
 }

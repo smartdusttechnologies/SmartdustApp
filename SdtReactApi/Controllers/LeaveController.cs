@@ -273,5 +273,27 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost]
+        [Route("EditManagerAndEmployeeData")]
+        public IActionResult EditManagerAndEmployeeData(EmployeeTable employeeData)
+        {
+            var result = _leaveService.EditManagerAndEmployeeData(employeeData);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost]
+        [Route("DeleteManagerAndEmployeeData/{id}")]
+        public IActionResult DeleteManagerAndEmployeeData(int id)
+        {
+            var result = _leaveService.DeleteManagerAndEmployeeData(id);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

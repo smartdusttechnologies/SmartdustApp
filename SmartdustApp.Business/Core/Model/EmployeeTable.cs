@@ -8,6 +8,7 @@ namespace SmartdustApp.Business.Core.Model
 {
     public class EmployeeTable
     {
+        public int ID { get; set; }
         public int ManagerID { get; set; }
         public string ManagerName { get; set; }
         public int EmployeeID { get; set; }

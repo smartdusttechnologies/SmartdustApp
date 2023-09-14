@@ -35,16 +35,13 @@ const Create = ({ users, handleCreate }) => {
         });
     };
     const handleCreateClick = () => {
-        console.log(formData, 'formData create leavebalance')
-
-        handleCreate(formData);
         // Validate the form data
-        //if (formData.user && formData.leaveType && formData.balance > 0) {
-        //    handleCreate(formData);
-        //    // handleClose();
-        //} else {
-        //    toast.warn('Please fill in all required fields and ensure the balance is not smaller than 0.', { position: "bottom-center", theme: "dark" });
-        //}
+        if (formData.setemployee && formData.setmanager) {
+            handleCreate(formData);
+            handleClose();
+        } else {
+            toast.warn('Please Select all required fields.', { position: "bottom-center", theme: "dark" });
+        }
     };
     return (
         <div>
@@ -81,7 +78,7 @@ const Create = ({ users, handleCreate }) => {
                             <Select
                                 label='Select Employee'
                                 name='setemployee'
-                                //value={formData.setemployee}
+                                value={formData.setemployee}
                                 onChange={(e) => handleChange(e)}
                                 required
                             >
@@ -97,7 +94,7 @@ const Create = ({ users, handleCreate }) => {
                             <Select
                                 label='Select Manager'
                                 name='setmanager'
-                                //value={formData.setmanager}
+                                value={formData.setmanager}
                                 onChange={(e) => handleChange(e)}
                                 required
                             >

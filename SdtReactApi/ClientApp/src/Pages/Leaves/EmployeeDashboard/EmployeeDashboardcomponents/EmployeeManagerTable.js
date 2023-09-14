@@ -23,7 +23,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios'
 import ColumnMenu from '../../../../components/GridTable/ColumnMenu';
-//import EditLeaveBalance from './EditLeaveBalance';
+import Edit from './Edit';
+import DeleteComponent from '../../../../components/DeleteComponent/DeleteComponent';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -213,7 +214,7 @@ const NoDataTableRows = (rows) => {
     }
 };
 
-export default function EmployeeManagerTable({ rows, leavetypes, employeeDetails, handleUpdate, handleDelete }) {
+export default function EmployeeManagerTable({ rows, users, handleUpdate, handleDelete }) {
     console.log(rows, 'props')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -356,18 +357,15 @@ export default function EmployeeManagerTable({ rows, leavetypes, employeeDetails
                                         <TableCell align="right" sx={{
                                             display: 'flex'
                                         }} >
-                                            <IconButton
-                                                variant="outlined"
-                                                onClick={() => handleDelete(row.id)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                            {/*<EditLeaveBalance*/}
-                                            {/*    data={row}*/}
-                                            {/*    leavetypes={leavetypes}*/}
-                                            {/*    employeeDetails={employeeDetails}*/}
-                                            {/*    handleUpdate={handleUpdate}*/}
-                                            {/*/>*/}
+                                            <DeleteComponent
+                                                onDelete={handleDelete}
+                                                id={row.id }
+                                            />
+                                            <Edit
+                                                data={row}
+                                                users={users}
+                                                handleUpdate={handleUpdate}
+                                            />
 
                                         </TableCell>
                                     </TableRow>

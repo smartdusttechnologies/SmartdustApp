@@ -147,7 +147,7 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
-                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center"});
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
                 handleGetLeaves()
                 setLoading(false)
@@ -155,7 +155,7 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
             .catch(error => {
                 setLoading(false)
                 console.log(error)
-                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center" });
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
 

@@ -237,6 +237,46 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        public RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData)
+        {
+            var result = _leaveRepository.EditManagerAndEmployeeData(employeeData);
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Edited Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
+        public RequestResult<bool> DeleteManagerAndEmployeeData(int id)
+        {
+            var result = _leaveRepository.DeleteManagerAndEmployeeData(id);
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Deleted Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
+            }
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
+        }
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
             var leave = _leaveRepository.GetEmployeeLeave(userID);
