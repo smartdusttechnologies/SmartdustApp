@@ -130,6 +130,15 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        public RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID)
+        {
+            var EmployeeLeaveBalance = _leaveRepository.GetEmployeeLeaveBalance(userID);
+            if (EmployeeLeaveBalance == null)
+            {
+                return new RequestResult<List<LeaveBalance>>();
+            }
+            return new RequestResult<List<LeaveBalance>>(EmployeeLeaveBalance);
+        }
         public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
         {
             var result = _leaveRepository.CreateLeaveBalance(leavebalance);
@@ -190,66 +199,43 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
-        public List<int> UploadFiles(IFormFileCollection files)
+        public RequestResult<List<EmployeeTable>> GetManagerAndEmployeeData()
         {
-            List<int> uploadedFileIds = new List<int>();
-
-            foreach (var file in files)
+            var ManagerAndEmployeeData = _leaveRepository.GetManagerAndEmployeeData();
+            if (ManagerAndEmployeeData == null)
             {
-                if (file != null && file.Length > 0)
+                return new RequestResult<List<EmployeeTable>>();
+            }
+            return new RequestResult<List<EmployeeTable>>(ManagerAndEmployeeData);
+        }
+        public RequestResult<List<UserModel>> GetUsers()
+        {
+            var UsersData = _leaveRepository.GetUsers();
+            if (UsersData == null)
+            {
+                return new RequestResult<List<UserModel>>();
+            }
+            return new RequestResult<List<UserModel>>(UsersData);
+        }
+        public RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData)
+        {
+            var result = _leaveRepository.CreateManagerAndEmployeeData(employeeData);
+
+            if (result.IsSuccessful)
+            {
+                List<ValidationMessage> success = new List<ValidationMessage>()
                 {
-                    var uploadedFileId = UploadSingleFile(file);
-                    uploadedFileIds.Add(uploadedFileId);
-                }
+                    new ValidationMessage(){Reason = "Created Successfully",Severity=ValidationSeverity.Information}
+                };
+                result.Message = success;
+                return result;
             }
-
-            return uploadedFileIds;
-        }
-
-        private int UploadSingleFile(IFormFile file)
-        {
-            var newFileName = GenerateUniqueFileName(file.FileName);
-            var fileModel = new DocumentModel
-            {
-                Name = newFileName,
-                FileType = Path.GetExtension(newFileName)
-            };
-            // Validate file extension
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".xlsx", ".pdf" };
-            if (!allowedExtensions.Contains(fileModel.FileType.ToLower()))
-            {
-                throw new InvalidOperationException("Unsupported file type.");
-            }
-
-            // Validate file size
-            if (file.Length > 1024 * 1024) // 1 MB
-            {
-                throw new InvalidOperationException("File size should not exceed 1MB.");
-            }
-            using (var memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-                fileModel.DataFiles = memoryStream.ToArray();
-            }
-
-            return _leaveRepository.FileUpload(fileModel);
-        }
-
-        private string GenerateUniqueFileName(string originalFileName)
-        {
-            var fileExtension = Path.GetExtension(originalFileName);
-            return $"{Guid.NewGuid()}{fileExtension}";
-        }
-
-        /// <summary>
-        /// Method To download Document 
-        /// </summary>
-        /// <returns></returns>
-        public DocumentModel DownloadDocument(int documentID)
-        {
-            var document = _leaveRepository.DownloadDocument(documentID);
-            return document;
-
+            List<ValidationMessage> error = new List<ValidationMessage>()
+                {
+                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
+                };
+            result.Message = error;
+            return result;
         }
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
@@ -268,15 +254,6 @@ namespace SmartdustApp.Business.Services
                 return new RequestResult<List<UserModel>>();
             }
             return new RequestResult<List<UserModel>>(EmployeeDetails);
-        }
-        public RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID)
-        {
-            var EmployeeLeaveBalance = _leaveRepository.GetEmployeeLeaveBalance(userID);
-            if(EmployeeLeaveBalance == null)
-            {
-                return new RequestResult<List<LeaveBalance>>();
-            }
-            return new RequestResult<List<LeaveBalance>>(EmployeeLeaveBalance);
         }
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
@@ -434,6 +411,67 @@ namespace SmartdustApp.Business.Services
                 body = reader.ReadToEnd();
             }
             return body;
+        }
+        // For Documnent Controller
+        public List<int> UploadFiles(IFormFileCollection files)
+        {
+            List<int> uploadedFileIds = new List<int>();
+
+            foreach (var file in files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var uploadedFileId = UploadSingleFile(file);
+                    uploadedFileIds.Add(uploadedFileId);
+                }
+            }
+
+            return uploadedFileIds;
+        }
+
+        private int UploadSingleFile(IFormFile file)
+        {
+            var newFileName = GenerateUniqueFileName(file.FileName);
+            var fileModel = new DocumentModel
+            {
+                Name = newFileName,
+                FileType = Path.GetExtension(newFileName)
+            };
+            // Validate file extension
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".xlsx", ".pdf" };
+            if (!allowedExtensions.Contains(fileModel.FileType.ToLower()))
+            {
+                throw new InvalidOperationException("Unsupported file type.");
+            }
+
+            // Validate file size
+            if (file.Length > 1024 * 1024) // 1 MB
+            {
+                throw new InvalidOperationException("File size should not exceed 1MB.");
+            }
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                fileModel.DataFiles = memoryStream.ToArray();
+            }
+
+            return _leaveRepository.FileUpload(fileModel);
+        }
+
+        private string GenerateUniqueFileName(string originalFileName)
+        {
+            var fileExtension = Path.GetExtension(originalFileName);
+            return $"{Guid.NewGuid()}{fileExtension}";
+        }
+
+        /// <summary>
+        /// Method To download Document 
+        /// </summary>
+        public DocumentModel DownloadDocument(int documentID)
+        {
+            var document = _leaveRepository.DownloadDocument(documentID);
+            return document;
+
         }
     }
 }

@@ -1,0 +1,142 @@
+import React, { useContext, useState, useEffect } from 'react'
+import axios from 'axios'
+import './EmployeeDashboard.css'
+import { Divider, InputLabel, TextField, Box, FormControl, MenuItem, Select } from '@mui/material'
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import Button from '@mui/joy/Button';
+import { ToastContainer, toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import Chip from '@mui/material/Chip';
+import AuthContext from '../../../context/AuthProvider'
+import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
+import EmployeeManagerTable from './EmployeeDashboardcomponents/EmployeeManagerTable';
+import Create from './EmployeeDashboardcomponents/Create';
+//import CreateLeaveBalance from './LeaveBalanceComponents/CreateLeaveBalance';
+//import LeavesBalanceTable from './LeaveBalanceComponents/LeaveBalanceTable';
+
+const EmployeeDashboardPage = () => {
+    const [isLoading, setLoading] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [employeeDetails, setEmployeeDetails] = useState([]);
+    const [managerAndEmployeeData, setManagerAndEmployeeData] = useState([]);
+    const { auth, setNotification, notification } = useContext(AuthContext);
+
+    const handleCreate = (formData) => {
+
+        axios.post('api/leave/CreateManagerAndEmployeeData', {
+            managerId: formData.setmanager,
+            managerName: '',
+            employeeId: formData.setemployee,
+            employeeName: ''
+        })
+            .then(response => {
+                console.log(response?.data?.message[0]?.reason)
+                handleGetManagerAndEmployeeData()
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                //setLoading(false)
+                //setLeaveData(initialState)
+            })
+            .catch(error => {
+                //setLoading(false)
+                console.log(error)
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+            })
+    }
+    const handleUpdate = (formData) => {
+
+        axios.post('api/leave/UpdateLeaveBalance', {
+            id: formData.Id,
+            userId: formData.user,
+            leavetype: formData.leaveType,
+            available: formData.balance,
+            userName: ''
+        })
+            .then(response => {
+                console.log(response?.data?.message[0]?.reason)
+                handleGetManagerAndEmployeeData()
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                //setLoading(false)
+                //setLeaveData(initialState)
+            })
+            .catch(error => {
+                //setLoading(false)
+                console.log(error)
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+            })
+    }
+    const handleDelete = (id) => {
+        axios.post(`api/leave/DeleteLeaveBalance/${id}`)
+            .then(response => {
+                console.log(response?.data?.message[0]?.reason)
+                handleGetManagerAndEmployeeData()
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                //setLoading(false)
+                //setLeaveData(initialState)
+            })
+            .catch(error => {
+                //setLoading(false)
+                console.log(error)
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+            })
+    }
+    const handleGetUsers = () => {
+        axios.get('api/leave/GetUsers')
+            .then(response => {
+                console.log(response?.data?.requestedObject, 'handleGetUsers')
+                setUsers(response?.data?.requestedObject)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+    const handleGetManagerAndEmployeeData = () => {
+        setLoading(true)
+        axios.get(`api/leave/GetManagerAndEmployeeData`)
+            .then(response => {
+                console.log(response?.data?.requestedObject, 'GetManagerAndEmployeeData')
+                setManagerAndEmployeeData(response?.data?.requestedObject)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
+    }
+
+    useEffect(() => {
+        handleGetManagerAndEmployeeData()
+        handleGetUsers()
+    }, [])
+    return (
+        <div className='Employee-Dashboard-page'>
+            <div className='heading'>
+                <h1>Employee and Manager Dashboard</h1>
+            </div>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'right',
+                width: '90%',
+                margin: '5px auto',
+            }}>
+                <Create
+                    users={users}
+                    handleCreate={handleCreate}
+                />
+            </div>
+            <div>
+                {
+                    isLoading ? <Box><LoadingProgress /></Box> : <EmployeeManagerTable rows={managerAndEmployeeData} employeeDetails={employeeDetails} handleUpdate={handleUpdate} handleDelete={handleDelete} />
+                }
+            </div>
+            <ToastContainer />
+        </div>
+    )
+}
+
+export default EmployeeDashboardPage

@@ -108,6 +108,14 @@ export default function AbsenceMenu() {
                         </MenuItem>
                     </Link>)
                 }
+                {
+                    auth.isAuthenticated && auth.roleId == 4 &&
+                    (<Link to={'/employeedashboard'} style={{ textDecoration: "none", color: "grey" }}>
+                        <MenuItem >
+                            Employee Dashboard
+                        </MenuItem>
+                    </Link>)
+                }
                 <Divider />
             </Menu>
         </React.Fragment>

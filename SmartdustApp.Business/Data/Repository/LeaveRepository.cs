@@ -536,7 +536,51 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+        public List<UserModel> GetUsers()
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
 
+            var query = @"
+                         SELECT Id, UserName
+                         FROM [User]";
+
+            return db.Query<UserModel>(query).ToList();
+        }
+
+        public List<EmployeeTable> GetManagerAndEmployeeData()
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            var query = @"
+                         SELECT E.EmployeeId, E.ManagerId, M.UserName as ManagerName, U.UserName as EmployeeName
+                         FROM Employee E
+                         LEFT JOIN [User] M ON E.ManagerId = M.Id
+                         LEFT JOIN [User] U ON E.EmployeeId = U.Id";
+
+            var results = db.Query<EmployeeTable>(query).ToList();
+
+            return results;
+        }
+        public RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData)
+        {
+            using IDbConnection db = _connectionFactory.GetConnection;
+
+            string insertEmployeeQuery = @"
+                                         INSERT INTO Employee (EmployeeId, ManagerId)
+                                         VALUES (@EmployeeId, @ManagerId)";
+
+            int result = db.Execute(insertEmployeeQuery, employeeData);
+
+            if (result > 0)
+            {
+                return new RequestResult<bool>(true);
+            }
+            else
+            {
+                return new RequestResult<bool>(false);
+            }
+        }
+        
 
     }
 }

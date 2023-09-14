@@ -13,12 +13,11 @@ import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
-const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
+const Create = ({ users, handleCreate }) => {
     const [open, setOpen] = React.useState(false);
     const [formData, setFormData] = useState({
-        user: '',
-        leaveType: '',
-        balance: 0,
+        setemployee: undefined,
+        setmanager: undefined
     });
     const handleClickOpen = () => {
         setOpen(true);
@@ -37,13 +36,15 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
     };
     const handleCreateClick = () => {
         console.log(formData, 'formData create leavebalance')
+
+        handleCreate(formData);
         // Validate the form data
-        if (formData.user && formData.leaveType && formData.balance > 0) {
-            handleCreate(formData);
-            // handleClose();
-        } else {
-            toast.warn('Please fill in all required fields and ensure the balance is not smaller than 0.', { position: "bottom-center", theme: "dark" });
-        }
+        //if (formData.user && formData.leaveType && formData.balance > 0) {
+        //    handleCreate(formData);
+        //    // handleClose();
+        //} else {
+        //    toast.warn('Please fill in all required fields and ensure the balance is not smaller than 0.', { position: "bottom-center", theme: "dark" });
+        //}
     };
     return (
         <div>
@@ -75,55 +76,43 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
                             minWidth: '500px'
                         }}
                     >
-                        <FormControl className='user'>
-                            <InputLabel id="demo-select-small-label">User</InputLabel>
+                        <FormControl>
+                            <InputLabel id="demo-select-small-label">Select Employee</InputLabel>
                             <Select
-                                label='User'
-                                name='user'
-                                value={formData.user}
+                                label='Select Employee'
+                                name='setemployee'
+                                //value={formData.setemployee}
                                 onChange={(e) => handleChange(e)}
                                 required
                             >
                                 {
-                                    employeeDetails.map((el, index) => (
+                                    users.map((el, index) => (
                                         <MenuItem key={index} value={el.id}>{el.userName}</MenuItem>
                                     ))
                                 }
                             </Select>
                         </FormControl>
-                        <FormControl className='leave-type'>
-                            <InputLabel id="demo-select-small-label">Leave Type</InputLabel>
+                        <FormControl>
+                            <InputLabel id="demo-select-small-label">Select Manager</InputLabel>
                             <Select
-                                label='Leave Type'
-                                name='leaveType'
-                                value={formData.leaveType}
+                                label='Select Manager'
+                                name='setmanager'
+                                //value={formData.setmanager}
                                 onChange={(e) => handleChange(e)}
                                 required
                             >
                                 {
-                                    leavetypes.map((el, index) => (
-                                        <MenuItem key={index} value={el.name}>{el.name}</MenuItem>
+                                    users.map((el, index) => (
+                                        <MenuItem key={index} value={el.id}>{el.userName}</MenuItem>
                                     ))
                                 }
                             </Select>
                         </FormControl>
-                        <TextField
-                            label='Give Balance'
-                            type='number'
-                            name='balance'
-                            value={formData.balance}
-                            onChange={(e) => handleChange(e)}
-                            inputProps={{
-                                inputMode: 'numeric',
-                                pattern: '^[1-9]\\d*$',
-                            }}
-                            required
-                        />
                         <Divider />
                         <Button
                             type='submit'
                             onClick={() => handleCreateClick()}
-                            //loading={isLoading}
+                        //loading={isLoading}
                         >
                             Create
                         </Button>
@@ -136,4 +125,4 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
 }
 
 
-export default CreateLeaveBalance
+export default Create

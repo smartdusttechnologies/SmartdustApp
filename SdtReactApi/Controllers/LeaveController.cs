@@ -230,5 +230,48 @@ namespace SmartdustApp.Controllers
                 };
             return Json(new RequestResult<bool>(errors));
         }
+        [HttpGet]
+        [Route("GetUsers")]
+        public IActionResult GetUsers()
+        {
+            var list = _leaveService.GetUsers();
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
+        [HttpGet]
+        [Route("GetManagerAndEmployeeData")]
+        public IActionResult GetManagerAndEmployeeData()
+        {
+            var list = _leaveService.GetManagerAndEmployeeData();
+            if (list.IsSuccessful)
+            {
+                return Ok(list);
+            }
+
+            List<ValidationMessage> errors = new List<ValidationMessage>
+                {
+                    new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
+                };
+            return Json(new RequestResult<bool>(errors));
+        }
+        [HttpPost]
+        [Route("CreateManagerAndEmployeeData")]
+        public IActionResult CreateManagerAndEmployeeData(EmployeeTable employeeData)
+        {
+            var result = _leaveService.CreateManagerAndEmployeeData(employeeData);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
