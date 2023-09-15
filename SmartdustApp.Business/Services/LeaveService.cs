@@ -20,6 +20,7 @@ using static SmartdustApp.Business.Core.Model.PolicyTypes;
 
 namespace SmartdustApp.Business.Services
 {
+    // This class implements the ILeaveService interface and provides leave management services.
     public class LeaveService : ILeaveService
     {
         private readonly ILeaveRepository _leaveRepository;
@@ -28,6 +29,7 @@ namespace SmartdustApp.Business.Services
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IUserRepository _userRepository;
 
+        // Constructor for LeaveService with dependency injection.
         public LeaveService(ILeaveRepository leaveRepository, IEmailService emailservice, IConfiguration configuration , IWebHostEnvironment hostingEnvironment, IUserRepository userRepository)
         {
             _leaveRepository = leaveRepository;
@@ -37,6 +39,7 @@ namespace SmartdustApp.Business.Services
             _userRepository = userRepository;
         }
 
+        // Retrieves a list of leave records for a specific user.
         public RequestResult<List<LeaveModel>> Get(int userID)
         {
             var leave = _leaveRepository.Get(userID);
@@ -52,6 +55,7 @@ namespace SmartdustApp.Business.Services
             throw new NotImplementedException();
         }
 
+        // Saves a leave record and sends an email notification.
         public RequestResult<bool> Save(LeaveModel leave)
         {
             var validationResult = ValidateLeaveDate(leave);
@@ -105,6 +109,7 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        // Updates a leave record.
         public RequestResult<bool> Update(LeaveModel leave)
         {
             var validationResult = ValidateLeaveDate(leave);
@@ -130,6 +135,8 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+
+        // Retrieves leave balance records for employees managed by a manager.
         public RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID)
         {
             var EmployeeLeaveBalance = _leaveRepository.GetEmployeeLeaveBalance(userID);
@@ -139,6 +146,7 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<LeaveBalance>>(EmployeeLeaveBalance);
         }
+        // Creates a leave balance record.
         public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
         {
             var result = _leaveRepository.CreateLeaveBalance(leavebalance);
@@ -159,6 +167,8 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+
+        // Updates a leave balance record.
         public RequestResult<bool> UpdateLeaveBalance(LeaveBalance leavebalance)
         {
             var result = _leaveRepository.UpdateLeaveBalance(leavebalance);
@@ -179,6 +189,8 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+
+        // Deletes a leave balance record.
         public RequestResult<bool> DeleteLeaveBalance(int id)
         {
             var result = _leaveRepository.DeleteLeaveBalance(id);
@@ -199,6 +211,8 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+
+        // Retrieves a list of manager and employee data.
         public RequestResult<List<EmployeeTable>> GetManagerAndEmployeeData()
         {
             var ManagerAndEmployeeData = _leaveRepository.GetManagerAndEmployeeData();
@@ -208,6 +222,8 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<EmployeeTable>>(ManagerAndEmployeeData);
         }
+
+        // Retrieves a list of all users.
         public RequestResult<List<UserModel>> GetUsers()
         {
             var UsersData = _leaveRepository.GetUsers();
@@ -217,6 +233,7 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<UserModel>>(UsersData);
         }
+        // Creates manager and employee data records.
         public RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData)
         {
             var result = _leaveRepository.CreateManagerAndEmployeeData(employeeData);
@@ -237,6 +254,7 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        // Edits manager and employee data records.
         public RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData)
         {
             var result = _leaveRepository.EditManagerAndEmployeeData(employeeData);
@@ -257,6 +275,7 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+        // Deletes manager and employee data by ID.
         public RequestResult<bool> DeleteManagerAndEmployeeData(int id)
         {
             var result = _leaveRepository.DeleteManagerAndEmployeeData(id);
@@ -277,6 +296,8 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+
+        // Retrieves a list of leave records for employees managed by a manager.
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
             var leave = _leaveRepository.GetEmployeeLeave(userID);
@@ -286,6 +307,8 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<LeaveModel>>(leave);
         }
+
+        // Retrieves employee details.
         public RequestResult<List<UserModel>> GetEmployeeDetails(int userID)
         {
             var EmployeeDetails = _leaveRepository.GetEmployeeDetails(userID);
@@ -295,6 +318,8 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<UserModel>>(EmployeeDetails);
         }
+
+        // Updates the status of a leave record and sends an email notification.
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
             var leave = _leaveRepository.GetLeaveDetails(updateStatus.LeaveID);
@@ -340,6 +365,8 @@ namespace SmartdustApp.Business.Services
             result.Message = error;
             return result;
         }
+
+        // Retrieves a list of available leave types.
         public RequestResult<List<LeaveTypes>> GetLeaveTypes()
         {
             var leavetypes = _leaveRepository.GetLeaveTypes();
@@ -350,6 +377,7 @@ namespace SmartdustApp.Business.Services
             return new RequestResult<List<LeaveTypes>>(leavetypes);
         }
 
+        // Retrieves a list of leave status actions available to managers.
         public RequestResult<List<LeaveStatusActions>> GetManagerLeaveStatusActions()
         {
             var leavestatusactions = _leaveRepository.GetManagerLeaveStatusActions();
@@ -360,6 +388,7 @@ namespace SmartdustApp.Business.Services
             return new RequestResult<List<LeaveStatusActions>>(leavestatusactions);
         }
 
+        // Retrieves leave balance for a specific user.
         public RequestResult<List<LeaveBalance>> GetLeaveBalance(int userID)
         {
             var leaveBalance = _leaveRepository.GetLeaveBalance(userID);
@@ -369,6 +398,8 @@ namespace SmartdustApp.Business.Services
             }
             return new RequestResult<List<LeaveBalance>>(leaveBalance);
         }
+
+        // To Check the Leave Balance before Applying Leave.
         private RequestResult<bool> CheckLeaveBalance(LeaveModel leave)
         {
             // Check if the LeaveType is "Leave of Absence" and return successful result without checking the leave balance
@@ -402,31 +433,6 @@ namespace SmartdustApp.Business.Services
                 };
                 return new RequestResult<bool>(false, validationMessages);
             }
-
-            //var currentDate = DateTime.Today;
-            //var distinctDates = new HashSet<DateTime>();
-
-            //foreach (var date in leave.LeaveDates)
-            //{
-            //    if (date.Date < currentDate)
-            //    {
-            //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-            //        {
-            //            new ValidationMessage() { Reason = $"Leave Date {date.Date.ToShortDateString()} cannot be before the current date.", Severity = ValidationSeverity.Error }
-            //        };
-            //        return new RequestResult<bool>(false, validationMessages);
-            //    }
-
-            //    if (!distinctDates.Add(date.Date))
-            //    {
-            //        List<ValidationMessage> validationMessages = new List<ValidationMessage>()
-            //        {
-            //            new ValidationMessage() { Reason = $"Leave Date {date.Date.ToShortDateString()} is duplicated.", Severity = ValidationSeverity.Error }
-            //        };
-            //        return new RequestResult<bool>(false, validationMessages);
-            //    }
-            //}
-
             return new RequestResult<bool>(true);
         }
 
@@ -451,67 +457,6 @@ namespace SmartdustApp.Business.Services
                 body = reader.ReadToEnd();
             }
             return body;
-        }
-        // For Documnent Controller
-        public List<int> UploadFiles(IFormFileCollection files)
-        {
-            List<int> uploadedFileIds = new List<int>();
-
-            foreach (var file in files)
-            {
-                if (file != null && file.Length > 0)
-                {
-                    var uploadedFileId = UploadSingleFile(file);
-                    uploadedFileIds.Add(uploadedFileId);
-                }
-            }
-
-            return uploadedFileIds;
-        }
-
-        private int UploadSingleFile(IFormFile file)
-        {
-            var newFileName = GenerateUniqueFileName(file.FileName);
-            var fileModel = new DocumentModel
-            {
-                Name = newFileName,
-                FileType = Path.GetExtension(newFileName)
-            };
-            // Validate file extension
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".xlsx", ".pdf" };
-            if (!allowedExtensions.Contains(fileModel.FileType.ToLower()))
-            {
-                throw new InvalidOperationException("Unsupported file type.");
-            }
-
-            // Validate file size
-            if (file.Length > 1024 * 1024) // 1 MB
-            {
-                throw new InvalidOperationException("File size should not exceed 1MB.");
-            }
-            using (var memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-                fileModel.DataFiles = memoryStream.ToArray();
-            }
-
-            return _leaveRepository.FileUpload(fileModel);
-        }
-
-        private string GenerateUniqueFileName(string originalFileName)
-        {
-            var fileExtension = Path.GetExtension(originalFileName);
-            return $"{Guid.NewGuid()}{fileExtension}";
-        }
-
-        /// <summary>
-        /// Method To download Document 
-        /// </summary>
-        public DocumentModel DownloadDocument(int documentID)
-        {
-            var document = _leaveRepository.DownloadDocument(documentID);
-            return document;
-
         }
     }
 }

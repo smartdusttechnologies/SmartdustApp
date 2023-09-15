@@ -27,7 +27,7 @@ const isWeekend = (date) => {
     return day === 0 || day === 6;
 };
 
-export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
+export default function EditLeave({ rowData, leavetypes, UpdateLeave }) {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setLoading] = useState(false);
     const { auth, setNotification, notification } = useContext(AuthContext);
@@ -89,7 +89,6 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
     };
 
     const handleUpdate = () => {
-        setLoading(true)
         const formData = new FormData();
 
         // Check if there are files to upload
@@ -103,21 +102,19 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
                         formData.append('files', file);
                     } else {
                         toast.warn('File size should not exceed 1MB.', { position: "bottom-center" });
-                        setLoading(false)
                     }
                 } else {
                     toast.warn('Wrong File Type!', { position: "bottom-center" });
-                    setLoading(false)
                 }
             });
 
             if (formData.has('files')) {
                 // Upload files and get AttachedFileIDs
-                axios.post('api/leave/FileUpload', formData)
+                axios.post('api/document/FileUpload', formData)
                     .then(response => {
                         console.log(response.data);
                         // Call ApplyLeave with AttachedFileIDs
-                        UpdateLeave([...updatedAttachedFileIDs, ...response.data ] );
+                        UpdateLeave([...updatedAttachedFileIDs, ...response.data], rowData.id, updatedLeaveType, updatedReason, updatedLeaveDates );
                     })
                     .catch(error => {
                         console.error(error);
@@ -125,44 +122,13 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
             }
         } else {
             // Call ApplyLeave without AttachedFileIDs
-            UpdateLeave(updatedAttachedFileIDs);
+            UpdateLeave(updatedAttachedFileIDs, rowData.id, updatedLeaveType, updatedReason, updatedLeaveDates);
         }
 
     };
-
-    const UpdateLeave = (attachedFileIDs) => {
-        axios.post('api/leave/UpdateLeave', {
-            id: rowData.id,
-            userId: auth?.userId,
-            userName: auth?.userName,
-            leaveType: '',
-            leaveTypeId: updatedLeaveType,
-            reason: updatedReason,
-            appliedDate: new Date(),
-            leaveStatus: rowData.leaveStatus,
-            leaveStatusId: 6,
-            leaveDays: updatedLeaveDates?.length,
-            leaveDates: updatedLeaveDates,
-            attachedFileIDs: attachedFileIDs
-        })
-            .then(response => {
-                console.log(response?.data?.message[0]?.reason)
-                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                handleGetLeaves()
-                setLoading(false)
-            })
-            .catch(error => {
-                setLoading(false)
-                console.log(error)
-                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
-            })
-
-    }
     const DownloadButton = ({ documentID, index }) => {
         const handleDownloadClick = () => {
-            const downloadUrl = `/api/leave/DownloadDocument/${documentID}`;
+            const downloadUrl = `/api/document/DownloadDocument/${documentID}`;
 
             const link = document.createElement('a');
             link.href = downloadUrl;
@@ -228,7 +194,6 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
                                         disablePast
                                         shouldDisableDate={isWeekend}
                                         closeOnSelect={false}
-                                        //value={dayjs(leaveData.leaveDates[0])}
                                         onChange={(e) => handleLeaveDates(e)}
                                     />
                                 </DemoItem>
@@ -324,7 +289,6 @@ export default function EditLeave({ rowData, handleGetLeaves, leavetypes }) {
                 <Divider />
                 <Button
                     onClick={handleUpdate}
-                    loading={isLoading}
                     sx={{
                         width: '90%',
                         margin: 'auto',

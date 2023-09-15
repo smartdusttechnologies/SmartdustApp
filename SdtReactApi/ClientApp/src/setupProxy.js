@@ -5,7 +5,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
   env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:23380';
   //Put controller Name Here ->
 const context =  [
-    "/api/home","/api/security","/api/leave"
+    "/api/home","/api/security","/api/leave","/api/document"
 ];
 
 module.exports = function(app) {

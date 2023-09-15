@@ -53,37 +53,34 @@ const LeaveDashboard = () => {
             })
     };
 
-    //const handleUpdate = (id, updatedLeaveType, updatedReason, updatedLeaveDates) => {
-    //    console.log(updatedLeaveDates, 'updatedLeaveDates')
-    //    //console.log(rowData?.leaveDates)
-    //    axios.post('api/leave/UpdateLeave', {
-    //        id: id,
-    //        userId: auth?.userId,
-    //        userName: auth?.userName,
-    //        leaveType: updatedLeaveType,
-    //        leaveTypeId: 1,
-    //        reason: updatedReason,
-    //        appliedDate: new Date(),
-    //        leaveStatus: '',
-    //        leaveStatusId: 6,
-    //        leaveDays: updatedLeaveDates?.length,
-    //        leaveDates: updatedLeaveDates,
-    //        attachedFileIDs: []
-    //    })
-    //        .then(response => {
-    //            console.log(response?.data?.message[0]?.reason)
-    //            toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-    //            setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-    //            //handleGetLeaves()
-    //            //setLoading(false)
-    //        })
-    //        .catch(error => {
-    //            //setLoading(false)
-    //            console.log(error)
-    //            toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-    //            setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
-    //        })
-    //};
+    const UpdateLeave = (attachedFileIDs, id, updatedLeaveType, updatedReason, updatedLeaveDates) => {
+        axios.post('api/leave/UpdateLeave', {
+            id: id,
+            userId: auth?.userId,
+            userName: auth?.userName,
+            leaveType: '',
+            leaveTypeId: updatedLeaveType,
+            reason: updatedReason,
+            appliedDate: new Date(),
+            leaveStatus: '',
+            leaveStatusId: 6,
+            leaveDays: updatedLeaveDates?.length,
+            leaveDates: updatedLeaveDates,
+            attachedFileIDs: attachedFileIDs
+        })
+            .then(response => {
+                console.log(response?.data?.message[0]?.reason)
+                handleGetLeaves()
+                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+            })
+            .catch(error => {
+                console.log(error)
+                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+            })
+
+    }
 
     useEffect(() => {
         handleGetLeaves()
@@ -103,7 +100,7 @@ const LeaveDashboard = () => {
           </div>
           <div>
               {
-                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} handleGetLeaves={handleGetLeaves} leavetypes={leavetypes} />
+                  isLoading ? <Box><LoadingProgress /></Box> : <LeavesDataTable rows={[...rows].reverse()} leavetypes={leavetypes} UpdateLeave={UpdateLeave } />
               }
           </div>
     </div>

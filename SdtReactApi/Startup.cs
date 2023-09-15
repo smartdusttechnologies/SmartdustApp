@@ -53,10 +53,12 @@ namespace SmartdustApp
             //Repository DI
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ILeaveRepository, LeaveRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
             //Service DI
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IConnectionFactory, ConnectionFactory>();
             services.AddScoped<ILeaveService, LeaveService>();
+            services.AddScoped<IDocumentService, DocumentService>();
             //
 
             services.AddScoped<Business.Core.Interfaces.ILogger, Logger>();

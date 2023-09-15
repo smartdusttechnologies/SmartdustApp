@@ -113,7 +113,7 @@ const LeaveApplication = () => {
 
             if (formData.has('files')) {
                 // Upload files and get AttachedFileIDs
-                axios.post('api/leave/FileUpload', formData)
+                axios.post('api/document/FileUpload', formData)
                     .then(response => {
                         console.log(response.data);
                         // Call ApplyLeave with AttachedFileIDs

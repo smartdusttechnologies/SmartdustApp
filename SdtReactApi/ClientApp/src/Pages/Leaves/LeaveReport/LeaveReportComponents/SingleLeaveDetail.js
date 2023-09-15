@@ -29,7 +29,7 @@ export default function SingleLeaveDetail({ rows }) {
 
     const DownloadButton = ({ documentID, index }) => {
         const handleDownloadClick = () => {
-            const downloadUrl = `/api/leave/DownloadDocument/${documentID}`;
+            const downloadUrl = `/api/document/DownloadDocument/${documentID}`;
 
             const link = document.createElement('a');
             link.href = downloadUrl;

@@ -232,29 +232,6 @@ namespace SmartdustApp.Business.Data.Repository
             }
         }
 
-
-        /// <summary>
-        /// Image Upload in DB
-        /// </summary>
-        public int FileUpload(DocumentModel File)
-        {
-            string query = @"INSERT INTO [DocumentTable](Name, FileType, DataFiles)
-                    VALUES (@Name, @FileType, @DataFiles);
-                    SELECT CAST(SCOPE_IDENTITY() AS INT)";
-
-            using IDbConnection db = _connectionFactory.GetConnection;
-            return db.QuerySingle<int>(query, File);
-        }
-
-        /// <summary>
-        /// Image download
-        /// </summary>
-        public DocumentModel DownloadDocument(int documentID)
-        {
-            using IDbConnection con = _connectionFactory.GetConnection;
-            return con.Query<DocumentModel>(@"select * from [DocumentTable] where ID = @ID ", new { ID = documentID }).FirstOrDefault();
-        }
-
         // Method to fetch LeaveTypes from Lookup table
         public List<LeaveTypes> GetLeaveTypes()
         {
@@ -308,6 +285,8 @@ namespace SmartdustApp.Business.Data.Repository
             var parameters = new { employeeId };
             return db.QuerySingleOrDefault<string>(query, parameters);
         }
+
+        // Retrieves a list of leave records for employees managed by a manager.
         public List<LeaveModel> GetEmployeeLeave(int managerId)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -381,6 +360,8 @@ namespace SmartdustApp.Business.Data.Repository
                    })
                    .ToList();
         }
+
+        // Retrieves employee details for employees managed by a manager.
         public List<UserModel> GetEmployeeDetails(int managerId)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -396,7 +377,8 @@ namespace SmartdustApp.Business.Data.Repository
             return db.Query<UserModel>(query, parameters).ToList();
 
         }
-        
+
+        // Retrieves leave balance records for employees managed by a manager.
         public List<LeaveBalance> GetEmployeeLeaveBalance(int managerId)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -414,6 +396,8 @@ namespace SmartdustApp.Business.Data.Repository
 
         }
 
+
+        // Retrieves a list of leave status actions from LookUp Table available to managers.
         public List<LeaveStatusActions> GetManagerLeaveStatusActions()
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -428,6 +412,8 @@ namespace SmartdustApp.Business.Data.Repository
             // Use Dapper's Query method to fetch the manager leave status actions as a list of LeaveTypes objects
             return db.Query<LeaveStatusActions>(query).ToList();
         }
+
+        // Updates the status of a leave record.
         public RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID)
         {
             using (IDbConnection db = _connectionFactory.GetConnection)
@@ -449,6 +435,8 @@ namespace SmartdustApp.Business.Data.Repository
                 }
             }
         }
+
+        // Updates the leave balance for a specific leave record.
         public void UpdateLeaveBalance(int leaveID)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -465,6 +453,8 @@ namespace SmartdustApp.Business.Data.Repository
             var parameters = new { leaveID };
             db.Execute(updateLeaveBalanceQuery, parameters);
         }
+
+        // Retrieves details of a specific leave record.
         public LeaveModel GetLeaveDetails(int leaveID)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -479,6 +469,7 @@ namespace SmartdustApp.Business.Data.Repository
             return db.QuerySingleOrDefault<LeaveModel>(query, parameters);
         }
 
+        // Creates a leave balance record and returns the result.
         public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -497,6 +488,8 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+
+        // Updates a leave balance record and returns the result.
         public RequestResult<bool> UpdateLeaveBalance(LeaveBalance leaveBalance)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -517,6 +510,8 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+
+        // Deletes a leave balance record by its ID and returns the result.
         public RequestResult<bool> DeleteLeaveBalance(int id)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -536,6 +531,8 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+
+        // Retrieves a list of all users.
         public List<UserModel> GetUsers()
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -547,6 +544,7 @@ namespace SmartdustApp.Business.Data.Repository
             return db.Query<UserModel>(query).ToList();
         }
 
+        // Retrieves a list of manager and employee data.
         public List<EmployeeTable> GetManagerAndEmployeeData()
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -561,6 +559,8 @@ namespace SmartdustApp.Business.Data.Repository
 
             return results;
         }
+
+        // Creates manager and employee data.
         public RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -580,6 +580,8 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+
+        // Edits manager and employee data records and returns the result.
         public RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData)
         {
             using IDbConnection db = _connectionFactory.GetConnection;
@@ -600,6 +602,8 @@ namespace SmartdustApp.Business.Data.Repository
                 return new RequestResult<bool>(false);
             }
         }
+
+        // Deletes manager and employee data by ID and returns the result.
         public RequestResult<bool> DeleteManagerAndEmployeeData(int id)
         {
             using IDbConnection db = _connectionFactory.GetConnection;

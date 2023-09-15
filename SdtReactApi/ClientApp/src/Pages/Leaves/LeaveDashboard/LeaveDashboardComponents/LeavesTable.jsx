@@ -231,7 +231,7 @@ const NoDataTableRows = (rows) => {
     }
 };
 
-export default function LeavesDataTable({ rows, handleGetLeaves, leavetypes }) {
+export default function LeavesDataTable({ rows, leavetypes, UpdateLeave }) {
     console.log(rows , 'props')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -393,8 +393,8 @@ export default function LeavesDataTable({ rows, handleGetLeaves, leavetypes }) {
                                         <TableCell align="right">
                                             <EditLeave
                                                 rowData={row}
-                                                handleGetLeaves={handleGetLeaves}
-                                                leavetypes={leavetypes }
+                                                leavetypes={leavetypes}
+                                                UpdateLeave={UpdateLeave }
                                             />
                                         </TableCell>
                                     </TableRow>

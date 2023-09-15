@@ -8,17 +8,20 @@ using System.Collections.Generic;
 
 namespace SmartdustApp.Controllers
 {
+    // This class defines the API endpoints for leave management.
     [ApiController]
     [Route("api/[Controller]")]
     public class LeaveController : Controller
     {
         private readonly ILeaveService _leaveService;
 
+        // Constructor for LeaveController with dependency injection.
         public LeaveController(ILeaveService leaveService)
         {
             _leaveService = leaveService;
         }
 
+        // Retrieves a list of leave records for a specific user.
         [HttpGet]
         [Route("GetLeave/{userID}")]
         public IActionResult GetLeave(int userID)
@@ -36,6 +39,7 @@ namespace SmartdustApp.Controllers
             return Json(new RequestResult<bool>(errors));
         }
 
+        // Applies for leave and returns the result.
         [HttpPost]
         [Route("ApplyLeave")]
         public IActionResult ApplyLeave(LeaveModel leave)
@@ -47,6 +51,8 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+
+        // Updates a leave record and returns the result.
         [HttpPost]
         [Route("UpdateLeave")]
         public IActionResult UpdateLeave(LeaveModel leave)
@@ -59,6 +65,7 @@ namespace SmartdustApp.Controllers
             return BadRequest(result);
         }
 
+        // Retrieves a list of leave records for employees managed by a manager.
         [HttpGet]
         [Route("GetEmployeeLeave/{userID}")]
         public IActionResult GetEmployeeLeave(int userID)
@@ -76,6 +83,7 @@ namespace SmartdustApp.Controllers
             return Json(new RequestResult<bool>(errors));
         }
 
+        // Updates the status of a leave record.
         [HttpPost]
         [Route("UpdateLeaveStatus")]
         public IActionResult UpdateLeaveStatus(UpdateLeaveModel updateStatus)
@@ -88,6 +96,7 @@ namespace SmartdustApp.Controllers
             return BadRequest(result);
         }
 
+        // Retrieves a list of available leave types.
         [HttpGet]
         [Route("GetLeaveTypes")]
         public IActionResult GetLeaveTypes()
@@ -105,6 +114,7 @@ namespace SmartdustApp.Controllers
             return Json(new RequestResult<bool>(errors));
         }
 
+        // Retrieves a list of leave status actions available to managers.
         [HttpGet]
         [Route("GetManagerLeaveStatusActions")]
         public IActionResult GetManagerLeaveStatusActions()
@@ -139,30 +149,7 @@ namespace SmartdustApp.Controllers
             return Json(new RequestResult<bool>(errors));
         }
 
-        [HttpPost]
-        [Route("FileUpload")]
-        public IActionResult FileUpload()
-        {
-            var uploadedFileIds = _leaveService.UploadFiles(Request.Form.Files);
-            return Ok(uploadedFileIds);
-        }
-
-        /// <summary>
-        /// Method To download Document 
-        /// </summary>
-        [HttpGet]
-        [Route("DownloadDocument/{documentID}")]
-        public IActionResult DownloadDocument(int documentID)
-        {
-
-            DocumentModel attachment = _leaveService.DownloadDocument(documentID);
-
-            if (attachment != null)
-            {
-                return File(new MemoryStream(attachment.DataFiles), Helpers.GetMimeTypes()[attachment.FileType], attachment.Name);
-            }
-            return Ok("Can't find the Document");
-        }
+        // Creates a leave balance record and returns the result.
         [HttpPost]
         [Route("CreateLeaveBalance")]
         public IActionResult CreateLeaveBalance(LeaveBalance leavebalance)
@@ -174,6 +161,8 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+
+        // Updates a leave balance record and returns the result.
         [HttpPost]
         [Route("UpdateLeaveBalance")]
         public IActionResult UpdateLeaveBalance(LeaveBalance leavebalance)
@@ -185,6 +174,8 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+
+        // Deletes a leave balance record by its ID and returns the result.
         [HttpPost]
         [Route("DeleteLeaveBalance/{id}")]
         public IActionResult DeleteLeaveBalance(int id)
@@ -246,6 +237,8 @@ namespace SmartdustApp.Controllers
                 };
             return Json(new RequestResult<bool>(errors));
         }
+
+        // Retrieves a list of manager and employee data.
         [HttpGet]
         [Route("GetManagerAndEmployeeData")]
         public IActionResult GetManagerAndEmployeeData()
@@ -262,6 +255,8 @@ namespace SmartdustApp.Controllers
                 };
             return Json(new RequestResult<bool>(errors));
         }
+
+        // Creates manager and employee data records and returns the result.
         [HttpPost]
         [Route("CreateManagerAndEmployeeData")]
         public IActionResult CreateManagerAndEmployeeData(EmployeeTable employeeData)
@@ -273,6 +268,8 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+
+        // Edits manager and employee data records and returns the result.
         [HttpPost]
         [Route("EditManagerAndEmployeeData")]
         public IActionResult EditManagerAndEmployeeData(EmployeeTable employeeData)
@@ -284,6 +281,8 @@ namespace SmartdustApp.Controllers
             }
             return BadRequest(result);
         }
+
+        // Deletes manager and employee data by ID and returns the result.
         [HttpPost]
         [Route("DeleteManagerAndEmployeeData/{id}")]
         public IActionResult DeleteManagerAndEmployeeData(int id)
