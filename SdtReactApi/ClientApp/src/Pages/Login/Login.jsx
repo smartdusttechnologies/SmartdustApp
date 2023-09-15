@@ -43,7 +43,7 @@ const Login = () => {
             console.log(accessToken,userName,userId)
             setAuth({ roleId, accessToken, userName, userId, isAuthenticated })
 
-            navigate('/')
+            //navigate('/')
           toast.success(response?.data?.message[0]?.reason,{
             position: "bottom-center",
             autoClose: 5000,
@@ -54,15 +54,15 @@ const Login = () => {
             progress: undefined,
             theme: "colored",
           });
-          setNotification([...notification, {message:response?.data.message[0].reason,success:isAuthenticated}])
+            setNotification([...notification, { message: response?.data.message[0].reason, success: isAuthenticated }])
 
+            setTimeout(() => {
+                navigate('/')
+            }, 1000);
           setLoading(false)
           setEmail('')
           setPassword('')
           
-          //setTimeout(() => {
-          //  navigate('/')
-          //}, 1000);
         }
       })
       .catch(error=>{
