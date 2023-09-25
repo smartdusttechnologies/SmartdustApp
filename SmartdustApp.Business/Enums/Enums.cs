@@ -15,4 +15,15 @@ namespace SmartdustApp.Business.Enums
         Pending=6,
         Decline=7
     }
+
+    /// <summary>
+    /// Enum For Permission Module Type
+    /// </summary>
+    public enum PermissionModuleType
+    {
+        DefaultModulePermission,
+        UiPageTypePermission,
+        UiPageMetadataPermission,
+        UiControlTypePermission
+    }
 }

@@ -11,8 +11,6 @@ import AuthContext from '../../../context/AuthProvider'
 import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
 import EmployeeManagerTable from './EmployeeDashboardcomponents/EmployeeManagerTable';
 import Create from './EmployeeDashboardcomponents/Create';
-//import CreateLeaveBalance from './LeaveBalanceComponents/CreateLeaveBalance';
-//import LeavesBalanceTable from './LeaveBalanceComponents/LeaveBalanceTable';
 
 const EmployeeDashboardPage = () => {
     const [isLoading, setLoading] = useState(false);

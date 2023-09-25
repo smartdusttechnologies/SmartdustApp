@@ -29,6 +29,7 @@ namespace SmartdustApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(options =>
             {

@@ -20,13 +20,17 @@ const LeaveBalancePage = () => {
     const { auth, setNotification, notification } = useContext(AuthContext);
 
     const handleCreate = (formData) => {
-
+        //console.log(auth.accessToken, 'auth.accessToken')
         axios.post('api/leave/CreateLeaveBalance', {
             id: 0,
             userId: formData.user,
             leavetype: formData.leaveType,
             available: formData.balance,
             userName: ''
+        }, {
+            headers: {
+                'Authorization': `Bearer ${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
