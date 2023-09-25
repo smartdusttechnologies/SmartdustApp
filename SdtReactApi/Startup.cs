@@ -12,6 +12,7 @@ using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository;
 using TestingAndCalibrationLabs.Business.Core.Interfaces;
 using TestingAndCalibrationLabs.Business.Services;
+using SmartdustApp.Common;
 
 namespace SmartdustApp
 {
@@ -98,7 +99,10 @@ namespace SmartdustApp
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseHttpsRedirection();
+            //app.UseAuthentication();
             app.UseRouting();
+            app.UseMiddleware<SdtAuthenticationMiddleware>();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapFallbackToFile("index.html");

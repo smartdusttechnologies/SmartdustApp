@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
@@ -28,15 +29,19 @@ namespace SmartdustApp.Business.Services
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthorizationService _authorizationService;
 
         // Constructor for LeaveService with dependency injection.
-        public LeaveService(ILeaveRepository leaveRepository, IEmailService emailservice, IConfiguration configuration , IWebHostEnvironment hostingEnvironment, IUserRepository userRepository)
+        public LeaveService(ILeaveRepository leaveRepository, IEmailService emailservice, IConfiguration configuration , IWebHostEnvironment hostingEnvironment, IUserRepository userRepository,IHttpContextAccessor httpContextAccessor,IAuthorizationService authorizationService)
         {
             _leaveRepository = leaveRepository;
             _emailService = emailservice;
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
             _userRepository = userRepository;
+            _authorizationService = authorizationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // Retrieves a list of leave records for a specific user.
@@ -149,6 +154,10 @@ namespace SmartdustApp.Business.Services
         // Creates a leave balance record.
         public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leavebalance, new[] { Operations.Create }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var result = _leaveRepository.CreateLeaveBalance(leavebalance);
 
             if (result.IsSuccessful)

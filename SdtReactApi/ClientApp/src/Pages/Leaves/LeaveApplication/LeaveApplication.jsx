@@ -113,7 +113,11 @@ const LeaveApplication = () => {
 
             if (formData.has('files')) {
                 // Upload files and get AttachedFileIDs
-                axios.post('api/document/FileUpload', formData)
+                axios.post('api/document/FileUpload', formData, {
+                    headers: {
+                        'Authorization': `${auth.accessToken}`
+                    }
+                })
                     .then(response => {
                         console.log(response.data);
                         // Call ApplyLeave with AttachedFileIDs
@@ -145,6 +149,10 @@ const LeaveApplication = () => {
             leaveDays: leaveData?.leaveDates?.length,
             leaveDates: leaveData?.leaveDates,
             attachedFileIDs: attachedFileIDs
+        }, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
@@ -163,7 +171,11 @@ const LeaveApplication = () => {
     }
 
     const handleGetLeaveTypes = () => {
-        axios.get('api/leave/GetLeaveTypes')
+        axios.get('api/leave/GetLeaveTypes', {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject)
                 setLeaveTypes(response?.data?.requestedObject)

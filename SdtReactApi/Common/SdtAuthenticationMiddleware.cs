@@ -37,14 +37,15 @@ namespace SmartdustApp.Common
                 }
 
             }
-            else if (context.Request.Path.Value.Equals("/Security/Index", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.Equals("/Security/Login", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.Equals("/Security/RefreshToken", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.Equals("/Security/RevokeToken", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.StartsWith("/Security/SignUp", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.StartsWith("/Swagger", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.StartsWith("/Home/GetOrganizations", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.StartsWith("/Home/ContactUs", StringComparison.OrdinalIgnoreCase))
+            else if (context.Request.Path.Value.Equals("/api/Security/Index", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.Equals("/api/Security/Login", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.Equals("/api/Login", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.Equals("/api/Security/RefreshToken", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.Equals("/api/Security/RevokeToken", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.StartsWith("/api/Security/SignUp", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.StartsWith("/api/Swagger", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.StartsWith("/api/Home/GetOrganizations", StringComparison.OrdinalIgnoreCase)
+                || context.Request.Path.Value.StartsWith("/api/Home/ContactUs", StringComparison.OrdinalIgnoreCase))
             {
                 await _next(context);
             }

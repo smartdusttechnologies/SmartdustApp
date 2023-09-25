@@ -37,7 +37,11 @@ const LeaveReport = () => {
 
     const handleGetEmployeeLeave = () => {
         setLoading(true)
-        axios.get(`api/leave/GetEmployeeLeave/${auth.userId}`)
+        axios.get(`api/leave/GetEmployeeLeave/${auth.userId}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'Employee Leaves')
                 setEmployeeRows(response?.data?.requestedObject)
@@ -49,7 +53,11 @@ const LeaveReport = () => {
             })
     }
     const handleGetManagerLeaveStatusActions = () => {
-        axios.get('api/leave/GetManagerLeaveStatusActions')
+        axios.get('api/leave/GetManagerLeaveStatusActions', {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'GetManagerLeaveStatusActions')
                 setActionsRows(response?.data?.requestedObject)
@@ -64,6 +72,10 @@ const LeaveReport = () => {
             leaveID: LeaveID,
             statusID: StatusID,
             comment: comment
+        }, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)

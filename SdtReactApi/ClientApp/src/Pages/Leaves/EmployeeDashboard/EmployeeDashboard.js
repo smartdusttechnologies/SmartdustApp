@@ -27,6 +27,10 @@ const EmployeeDashboardPage = () => {
             managerName: '',
             employeeId: formData.setemployee,
             employeeName: ''
+        }, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
@@ -51,6 +55,10 @@ const EmployeeDashboardPage = () => {
             managerName: '',
             employeeId: formData.setemployee,
             employeeName: ''
+        }, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
@@ -68,7 +76,11 @@ const EmployeeDashboardPage = () => {
             })
     }
     const handleDelete = (id) => {
-        axios.post(`api/leave/DeleteManagerAndEmployeeData/${id}`)
+        axios.post(`api/leave/DeleteManagerAndEmployeeData/${id}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
                 handleGetManagerAndEmployeeData()
@@ -82,7 +94,11 @@ const EmployeeDashboardPage = () => {
             })
     }
     const handleGetUsers = () => {
-        axios.get('api/leave/GetUsers')
+        axios.get('api/leave/GetUsers', {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'handleGetUsers')
                 setUsers(response?.data?.requestedObject)
@@ -93,7 +109,11 @@ const EmployeeDashboardPage = () => {
     }
     const handleGetManagerAndEmployeeData = () => {
         setLoading(true)
-        axios.get(`api/leave/GetManagerAndEmployeeData`)
+        axios.get(`api/leave/GetManagerAndEmployeeData`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'GetManagerAndEmployeeData')
                 setManagerAndEmployeeData(response?.data?.requestedObject)

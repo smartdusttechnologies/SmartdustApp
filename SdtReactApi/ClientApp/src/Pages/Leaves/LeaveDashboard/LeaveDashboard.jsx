@@ -21,7 +21,11 @@ const LeaveDashboard = () => {
 
     const handleGetLeaves = () => {
         setLoading(true)
-        axios.get(`api/leave/GetLeave/${auth.userId}`)
+        axios.get(`api/leave/GetLeave/${auth.userId}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 setRows(response?.data?.requestedObject)
                 setLoading(false)
@@ -32,7 +36,11 @@ const LeaveDashboard = () => {
             })
     }
     const handleGetLeaveBalance = () => {
-        axios.get(`api/leave/GetLeaveBalance/${auth.userId}`)
+        axios.get(`api/leave/GetLeaveBalance/${auth.userId}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response.data.requestedObject , 'Leave Balance')
                 setLeavebalance(response?.data?.requestedObject)
@@ -43,7 +51,11 @@ const LeaveDashboard = () => {
     }
 
     const handleGetLeaveTypes = () => {
-        axios.get('api/leave/GetLeaveTypes')
+        axios.get('api/leave/GetLeaveTypes', {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'GetLeaveTypes')
                 setLeaveTypes(response?.data?.requestedObject)
@@ -67,6 +79,10 @@ const LeaveDashboard = () => {
             leaveDays: updatedLeaveDates?.length,
             leaveDates: updatedLeaveDates,
             attachedFileIDs: attachedFileIDs
+        }, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)

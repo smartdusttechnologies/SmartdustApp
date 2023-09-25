@@ -55,6 +55,10 @@ const Contact = () => {
       subject:userdata.subject,
       address:userdata.address,
       message:userdata.message
+      }, {
+          headers: {
+              'Authorization': `${auth.accessToken}`
+          }
       })
       .then(response=>{
         console.log(response?.data)

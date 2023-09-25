@@ -29,7 +29,7 @@ const LeaveBalancePage = () => {
             userName: ''
         }, {
             headers: {
-                'Authorization': `Bearer ${auth.accessToken}`
+                'Authorization': `${auth.accessToken}`
             }
         })
             .then(response => {
@@ -52,6 +52,10 @@ const LeaveBalancePage = () => {
             leavetype: formData.leaveType,
             available: formData.balance,
             userName: ''
+        }, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
         })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
@@ -66,7 +70,11 @@ const LeaveBalancePage = () => {
             })
     }
     const handleDelete = (id) => {
-        axios.post(`api/leave/DeleteLeaveBalance/${id}`)
+        axios.post(`api/leave/DeleteLeaveBalance/${id}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.message[0]?.reason)
                 handleGetEmployeeLeaveBalance()
@@ -80,7 +88,11 @@ const LeaveBalancePage = () => {
             })
     }
     const handleGetLeaveTypes = () => {
-        axios.get('api/leave/GetLeaveTypes')
+        axios.get('api/leave/GetLeaveTypes', {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject)
                 setLeaveTypes(response?.data?.requestedObject)
@@ -90,7 +102,11 @@ const LeaveBalancePage = () => {
             })
     }
     const handleGetEmployeeDetails = () => {
-        axios.get(`api/leave/GetEmployeeDetails/${auth.userId}`)
+        axios.get(`api/leave/GetEmployeeDetails/${auth.userId}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'GetEmployeeDetails')
                 setEmployeeDetails(response?.data?.requestedObject)
@@ -101,7 +117,11 @@ const LeaveBalancePage = () => {
     }
     const handleGetEmployeeLeaveBalance = () => {
         setLoading(true)
-        axios.get(`api/leave/GetEmployeeLeaveBalance/${auth.userId}`)
+        axios.get(`api/leave/GetEmployeeLeaveBalance/${auth.userId}`, {
+            headers: {
+                'Authorization': `${auth.accessToken}`
+            }
+        })
             .then(response => {
                 console.log(response?.data?.requestedObject, 'GetEmployeeLeaveBalance')
                 setEmployeeLeaveBalance(response?.data?.requestedObject)
