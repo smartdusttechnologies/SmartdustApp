@@ -37,11 +37,8 @@ const EmployeeDashboardPage = () => {
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                //setLoading(false)
-                //setLeaveData(initialState)
             })
             .catch(error => {
-                //setLoading(false)
                 console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
@@ -65,11 +62,8 @@ const EmployeeDashboardPage = () => {
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
-                //setLoading(false)
-                //setLeaveData(initialState)
             })
             .catch(error => {
-                //setLoading(false)
                 console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])

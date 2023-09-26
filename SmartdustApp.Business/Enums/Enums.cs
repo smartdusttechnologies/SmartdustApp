@@ -25,6 +25,9 @@ namespace SmartdustApp.Business.Enums
         UiPageTypePermission,
         UiPageMetadataPermission,
         UiControlTypePermission,
-        LeaveBalancePermission
+        LeaveBalancePermission,
+        EmployeeTablePermission,
+        EmployeeLeavePermission,
+        LeavePermission
     }
 }

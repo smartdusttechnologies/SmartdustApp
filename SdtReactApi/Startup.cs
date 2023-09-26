@@ -87,6 +87,9 @@ namespace SmartdustApp
 
             //Authorization Handler Initalization Start
             services.AddScoped<IAuthorizationHandler, LeaveBalanceAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, EmployeeTableAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, EmployeeLeaveAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, LeaveAuthorizationHandler>();
             //Authorization Handler Initalization End
         }
 

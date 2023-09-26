@@ -47,6 +47,10 @@ namespace SmartdustApp.Business.Services
         // Retrieves a list of leave records for a specific user.
         public RequestResult<List<LeaveModel>> Get(int userID)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveModel(), new[] { Operations.Read }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var leave = _leaveRepository.Get(userID);
             if (leave == null)
             {
@@ -55,14 +59,13 @@ namespace SmartdustApp.Business.Services
             return new RequestResult<List<LeaveModel>>(leave);
         }
 
-        public RequestResult<List<LeaveModel>> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         // Saves a leave record and sends an email notification.
         public RequestResult<bool> Save(LeaveModel leave)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leave, new[] { Operations.Create }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var validationResult = ValidateLeaveDate(leave);
             if (!validationResult.IsSuccessful)
             {
@@ -117,6 +120,10 @@ namespace SmartdustApp.Business.Services
         // Updates a leave record.
         public RequestResult<bool> Update(LeaveModel leave)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leave, new[] { Operations.Update }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var validationResult = ValidateLeaveDate(leave);
             if (!validationResult.IsSuccessful)
             {
@@ -236,6 +243,10 @@ namespace SmartdustApp.Business.Services
         // Retrieves a list of manager and employee data.
         public RequestResult<List<EmployeeTable>> GetManagerAndEmployeeData()
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new EmployeeTable(), new[] { Operations.Read }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var ManagerAndEmployeeData = _leaveRepository.GetManagerAndEmployeeData();
             if (ManagerAndEmployeeData == null)
             {
@@ -257,6 +268,10 @@ namespace SmartdustApp.Business.Services
         // Creates manager and employee data records.
         public RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, employeeData, new[] { Operations.Create }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var result = _leaveRepository.CreateManagerAndEmployeeData(employeeData);
 
             if (result.IsSuccessful)
@@ -278,6 +293,10 @@ namespace SmartdustApp.Business.Services
         // Edits manager and employee data records.
         public RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, employeeData, new[] { Operations.Update }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var result = _leaveRepository.EditManagerAndEmployeeData(employeeData);
 
             if (result.IsSuccessful)
@@ -299,6 +318,10 @@ namespace SmartdustApp.Business.Services
         // Deletes manager and employee data by ID.
         public RequestResult<bool> DeleteManagerAndEmployeeData(int id)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new EmployeeTable(), new[] { Operations.Delete }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var result = _leaveRepository.DeleteManagerAndEmployeeData(id);
 
             if (result.IsSuccessful)
@@ -321,6 +344,10 @@ namespace SmartdustApp.Business.Services
         // Retrieves a list of leave records for employees managed by a manager.
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new UpdateLeaveModel(), new[] { Operations.Read }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var leave = _leaveRepository.GetEmployeeLeave(userID);
             if (leave == null)
             {
@@ -343,6 +370,10 @@ namespace SmartdustApp.Business.Services
         // Updates the status of a leave record and sends an email notification.
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new UpdateLeaveModel(), new[] { Operations.Update }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var leave = _leaveRepository.GetLeaveDetails(updateStatus.LeaveID);
             var employee = _userRepository.Get(leave.UserID);
 
