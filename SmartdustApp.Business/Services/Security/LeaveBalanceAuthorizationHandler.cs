@@ -28,9 +28,9 @@ namespace SmartdustApp.Business.Services.Security
             var user = context.User as SdtPrincipal;
             if (user == null) return Task.CompletedTask;
             var sdtUserIdentity = user.Identity as SdtUserIdentity;
-            var userRoleClaims = _roleService.GetUserRoleClaims(sdtUserIdentity.OrganizationId, sdtUserIdentity.UserId, PermissionModuleType.UiPageMetadataPermission.ToString(), PermissionModuleType.UiPageMetadataPermission.ToString(), CustomClaimType.ApplicationPermission);
-            var userClaims = _roleService.GetUserClaims(sdtUserIdentity.OrganizationId, sdtUserIdentity.UserId, PermissionModuleType.UiPageMetadataPermission.ToString(), PermissionModuleType.UiPageMetadataPermission.ToString(), CustomClaimType.ApplicationPermission);
-            var groupClaim = _roleService.GetGroupClaims(sdtUserIdentity.OrganizationId, sdtUserIdentity.UserId, PermissionModuleType.UiPageMetadataPermission.ToString(), PermissionModuleType.UiPageMetadataPermission.ToString(), CustomClaimType.ApplicationPermission);
+            var userRoleClaims = _roleService.GetUserRoleClaims(sdtUserIdentity.OrganizationId, sdtUserIdentity.UserId, PermissionModuleType.LeaveBalancePermission.ToString(), PermissionModuleType.LeaveBalancePermission.ToString(), CustomClaimType.ApplicationPermission);
+            var userClaims = _roleService.GetUserClaims(sdtUserIdentity.OrganizationId, sdtUserIdentity.UserId, PermissionModuleType.LeaveBalancePermission.ToString(), PermissionModuleType.LeaveBalancePermission.ToString(), CustomClaimType.ApplicationPermission);
+            var groupClaim = _roleService.GetGroupClaims(sdtUserIdentity.OrganizationId, sdtUserIdentity.UserId, PermissionModuleType.LeaveBalancePermission.ToString(), PermissionModuleType.LeaveBalancePermission.ToString(), CustomClaimType.ApplicationPermission);
             // Validate the requirement against the resource and identity.
             if (userRoleClaims.Any(p => p.ClaimType == CustomClaimType.ApplicationPermission && p.ClaimValue == requirement.Name))
                 context.Succeed(requirement);

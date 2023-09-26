@@ -144,6 +144,10 @@ namespace SmartdustApp.Business.Services
         // Retrieves leave balance records for employees managed by a manager.
         public RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveBalance(), new[] { Operations.Read }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var EmployeeLeaveBalance = _leaveRepository.GetEmployeeLeaveBalance(userID);
             if (EmployeeLeaveBalance == null)
             {
@@ -180,6 +184,10 @@ namespace SmartdustApp.Business.Services
         // Updates a leave balance record.
         public RequestResult<bool> UpdateLeaveBalance(LeaveBalance leavebalance)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leavebalance, new[] { Operations.Update }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var result = _leaveRepository.UpdateLeaveBalance(leavebalance);
 
             if (result.IsSuccessful)
@@ -202,6 +210,10 @@ namespace SmartdustApp.Business.Services
         // Deletes a leave balance record.
         public RequestResult<bool> DeleteLeaveBalance(int id)
         {
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveBalance(), new[] { Operations.Delete }).Result.Succeeded)
+            {
+                throw new UnauthorizedAccessException("You're Unauthorized");
+            }
             var result = _leaveRepository.DeleteLeaveBalance(id);
 
             if (result.IsSuccessful)

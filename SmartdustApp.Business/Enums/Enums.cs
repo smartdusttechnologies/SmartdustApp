@@ -24,6 +24,7 @@ namespace SmartdustApp.Business.Enums
         DefaultModulePermission,
         UiPageTypePermission,
         UiPageMetadataPermission,
-        UiControlTypePermission
+        UiControlTypePermission,
+        LeaveBalancePermission
     }
 }

@@ -13,6 +13,8 @@ using SmartdustApp.Business.Data.Repository;
 using TestingAndCalibrationLabs.Business.Core.Interfaces;
 using TestingAndCalibrationLabs.Business.Services;
 using SmartdustApp.Common;
+using Microsoft.AspNetCore.Authorization;
+using SmartdustApp.Business.Services.Security;
 
 namespace SmartdustApp
 {
@@ -82,6 +84,10 @@ namespace SmartdustApp
 
             //Email service
             services.AddScoped<IEmailService, EmailService>();
+
+            //Authorization Handler Initalization Start
+            services.AddScoped<IAuthorizationHandler, LeaveBalanceAuthorizationHandler>();
+            //Authorization Handler Initalization End
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
