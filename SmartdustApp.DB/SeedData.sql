@@ -17,9 +17,32 @@ BEGIN
                ([Id], [UserName], [FirstName], [LastName], [Email], [Mobile], [Country], [ISDCode], [TwoFactor], [Locked], [IsActive], [EmailValidationStatus], [MobileValidationStatus], [OrgId], [AdminLevel], [IsDeleted])
          VALUES
               (0, N'sysadmin', N'sysadmin', N'sysadmin', N'sysadmin@gmail.com', N'1234567899', N'INDIA', N'91', 0, 0, 1, 0, 0, 0, 0, 0),
+               (1, N'ApplicationAdminUser', N'Application', N'Admin', N'AppAdmin@gmail.com', N'8123444349', N'India', N'91', 0, 0, 1, 0, 0, 0, 2, 0),
                (4, N'Yashraj', N'string', N'string', N'string', N'string', N'string', N'string', 1, 0, 1, 0, 0, 0, 0, 0)
 
     SET IDENTITY_INSERT [dbo].[User]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [UserClaim] WHERE ID IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[UserClaim]  ON
+
+    INSERT INTO [dbo].[UserClaim]
+               ([Id], [UserId], [PermissionId], [IsDeleted], [ClaimTypeId])
+         VALUES
+               (1, 1, 4, 1, 1),
+			   (2, 0, 1, 1, 1),
+			   (3, 0, 2, 1, 1),
+			   (4, 0, 3, 1, 1),
+			   (5, 0, 4, 1, 1),
+			   (6, 0, 5, 1, 1),
+			   (7, 0, 6, 1, 1),
+			   (8, 0, 7, 1, 1),
+			   (9, 0, 8, 1, 1),
+			   (10, 0, 9, 0, 1),
+			   (11, 0, 10, 0, 1)
+
+    SET IDENTITY_INSERT [dbo].[UserClaim]  OFF
 END
 GO
 IF NOT EXISTS (SELECT 1 FROM [PasswordPolicy]  WHERE Id = 0)
@@ -90,6 +113,73 @@ BEGIN
     SET IDENTITY_INSERT [dbo].[Role]  OFF
 END
 GO
+IF NOT EXISTS (SELECT 1 FROM [RoleClaim] WHERE Id IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[RoleClaim]  ON
+
+    INSERT INTO [dbo].[RoleClaim]
+               ([Id], [RoleId], [PermissionId], [ClaimTypeId], [IsDeleted])
+         VALUES
+             (1, 0, 1, 1, 0),
+			 (2, 0, 3, 1, 0),
+			 (3, 0, 12, 1, 0),
+			 (4, 0, 13, 1, 0),
+			 (5, 0, 1011, 1, 0),
+			 (6, 0, 1012, 1, 0),
+			 (7, 4, 1017, 1, 0),
+			 (8, 4, 1018, 1, 0),
+			 (9, 4, 1019, 1, 0),
+			 (10, 4, 1020, 1, 0),
+			 (11, 4, 1021, 1, 0),
+			 (12, 4, 1022, 1, 0),
+			 (13, 4, 1023, 1, 0),
+			 (14, 4, 1024, 1, 0),
+			 (15, 4, 1025, 1, 0),
+			 (16, 4, 1026, 1, 0),
+			 (17, 5, 1027, 1, 0),
+			 (18, 5, 1028, 1, 0),
+			 (19, 5, 1029, 1, 0)
+
+    SET IDENTITY_INSERT [dbo].[RoleClaim]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [Group] WHERE ID IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[Group]  ON
+
+    INSERT INTO [dbo].[Group]
+               ([Id], [Name], [IsDeleted])
+         VALUES
+             (1, N'Back Office ', 0)
+
+    SET IDENTITY_INSERT [dbo].[Group]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [GroupClaim] WHERE ID IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[GroupClaim]  ON
+
+    INSERT INTO [dbo].[GroupClaim]
+               ([Id], [GroupId], [ClaimTypeId], [PermissionId], [IsDeleted])
+         VALUES
+              (1, 1, 1, 1, 0),
+			  (2, 1, 1, 2, 0),
+			  (3, 1, 1, 3, 0),
+			  (4, 1, 1, 4, 0),
+			  (5, 1, 1, 5, 0),
+			  (6, 1, 1, 6, 0),
+			  (7, 1, 1, 7, 0),
+			  (8, 1, 1, 8, 0),
+			  (9, 1, 1, 9, 0),
+			  (10, 1, 1, 10, 0),
+			  (12, 1, 1, 12, 0),
+			  (13, 1, 1, 13, 0),
+			  (1011, 1, 1, 1015, 0),
+			  (1013, 1, 1, 1016, 0)
+
+    SET IDENTITY_INSERT [dbo].[GroupClaim]  OFF
+END
+GO
 IF NOT EXISTS (SELECT 1 FROM [UserRole]  WHERE Id = 0)
 BEGIN
     SET IDENTITY_INSERT [dbo].[UserRole]  ON
@@ -99,6 +189,18 @@ BEGIN
          VALUES
                (2, 4, 2, 0)
     SET IDENTITY_INSERT [dbo].[UserRole]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [UserGroup] WHERE ID IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[UserGroup]  ON
+
+    INSERT INTO [dbo].[UserGroup]
+               ([Id], [GroupId], [UserId], [IsDeleted])
+         VALUES
+              (1, 1, 0, 0)
+
+    SET IDENTITY_INSERT [dbo].[UserGroup]  OFF
 END
 GO
 IF NOT EXISTS (SELECT 1 FROM [LoginLog]  WHERE Id = 0)
@@ -182,8 +284,34 @@ BEGIN
                (1, N'UIPageTypePermission', 0),
                (2, N'UiPageMetadataPermission', 0),
                (3, N'CubeTesting', 0),
-               (1004, N'UiControlTypePermission', 0)
+               (1004, N'UiControlTypePermission', 0),
+               (1005, N'LeaveBalancePermission', 0),
+               (1006, N'EmployeeTablePermission', 0),
+               (1007, N'EmployeeLeavePermission', 0),
+               (1008, N'LeavePermission', 0)
     SET IDENTITY_INSERT [dbo].[PermissionModuleType]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [SubPermissionModuleType] WHERE ID IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[SubPermissionModuleType]  ON
+
+    INSERT INTO [dbo].[SubPermissionModuleType]
+             ([Id], [Name], [PermissionModuleTypeId], [IsDeleted])
+         VALUES
+              (1, N'SampleReceiving', 3, 0),
+			  (2, N'TestPlan', 3, 0),
+			  (3, N'LabAnalysis', 3, 0),
+			  (4, N'TestReport', 3, 0),
+			  (5, N'Billing&Payments', 3, 0),
+			  (6, N'UIPageTypePermission', 1, 0),
+			  (7, N'UiPageMetadataPermission', 2, 0),
+			  (8, N'UiControlTypePermission', 1004, 0),
+			  (9, N'LeaveBalancePermission', 1005, 0),
+			  (10, N'EmployeeTablePermission', 1006, 0),
+			  (11, N'EmployeeLeavePermission', 1007, 0),
+			  (12, N'LeavePermission', 1008, 0)
+    SET IDENTITY_INSERT [dbo].[SubPermissionModuleType]  OFF
 END
 GO
 IF NOT EXISTS (SELECT 1 FROM [LookupCategory] WHERE Id = 0)
