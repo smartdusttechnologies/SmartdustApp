@@ -32,6 +32,10 @@ const LeaveDashboard = () => {
             })
             .catch(error => {
                 console.log(error)
+                if (error.response && error.response.status === 401) {
+                    // Handle 401 Unauthorized error
+                    navigate('/unauthorizedpage')
+                }
                 setLoading(false)
             })
     }

@@ -11,7 +11,7 @@ import Button from '@mui/joy/Button';
 const loginurl = 'api/security/login';
 
 const Login = () => {
-  const navigate = useNavigate()
+    const navigate = useNavigate();
     const { auth, setAuth, notification, setNotification } = useContext(AuthContext);
 
   const [email , setEmail] = useState('');

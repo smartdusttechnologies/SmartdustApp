@@ -93,7 +93,7 @@ export default function AbsenceMenu() {
                     </Link>)
                 }
                 {
-                    auth.isAuthenticated && auth.roleId == 4 &&
+                    auth.isAuthenticated &&
                     (<Link to={'/leavereport'} style={{ textDecoration: "none", color: "grey" }}>
                         <MenuItem >
                             Leave Report
@@ -101,7 +101,7 @@ export default function AbsenceMenu() {
                     </Link>)
                 }
                 {
-                    auth.isAuthenticated && auth.roleId == 4 &&
+                    auth.isAuthenticated &&
                     (<Link to={'/leavebalance'} style={{ textDecoration: "none", color: "grey" }}>
                         <MenuItem >
                             Leave Balance
@@ -109,7 +109,7 @@ export default function AbsenceMenu() {
                     </Link>)
                 }
                 {
-                    auth.isAuthenticated && auth.roleId == 4 &&
+                    auth.isAuthenticated &&
                     (<Link to={'/employeedashboard'} style={{ textDecoration: "none", color: "grey" }}>
                         <MenuItem >
                             Employee Dashboard

@@ -15,6 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import LeaveReport from '../../Pages/Leaves/LeaveReport/LeaveReport'
 import LeaveBalancePage from '../../Pages/Leaves/LeaveBalance/LeaveBalance'
 import EmployeeDashboardPage from '../../Pages/Leaves/EmployeeDashboard/EmployeeDashboard'
+import UnauthorizedPage from '../../Pages/UnauthorizedPage/UnauthorizedPage'
 
 const AllRoutes = () => {
   return (
@@ -23,7 +24,8 @@ const AllRoutes = () => {
       <Route path='/contact' element={<Contact/>}></Route>
       <Route path='/about' element={<About/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
-      <Route path='/signup' element={<Signup/>}></Route>
+          <Route path='/signup' element={<Signup />}></Route>
+          <Route path='/unauthorizedpage' element={<UnauthorizedPage />}></Route>
       <Route
         path='/changepassword'
         element={

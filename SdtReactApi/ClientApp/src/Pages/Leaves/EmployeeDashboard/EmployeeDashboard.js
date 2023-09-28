@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import './EmployeeDashboard.css'
+import { useNavigate } from 'react-router-dom'
 import { Divider, InputLabel, TextField, Box, FormControl, MenuItem, Select } from '@mui/material'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/joy/Button';
@@ -13,6 +14,8 @@ import EmployeeManagerTable from './EmployeeDashboardcomponents/EmployeeManagerT
 import Create from './EmployeeDashboardcomponents/Create';
 
 const EmployeeDashboardPage = () => {
+    const navigate = useNavigate();
+
     const [isLoading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
     const [employeeDetails, setEmployeeDetails] = useState([]);
@@ -115,6 +118,10 @@ const EmployeeDashboardPage = () => {
             })
             .catch(error => {
                 console.log(error)
+                if (error.response && error.response.status === 401) {
+                    // Handle 401 Unauthorized error
+                    navigate('/unauthorizedpage')
+                }
                 setLoading(false)
             })
     }

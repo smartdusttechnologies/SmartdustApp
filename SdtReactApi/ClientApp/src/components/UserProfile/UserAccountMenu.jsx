@@ -95,12 +95,6 @@ export default function UserAccountMenu() {
           </Link>)
         }
         <Divider />
-        <MenuItem >
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
         {
          auth.isAuthenticated && (<MenuItem onClick={handleLogout}>
           <ListItemIcon>

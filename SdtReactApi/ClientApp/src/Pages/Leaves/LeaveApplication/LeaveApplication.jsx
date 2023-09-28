@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import './LeaveApplication.css'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/joy/Button';
@@ -24,6 +25,8 @@ const isWeekend = (date) => {
 };
 
 const LeaveApplication = () => {
+    const navigate = useNavigate();
+
     const { auth, setNotification, notification } = useContext(AuthContext);
 
     const [leaveData, setLeaveData] = useState(initialState);
@@ -164,8 +167,15 @@ const LeaveApplication = () => {
             .catch(error => {
                 setLoading(false)
                 console.log(error)
-                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+
+                if (error.response && error.response.status === 401) {
+                    // Handle 401 Unauthorized error
+                    navigate('/unauthorizedpage')
+                } else {
+                    // Handle other errors
+                    toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
+                    setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+                }
             })
 
     }

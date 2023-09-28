@@ -43,6 +43,7 @@
     <Folder Include="ClientApp\src\components\DeleteComponent\" />
     <Folder Include="ClientApp\src\Pages\Leaves\LeaveBalance\LeaveBalanceComponents\" />
     <Folder Include="ClientApp\src\Pages\Leaves\LeaveDashboard\LeaveDashboardComponents\" />
+    <Folder Include="ClientApp\src\Pages\UnauthorizedPage\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

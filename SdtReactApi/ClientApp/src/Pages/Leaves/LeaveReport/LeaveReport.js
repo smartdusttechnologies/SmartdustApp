@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import './LeaveReport.css'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { Divider, InputLabel, TextField, Box } from '@mui/material'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Button from '@mui/joy/Button';
@@ -13,6 +14,8 @@ import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress
 import EmployeeLeaveTable from './LeaveReportComponents/EmployeeLeaveTable';
 
 const LeaveReport = () => {
+    const navigate = useNavigate();
+
     const [isLoading, setLoading] = useState(false);
     const [employeeRows, setEmployeeRows] = useState([]);
     const [actionRows, setActionsRows] = useState([]);
@@ -49,6 +52,10 @@ const LeaveReport = () => {
             })
             .catch(error => {
                 console.log(error)
+                if (error.response && error.response.status === 401) {
+                    // Handle 401 Unauthorized error
+                    navigate('/unauthorizedpage')
+                }
                 setLoading(false)
             })
     }

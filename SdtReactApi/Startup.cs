@@ -15,6 +15,7 @@ using TestingAndCalibrationLabs.Business.Services;
 using SmartdustApp.Common;
 using Microsoft.AspNetCore.Authorization;
 using SmartdustApp.Business.Services.Security;
+using SmartdustApp.Web.Common;
 
 namespace SmartdustApp
 {
@@ -111,6 +112,7 @@ namespace SmartdustApp
             //app.UseAuthentication();
             app.UseRouting();
             app.UseMiddleware<SdtAuthenticationMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
