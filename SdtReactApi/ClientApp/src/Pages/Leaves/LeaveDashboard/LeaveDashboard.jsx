@@ -6,7 +6,6 @@ import { Button, Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import LeavesDataTable from './LeaveDashboardComponents/LeavesTable';
-import CircularProgress from '@mui/material/CircularProgress';
 import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
 import AuthContext from '../../../context/AuthProvider'
 

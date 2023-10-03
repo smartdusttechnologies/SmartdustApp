@@ -14,9 +14,11 @@ import Chip from '@mui/material/Chip';
 import axios from 'axios'
 import dayjs from 'dayjs';
 import DownloadIcon from '@mui/icons-material/Download';
+import AuthContext from '../../../../context/AuthProvider';
 
 export default function SingleLeaveDetail({ rows }) {
     const [open, setOpen] = React.useState(false);
+    const { auth, setNotification, notification } = useContext(AuthContext);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -27,19 +29,78 @@ export default function SingleLeaveDetail({ rows }) {
         setOpen(false);
     };
 
+    //const DownloadButton = ({ documentID, index }) => {
+    //    const handleDownloadClick = () => {
+    //        const downloadUrl = `/api/document/DownloadDocument/${documentID}`;
+
+    //        const link = document.createElement('a');
+    //        link.href = downloadUrl;
+    //        link.style.display = 'none';
+
+    //        document.body.appendChild(link);
+
+    //        link.click();
+
+    //        document.body.removeChild(link);
+    //    };
+
+    //    return (
+    //        <Chip
+    //            icon={<DownloadIcon />}
+    //            label={`Document ${index + 1}`}
+    //            variant="outlined"
+    //            onClick={handleDownloadClick}
+    //        />
+    //    );
+    //};
+
     const DownloadButton = ({ documentID, index }) => {
         const handleDownloadClick = () => {
             const downloadUrl = `/api/document/DownloadDocument/${documentID}`;
 
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.style.display = 'none';
+            // Get the accessToken from wherever it's stored in your component
+            const accessToken = auth.accessToken; // Replace with the actual method to retrieve the access token
 
-            document.body.appendChild(link);
+            const headers = new Headers({
+                'Authorization': `${accessToken}`,
+            });
 
-            link.click();
+            // Create a request with the headers
+            const request = new Request(downloadUrl, {
+                method: 'GET',
+                headers: headers,
+            });
 
-            document.body.removeChild(link);
+            // Fetch the document with the access token in the headers
+            fetch(request)
+                .then(response => {
+                    if (response.status === 200) {
+                        // Create a blob from the response data
+                        return response.blob();
+                    } else {
+                        // Handle other response statuses (e.g., error handling)
+                        throw new Error('Failed to download document');
+                    }
+                })
+                .then(blob => {
+                    // Create a temporary link element to trigger the download
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `Document_${index + 1}.png`; // Set the desired file name here
+                    document.body.appendChild(a);
+
+                    // Trigger a click event to initiate the download
+                    a.click();
+
+                    // Clean up
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    // Handle any errors
+                });
         };
 
         return (
@@ -48,6 +109,7 @@ export default function SingleLeaveDetail({ rows }) {
                 label={`Document ${index + 1}`}
                 variant="outlined"
                 onClick={handleDownloadClick}
+                key={index}
             />
         );
     };
