@@ -18,9 +18,22 @@ BEGIN
          VALUES
               (0, N'sysadmin', N'sysadmin', N'sysadmin', N'sysadmin@gmail.com', N'1234567899', N'INDIA', N'91', 0, 0, 1, 0, 0, 0, 0, 0),
                (1, N'ApplicationAdminUser', N'Application', N'Admin', N'AppAdmin@gmail.com', N'8123444349', N'India', N'91', 0, 0, 1, 0, 0, 0, 2, 0),
-               (4, N'Yashraj', N'string', N'string', N'string', N'string', N'string', N'string', 1, 0, 1, 0, 0, 0, 0, 0)
+               (4, N'Yashraj', N'string', N'string', N'yashrajsmartdust@gmail.com', N'1111111111', N'string', N'string', 1, 0, 1, 0, 0, 0, 0, 0),
+               (25, N'YashrajManager', N'YashrajManager', N'YashrajManager', N'yashrajsmartdust@gmail.com', N'1111111111', N'string', N'string', 1, 0, 1, 0, 0, 0, 0, 0)
 
     SET IDENTITY_INSERT [dbo].[User]  OFF
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM [Employee] WHERE ID IN (1))
+BEGIN
+    SET IDENTITY_INSERT [dbo].[Employee]  ON
+
+    INSERT INTO [dbo].[Employee]
+               ([EmployeeId], [ManagerId], [ID])
+         VALUES
+               (4, 25, 1)
+
+    SET IDENTITY_INSERT [dbo].[Employee]  OFF
 END
 GO
 IF NOT EXISTS (SELECT 1 FROM [UserClaim] WHERE ID IN (1))
@@ -190,7 +203,8 @@ BEGIN
     INSERT INTO [dbo].[UserRole]
                ([Id], [UserId], [RoleId], [IsDeleted])
          VALUES
-               (2, 4, 2, 0)
+               (2, 4, 5, 0),
+               (2, 25, 4, 0)
     SET IDENTITY_INSERT [dbo].[UserRole]  OFF
 END
 GO
@@ -248,7 +262,9 @@ BEGIN
     INSERT INTO [dbo].[PasswordLogin]
                ([Id], [PasswordHash], [PasswordSalt], [UserId], [ChangeDate])
          VALUES
-               (0, N'qnVDMZYlsGjs4chNs1/qPidI70eDUZ1fzUF5EdCqdl0=', N'NDlzcm0GY1GqMgn+urXX9Q==', 4, CAST(N'2022-11-12T14:25:35.763' AS DateTime))
+               (0, N'qnVDMZYlsGjs4chNs1/qPidI70eDUZ1fzUF5EdCqdl0=', N'NDlzcm0GY1GqMgn+urXX9Q==', 0, CAST(N'2022-11-12T14:25:35.763' AS DateTime)),
+               (4, N'9t8EnooTjYrMD+6MRDF9dPj9DO0hIgUfSk0nhXbTbmM=', N'FP9CmBGWPaLeP5v0VaffVw==', 4, CAST(N'2022-11-12T14:25:35.763' AS DateTime)),
+               (25, N'KW5A14aPNtEBbIniV+iaIDhUghAS7vcXY2Q6g0yyexI=', N'WBlcgHQ3Ttri9Z2gSyShUg==', 25, CAST(N'2022-11-12T14:25:35.763' AS DateTime))
     SET IDENTITY_INSERT [dbo].[PasswordLogin]  OFF
 END
 GO
