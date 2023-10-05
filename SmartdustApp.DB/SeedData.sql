@@ -90,7 +90,20 @@ BEGIN
                (1013, N'uiC.ad', 5, 3, 0),
                (1014, N'uiC.read', 5, 1, 0),
                (1015, N'j', 4, 2, 0),
-               (1016, N'k', 4, 4, 0)
+               (1016, N'k', 4, 4, 0),
+               (1017, N'leaveBalance.add', 1005, 1, 0),
+               (1018, N'leaveBalance.edit', 1005, 2, 0),
+               (1019, N'leaveBalance.delete', 1005, 4, 0),
+               (1020, N'leaveBalance.read', 1005, 3, 0),
+               (1021, N'employeedData.add', 1006, 1, 0),
+               (1022, N'employeedData.edit', 1006, 2, 0),
+               (1023, N'employeedData.delete', 1006, 4, 0),
+               (1024, N'employeedData.read', 1006, 3, 0),
+               (1025, N'employeeleaveStatus.edit', 1007, 2, 0),
+               (1026, N'employeeLeaveData.read', 1007, 3, 0),
+               (1027, N'leave.add', 1008, 1, 0),
+               (1028, N'leave.edit', 1008, 2, 0),
+               (1029, N'leave.read', 1008, 3, 0)
     SET IDENTITY_INSERT [dbo].[Permission]  OFF
 END
 GO
