@@ -5,9 +5,11 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartdustApp.Web", "SdtReactApi\SmartdustApp.Web.csproj", "{56800DFB-B040-4581-A976-C7D553ECCAE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartdustApp.Business", "SmartdustApp.Business\SmartdustApp.Business.csproj", "{F03B7F5B-143D-407E-989B-199B19E2543C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartdustApp.Business", "SmartdustApp.Business\SmartdustApp.Business.csproj", "{F03B7F5B-143D-407E-989B-199B19E2543C}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SmartdustApp.DB", "SmartdustApp.DB\SmartdustApp.DB.sqlproj", "{A19FFDDD-504F-4C1D-8AAA-8871419D5711}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartdustApp.Tests", "SmartdustApp.Tests\SmartdustApp.Tests.csproj", "{8E19FF41-774E-4388-9654-610B24C441B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{A19FFDDD-504F-4C1D-8AAA-8871419D5711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A19FFDDD-504F-4C1D-8AAA-8871419D5711}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A19FFDDD-504F-4C1D-8AAA-8871419D5711}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8E19FF41-774E-4388-9654-610B24C441B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E19FF41-774E-4388-9654-610B24C441B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E19FF41-774E-4388-9654-610B24C441B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E19FF41-774E-4388-9654-610B24C441B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
