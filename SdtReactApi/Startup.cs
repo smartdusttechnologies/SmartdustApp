@@ -71,6 +71,7 @@ namespace SmartdustApp
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IRoleService, RoleService>();
             //Authorization Handler Initalization Start
+            services.AddScoped<Business.Core.Interfaces.IAuthorizationService, AuthorizationService>();
             //Authorization Handler Initalization End
             services.AddScoped<ISecurityParameterService, SecurityParameterService>();
             //Repository

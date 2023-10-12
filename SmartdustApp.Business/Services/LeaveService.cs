@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using TestingAndCalibrationLabs.Business.Core.Interfaces;
 using TestingAndCalibrationLabs.Business.Services;
 using static SmartdustApp.Business.Core.Model.PolicyTypes;
+using IAuthorizationService = SmartdustApp.Business.Core.Interfaces.IAuthorizationService;
 
 namespace SmartdustApp.Business.Services
 {
