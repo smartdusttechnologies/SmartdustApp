@@ -10,7 +10,7 @@ namespace SmartdustApp.Business.Core.Interfaces
 {
     public interface IAuthorizationService
     {
-        Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements);
+        Task<bool> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements);
 
     }
 }

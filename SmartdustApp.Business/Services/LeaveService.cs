@@ -48,7 +48,7 @@ namespace SmartdustApp.Business.Services
         // Retrieves a list of leave records for a specific user.
         public RequestResult<List<LeaveModel>> Get(int userID)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveModel(), new[] { Operations.Read }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveModel(), new[] { Operations.Read }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -63,7 +63,7 @@ namespace SmartdustApp.Business.Services
         // Saves a leave record and sends an email notification.
         public RequestResult<bool> Save(LeaveModel leave)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leave, new[] { Operations.Create }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leave, new[] { Operations.Create }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -121,7 +121,7 @@ namespace SmartdustApp.Business.Services
         // Updates a leave record.
         public RequestResult<bool> Update(LeaveModel leave)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leave, new[] { Operations.Update }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leave, new[] { Operations.Update }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -152,7 +152,7 @@ namespace SmartdustApp.Business.Services
         // Retrieves leave balance records for employees managed by a manager.
         public RequestResult<List<LeaveBalance>> GetEmployeeLeaveBalance(int userID)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveBalance(), new[] { Operations.Read }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveBalance(), new[] { Operations.Read }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -166,7 +166,7 @@ namespace SmartdustApp.Business.Services
         // Creates a leave balance record.
         public RequestResult<bool> CreateLeaveBalance(LeaveBalance leavebalance)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leavebalance, new[] { Operations.Create }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leavebalance, new[] { Operations.Create }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -192,7 +192,7 @@ namespace SmartdustApp.Business.Services
         // Updates a leave balance record.
         public RequestResult<bool> UpdateLeaveBalance(LeaveBalance leavebalance)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leavebalance, new[] { Operations.Update }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, leavebalance, new[] { Operations.Update }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -218,7 +218,7 @@ namespace SmartdustApp.Business.Services
         // Deletes a leave balance record.
         public RequestResult<bool> DeleteLeaveBalance(int id)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveBalance(), new[] { Operations.Delete }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new LeaveBalance(), new[] { Operations.Delete }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -244,7 +244,7 @@ namespace SmartdustApp.Business.Services
         // Retrieves a list of manager and employee data.
         public RequestResult<List<EmployeeTable>> GetManagerAndEmployeeData()
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new EmployeeTable(), new[] { Operations.Read }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new EmployeeTable(), new[] { Operations.Read }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -269,7 +269,7 @@ namespace SmartdustApp.Business.Services
         // Creates manager and employee data records.
         public RequestResult<bool> CreateManagerAndEmployeeData(EmployeeTable employeeData)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, employeeData, new[] { Operations.Create }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, employeeData, new[] { Operations.Create }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -294,7 +294,7 @@ namespace SmartdustApp.Business.Services
         // Edits manager and employee data records.
         public RequestResult<bool> EditManagerAndEmployeeData(EmployeeTable employeeData)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, employeeData, new[] { Operations.Update }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, employeeData, new[] { Operations.Update }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -319,7 +319,7 @@ namespace SmartdustApp.Business.Services
         // Deletes manager and employee data by ID.
         public RequestResult<bool> DeleteManagerAndEmployeeData(int id)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new EmployeeTable(), new[] { Operations.Delete }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new EmployeeTable(), new[] { Operations.Delete }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -345,7 +345,7 @@ namespace SmartdustApp.Business.Services
         // Retrieves a list of leave records for employees managed by a manager.
         public RequestResult<List<LeaveModel>> GetEmployeeLeave(int userID)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new UpdateLeaveModel(), new[] { Operations.Read }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new UpdateLeaveModel(), new[] { Operations.Read }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
@@ -371,7 +371,7 @@ namespace SmartdustApp.Business.Services
         // Updates the status of a leave record and sends an email notification.
         public RequestResult<bool> UpdateLeaveStatus(UpdateLeaveModel updateStatus)
         {
-            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new UpdateLeaveModel(), new[] { Operations.Update }).Result.Succeeded)
+            if (!_authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, updateStatus, new[] { Operations.Update }).Result)
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }

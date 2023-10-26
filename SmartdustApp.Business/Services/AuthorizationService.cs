@@ -18,10 +18,9 @@ namespace SmartdustApp.Business.Services
             _authorizationService = authorizationService;
         }
 
-        public virtual async Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements)
+        public async Task<bool> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements)
         {
-
-            var authorizationResult = await _authorizationService.AuthorizeAsync(user, resource, requirements);
+            var authorizationResult = _authorizationService.AuthorizeAsync(user, resource, requirements).Result.Succeeded;
 
             return authorizationResult;
         }
