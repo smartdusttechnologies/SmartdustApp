@@ -485,7 +485,11 @@ namespace SmartdustApp.Business.Data.Repository
             }
             else
             {
-                return new RequestResult<bool>(false);
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "Unable To take Your Request Right Now.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
             }
         }
 
@@ -507,7 +511,11 @@ namespace SmartdustApp.Business.Data.Repository
             }
             else
             {
-                return new RequestResult<bool>(false);
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "Unable To take Your Request Right Now.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
             }
         }
 
@@ -528,7 +536,11 @@ namespace SmartdustApp.Business.Data.Repository
             }
             else
             {
-                return new RequestResult<bool>(false);
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "Unable To take Your Request Right Now.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
             }
         }
 
@@ -577,7 +589,11 @@ namespace SmartdustApp.Business.Data.Repository
             }
             else
             {
-                return new RequestResult<bool>(false);
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "Unable To take Your Request Right Now.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
             }
         }
 
@@ -599,7 +615,11 @@ namespace SmartdustApp.Business.Data.Repository
             }
             else
             {
-                return new RequestResult<bool>(false);
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "Unable To take Your Request Right Now.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
             }
         }
 
@@ -620,7 +640,11 @@ namespace SmartdustApp.Business.Data.Repository
             }
             else
             {
-                return new RequestResult<bool>(false);
+                List<ValidationMessage> validationMessages = new List<ValidationMessage>()
+                {
+                    new ValidationMessage() { Reason = "Unable To take Your Request Right Now.", Severity = ValidationSeverity.Error }
+                };
+                return new RequestResult<bool>(false, validationMessages);
             }
         }
 

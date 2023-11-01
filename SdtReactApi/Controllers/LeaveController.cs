@@ -36,7 +36,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         // Applies for leave and returns the result.

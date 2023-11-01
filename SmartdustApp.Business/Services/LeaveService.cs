@@ -111,11 +111,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
         // Updates a leave record.
@@ -141,11 +136,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
 
@@ -181,11 +171,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
 
@@ -207,11 +192,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
 
@@ -233,11 +213,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
 
@@ -284,11 +259,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
         // Edits manager and employee data records.
@@ -309,11 +279,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
         // Deletes manager and employee data by ID.
@@ -334,11 +299,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
 
@@ -411,11 +371,6 @@ namespace SmartdustApp.Business.Services
                 result.Message = success;
                 return result;
             }
-            List<ValidationMessage> error = new List<ValidationMessage>()
-                {
-                    new ValidationMessage(){Reason = "Unable To take Your Request Right Now",Severity=ValidationSeverity.Information}
-                };
-            result.Message = error;
             return result;
         }
 
