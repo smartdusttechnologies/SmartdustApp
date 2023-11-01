@@ -22,10 +22,10 @@ const Navbar = () => {
           </Link>
         </div>
         <div className='right none'>
-        <Link to={'/'}><div><a>Home</a> </div></Link> 
-        {!auth.isAuthenticated && (<Link to={'/login'}><div><a>Sign in</a> </div></Link>)} 
-        <Link to={'/contact'}><div><a>Contact</a> </div></Link> 
-        <Link to={'/about'}><div><a>About</a> </div></Link>
+                  <Link to={'/'}><span><a>Home</a> </span></Link> 
+                  {!auth.isAuthenticated && (<Link to={'/login'}><span>Sign in </span></Link>)} 
+                  <Link to={'/contact'}><span><a>Contact</a> </span></Link> 
+                  <Link to={'/about'}><span><a>About</a> </span></Link>
         {auth.isAuthenticated && <AbsenceMenu/>}
         <NotificationBellMenu/>
         <UserAccountMenu/>

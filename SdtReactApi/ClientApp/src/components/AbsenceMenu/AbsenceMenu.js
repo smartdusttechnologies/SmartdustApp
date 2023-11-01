@@ -8,14 +8,11 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthProvider';
 import Button from '@mui/material/Button';
 
-export default function AbsenceMenu() {
+export default function AbsenceMenu({ color, fontWeight }) {
     const { setAuth, auth } = React.useContext(AuthContext);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -36,7 +33,11 @@ export default function AbsenceMenu() {
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
-                        sx={{ cursor: "pointer", fontWeight:"600"}}
+                        sx={{
+                            cursor: "pointer",
+                            fontWeight: fontWeight || "600",
+                            color: color || "black",
+                        }}
                     >
                         Absence
                     </Typography>

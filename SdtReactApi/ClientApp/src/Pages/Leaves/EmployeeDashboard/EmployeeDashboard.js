@@ -73,13 +73,14 @@ const EmployeeDashboardPage = () => {
             })
     }
     const handleDelete = (id) => {
+        console.log(id , 'asdfsdf')
         axios.post(`api/leave/DeleteManagerAndEmployeeData/${id}`, {
             headers: {
                 'Authorization': `${auth.accessToken}`
             }
         })
             .then(response => {
-                console.log(response?.data?.message[0]?.reason)
+                console.log(response)
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])

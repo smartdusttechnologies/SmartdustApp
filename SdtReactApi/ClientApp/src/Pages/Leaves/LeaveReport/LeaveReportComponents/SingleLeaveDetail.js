@@ -18,7 +18,7 @@ import AuthContext from '../../../../context/AuthProvider';
 
 export default function SingleLeaveDetail({ rows }) {
     const [open, setOpen] = React.useState(false);
-    const { auth, setNotification, notification } = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -28,31 +28,6 @@ export default function SingleLeaveDetail({ rows }) {
     const handleClose = () => {
         setOpen(false);
     };
-
-    //const DownloadButton = ({ documentID, index }) => {
-    //    const handleDownloadClick = () => {
-    //        const downloadUrl = `/api/document/DownloadDocument/${documentID}`;
-
-    //        const link = document.createElement('a');
-    //        link.href = downloadUrl;
-    //        link.style.display = 'none';
-
-    //        document.body.appendChild(link);
-
-    //        link.click();
-
-    //        document.body.removeChild(link);
-    //    };
-
-    //    return (
-    //        <Chip
-    //            icon={<DownloadIcon />}
-    //            label={`Document ${index + 1}`}
-    //            variant="outlined"
-    //            onClick={handleDownloadClick}
-    //        />
-    //    );
-    //};
 
     const DownloadButton = ({ documentID, index }) => {
         const handleDownloadClick = () => {

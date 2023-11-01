@@ -145,9 +145,9 @@ const Login = () => {
           <Link to={'/signup'}>Don't have an account? Sign Up</Link>
         </div>
         <div className='why-box'>
-          <p class="why">Why Create an Account?</p>
+          <p className="why">Why Create an Account?</p>
           <div>
-              <p class="ans">
+              <p className="ans">
                   By creating the account you agreed to our
                   <a>Privacy Policy</a>&
                   <a>Cookie Policy</a>
