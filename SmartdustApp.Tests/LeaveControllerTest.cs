@@ -396,6 +396,103 @@ namespace SmartdustApp.Tests
             // Assert
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
         }
+        [Test]
+        public void GetEmployeeLeave_Test()
+        {
+            var userId = 1;
+            var leaveModels = new List<LeaveModel>
+            {
+                // Create some LeaveModel instances for testing
+                new LeaveModel { ID= 52, UserID= 5, UserName= "YashRaj" , LeaveType = "MedicalLeave", LeaveTypeID= 1, Reason="aa", AppliedDate = new DateTime(), LeaveStatus="null", LeaveStatusID=1 , LeaveDays=3 ,LeaveDates = new List<DateTime> { DateTime.Now.Date,DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(2), },AttachedFileIDs = new List<int>{1,2}},
+                new LeaveModel { ID= 42, UserID= 5, UserName= "YashRaj", LeaveType = "MedicalLeave", LeaveTypeID= 1, Reason="aa" , AppliedDate = new DateTime(), LeaveStatus="null", LeaveStatusID=1 , LeaveDays=3 ,LeaveDates = new List<DateTime> { DateTime.Now.Date,DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(2), },AttachedFileIDs = new List<int>{1,2}},
+            };
+
+
+            // Mock the IHttpContextAccessor and IAuthorizationService
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var authorizationServiceMock = new Mock<Business.Core.Interfaces.IAuthorizationService>();
+
+            // Configure HttpContext.User to have an authorized user
+            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, "TestUser"),
+                new Claim(ClaimTypes.Role, "Admin"),
+
+            }, "mock"));
+
+            httpContextAccessorMock.SetupGet(x => x.HttpContext.User).Returns(userPrincipal);
+
+            // Configure IAuthorizationService to return a successful authorization result
+            authorizationServiceMock
+                  .Setup(x => x.AuthorizeAsync(userPrincipal, It.IsAny<UpdateLeaveModel>(), new[] { Operations.Read }))
+                  .ReturnsAsync(true);
+
+
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, httpContextAccessorMock.Object, authorizationServiceMock.Object);
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetEmployeeLeave(userId)).Returns(leaveModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetEmployeeLeave(userId);
+
+            // Assert
+            // Perform assertions to verify the result matches the expected outcome
+            Assert.IsNotNull(result);
+            //Assert.IsInstanceOf<List<LeaveModel>>(result);
+
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = (OkObjectResult)result;
+            okResult.Value.Should().BeOfType<RequestResult<List<LeaveModel>>>();
+            var requestResult = (RequestResult<List<LeaveModel>>)okResult.Value;
+
+            requestResult.RequestedObject.Should().BeEquivalentTo(leaveModels);
+        }
+
+        [Test]
+        public void GetEmployeeLeave_ReturnsBadRequest()
+        {
+            var userId = 1;
+            List<LeaveModel> leaveModels = null;
+
+
+            // Mock the IHttpContextAccessor and IAuthorizationService
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var authorizationServiceMock = new Mock<Business.Core.Interfaces.IAuthorizationService>();
+
+            // Configure HttpContext.User to have an authorized user
+            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, "TestUser"),
+                new Claim(ClaimTypes.Role, "Admin"),
+
+            }, "mock"));
+
+            httpContextAccessorMock.SetupGet(x => x.HttpContext.User).Returns(userPrincipal);
+
+            // Configure IAuthorizationService to return a successful authorization result
+            authorizationServiceMock
+                  .Setup(x => x.AuthorizeAsync(userPrincipal, It.IsAny<UpdateLeaveModel>(), new[] { Operations.Read }))
+                  .ReturnsAsync(true);
+
+
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, httpContextAccessorMock.Object, authorizationServiceMock.Object);
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetEmployeeLeave(userId)).Returns(leaveModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetEmployeeLeave(userId);
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
 
         [Test]
         public void UpdateLeaveStatus_Test()
@@ -598,6 +695,27 @@ namespace SmartdustApp.Tests
             requestResult.RequestedObject.Should().BeEquivalentTo(leaveTypesModels);
 
         }
+
+        [Test]
+        public void GetLeaveTypes_ReturnsBadRequest()
+        {
+            List<LeaveTypes> leaveTypesModels = null;
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, _httpContextAccessor, _authorizationService);
+
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetLeaveTypes()).Returns(leaveTypesModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetLeaveTypes();
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+
+        }
         [Test]
         public void GetManagerLeaveStatusActions_Test()
         {
@@ -626,6 +744,26 @@ namespace SmartdustApp.Tests
             var requestResult = (RequestResult<List<LeaveStatusActions>>)okResult.Value;
 
             requestResult.RequestedObject.Should().BeEquivalentTo(leavestatusModels);
+
+        }
+        [Test]
+        public void GetManagerLeaveStatusActions_ReturnsBadRequest()
+        {
+            List<LeaveStatusActions> leavestatusModels = null;
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, _httpContextAccessor, _authorizationService);
+
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetManagerLeaveStatusActions()).Returns(leavestatusModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetManagerLeaveStatusActions();
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
 
         }
         [Test]
@@ -662,6 +800,26 @@ namespace SmartdustApp.Tests
             var requestResult = (RequestResult<List<LeaveBalance>>)okResult.Value;
 
             requestResult.RequestedObject.Should().BeEquivalentTo(leavebalanceModels);
+
+        }
+        [Test]
+        public void GetLeaveBalance_ReturnsBadRequest()
+        {
+            List<LeaveBalance> leavebalanceModels = null;
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, _httpContextAccessor, _authorizationService);
+
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetLeaveBalance(1)).Returns(leavebalanceModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetLeaveBalance(1);
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
 
         }
 
@@ -1019,6 +1177,28 @@ namespace SmartdustApp.Tests
             requestResult.RequestedObject.Should().BeEquivalentTo(userModels);
 
         }
+        
+
+        [Test]
+        public void GetEmployeeDetails_ReturnsBadRequest()
+        {
+            List<UserModel> userModels = null;
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, _httpContextAccessor, _authorizationService);
+
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetEmployeeDetails(1)).Returns(userModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetEmployeeDetails(1);
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+
+        }
 
         [Test]
         public void GetEmployeeLeaveBalance_Test()
@@ -1077,6 +1257,48 @@ namespace SmartdustApp.Tests
             requestResult.RequestedObject.Should().BeEquivalentTo(leavebalanceModels);
 
         }
+
+        [Test]
+        public void GetEmployeeLeaveBalance_ReturnsBadRequest()
+        {
+            List<LeaveBalance> leavebalanceModels = null;
+
+            // Mock the IHttpContextAccessor and IAuthorizationService
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var authorizationServiceMock = new Mock<Business.Core.Interfaces.IAuthorizationService>();
+
+            // Configure HttpContext.User to have an authorized user
+            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, "TestUser"),
+                new Claim(ClaimTypes.Role, "Admin"),
+
+            }, "mock"));
+
+            httpContextAccessorMock.SetupGet(x => x.HttpContext.User).Returns(userPrincipal);
+
+            // Configure IAuthorizationService to return a successful authorization result
+            authorizationServiceMock
+                  .Setup(x => x.AuthorizeAsync(userPrincipal, It.IsAny<LeaveBalance>(), new[] { Operations.Read }))
+                  .ReturnsAsync(true);
+
+
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, httpContextAccessorMock.Object, authorizationServiceMock.Object);
+
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetEmployeeLeaveBalance(1)).Returns(leavebalanceModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetEmployeeLeaveBalance(1);
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+
+        }
         [Test]
         public void GetUsers_Test()
         {
@@ -1123,6 +1345,27 @@ namespace SmartdustApp.Tests
             var requestResult = (RequestResult<List<UserModel>>)okResult.Value;
 
             requestResult.RequestedObject.Should().BeEquivalentTo(userModels);
+
+        }
+        
+        [Test]
+        public void GetUsers_ReturnsBadRequest()
+        {
+            List<UserModel> userModels = null;
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, _httpContextAccessor, _authorizationService);
+
+            // Configure the _leaveRepository mock to return the leaveModels when Get is called
+            _leaveRepository.Setup(repo => repo.GetUsers()).Returns(userModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetUsers();
+
+
+            result.Should().BeOfType<BadRequestObjectResult>();
 
         }
 
@@ -1176,6 +1419,51 @@ namespace SmartdustApp.Tests
             var requestResult = (RequestResult<List<EmployeeTable>>)okResult.Value;
 
             requestResult.RequestedObject.Should().BeEquivalentTo(employeeModels);
+        }
+        
+
+        [Test]
+        public void GetManagerAndEmployeeData_ReturnsBadRequest()
+        {
+            List<EmployeeTable> employeeModels = null;
+
+
+            // Mock the IHttpContextAccessor and IAuthorizationService
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            var authorizationServiceMock = new Mock<Business.Core.Interfaces.IAuthorizationService>();
+
+            // Configure HttpContext.User to have an authorized user
+            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, "TestUser"),
+                new Claim(ClaimTypes.Role, "Admin"),
+
+            }, "mock"));
+
+            httpContextAccessorMock.SetupGet(x => x.HttpContext.User).Returns(userPrincipal);
+
+            // Configure IAuthorizationService to return a successful authorization result
+            authorizationServiceMock
+                  .Setup(x => x.AuthorizeAsync(userPrincipal, It.IsAny<EmployeeTable>(), new[] { Operations.Read }))
+                  .ReturnsAsync(true);
+
+
+
+            _leaveService = new LeaveService(_leaveRepository.Object, _emailService, _configuration, _hostingEnvironment, _userRepository, httpContextAccessorMock.Object, authorizationServiceMock.Object);
+           
+            _leaveRepository.Setup(repo => repo.GetManagerAndEmployeeData()).Returns(employeeModels);
+
+            // Create an instance of the LeaveController
+            var leaveController = new LeaveController(_leaveService);
+
+            // Act
+            var result = leaveController.GetManagerAndEmployeeData();
+
+            // Assert
+            // Perform assertions to verify the result matches the expected outcome
+            Assert.IsNotNull(result);
+
+            result.Should().BeOfType<BadRequestObjectResult>();
         }
 
 

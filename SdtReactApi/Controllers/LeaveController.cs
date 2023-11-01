@@ -80,7 +80,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         // Updates the status of a leave record.
@@ -111,7 +111,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         // Retrieves a list of leave status actions available to managers.
@@ -129,7 +129,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         [HttpGet]
@@ -146,7 +146,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         // Creates a leave balance record and returns the result.
@@ -202,7 +202,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         [HttpGet]
@@ -219,7 +219,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
         [HttpGet]
         [Route("GetUsers")]
@@ -235,7 +235,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         // Retrieves a list of manager and employee data.
@@ -253,7 +253,7 @@ namespace SmartdustApp.Controllers
                 {
                     new ValidationMessage { Reason = "Something Went Wrong", Severity = ValidationSeverity.Error, SourceId = "fields" }
                 };
-            return Json(new RequestResult<bool>(errors));
+            return BadRequest(new RequestResult<bool>(errors));
         }
 
         // Creates manager and employee data records and returns the result.
