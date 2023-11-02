@@ -202,13 +202,6 @@ const LeaveApplication = () => {
     }, [])
     return (
         <div className='leave-application-page'>
-
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={isLoading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
             <div className='leave-application-header'>
                 <h1>Leave Application</h1>
                 <Divider />
@@ -309,6 +302,12 @@ const LeaveApplication = () => {
                 </Button>
             </form>
             <ToastContainer />
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     )
 }

@@ -7,6 +7,8 @@ import { TextField } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from '@mui/joy/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const loginurl = 'api/security/login';
 
@@ -155,7 +157,13 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+          <ToastContainer />
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isLoading}
+          >
+              <CircularProgress color="inherit" />
+          </Backdrop>
     </div>
   )
 }

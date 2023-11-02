@@ -4,7 +4,6 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
 import LocationMap from '../../components/Localtionmap/Locationmap';
 import Button from '@mui/joy/Button';
 
@@ -21,8 +20,7 @@ const initialState = {
 }
 
 const Contact = () => {
-  const navigate = useNavigate()
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+  const {auth  , notification , setNotification} = useContext(AuthContext)
 
   // User Details 
   const [userdata , setUserdata] = useState(initialState)

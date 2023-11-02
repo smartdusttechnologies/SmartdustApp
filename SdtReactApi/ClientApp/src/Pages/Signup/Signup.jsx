@@ -7,6 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider'
 import Button from '@mui/joy/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const signupapi = 'api/security/SignUp';
 
@@ -192,11 +194,14 @@ const Signup = () => {
           <a className='Google red-login' href=""><p>Google</p></a>
           <a className='Linked-In blue-login' href=""><p>Linked-In</p></a>
         </div>
-        {/* <div className='login'>
-          <Link to={'/login'}>Already have an account? Sign in</Link>
-        </div> */}
       </div>
-      <ToastContainer/>
+          <ToastContainer />
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isLoading}
+          >
+              <CircularProgress color="inherit" />
+          </Backdrop>
     </div>
   )
 }
