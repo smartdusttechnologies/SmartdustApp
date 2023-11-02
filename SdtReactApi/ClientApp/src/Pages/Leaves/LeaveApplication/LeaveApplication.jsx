@@ -150,6 +150,7 @@ const LeaveApplication = () => {
             leaveStatus: 'Pending',
             leaveStatusId: 6,
             leaveDays: leaveData?.leaveDates?.length,
+            comment: '',
             leaveDates: leaveData?.leaveDates,
             attachedFileIDs: attachedFileIDs
         }, {

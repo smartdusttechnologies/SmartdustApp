@@ -80,6 +80,7 @@ const LeaveDashboard = () => {
             leaveStatus: '',
             leaveStatusId: 6,
             leaveDays: updatedLeaveDates?.length,
+            comment: '',
             leaveDates: updatedLeaveDates,
             attachedFileIDs: attachedFileIDs
         }, {

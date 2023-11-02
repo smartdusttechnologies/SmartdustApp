@@ -152,6 +152,7 @@ export default function SingleLeaveDetail({ rows }) {
                         <Typography>Leave Type : {rows.leaveType}</Typography>
                         <Typography>Leave Status : {rows.leaveStatus}</Typography>
                         <Typography>Reason : {rows.reason}</Typography>
+                        <Typography>Manager Comment : {rows.comment}</Typography>
                     </div>
                 </DialogContent>
             </Dialog>

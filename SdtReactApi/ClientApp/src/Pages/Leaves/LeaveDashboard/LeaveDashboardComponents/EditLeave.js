@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import Button from '@mui/joy/Button';
@@ -11,11 +11,9 @@ import { TextField, FormControl, InputLabel, MenuItem, Select } from '@mui/mater
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
 import AuthContext from '../../../../context/AuthProvider';
 import Chip from '@mui/material/Chip';
@@ -29,8 +27,7 @@ const isWeekend = (date) => {
 
 export default function EditLeave({ rowData, leavetypes, UpdateLeave }) {
     const [open, setOpen] = React.useState(false);
-    const [isLoading, setLoading] = useState(false);
-    const { auth, setNotification, notification } = useContext(AuthContext);
+    const { auth} = useContext(AuthContext);
     const [updatedLeaveDates, setUpdatedLeaveDates] = useState(rowData?.leaveDates);
     const [updatedAttachedFileIDs, setUpdatedAttachedFileIDs] = useState(rowData?.attachedFileIDs);
     const [updatedLeaveType, setUpdatedLeaveType] = useState(rowData.leaveTypeID);

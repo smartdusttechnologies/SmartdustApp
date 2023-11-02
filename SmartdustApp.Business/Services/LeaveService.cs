@@ -357,7 +357,7 @@ namespace SmartdustApp.Business.Services
                 _leaveRepository.UpdateLeaveBalance(updateStatus.LeaveID);
             }
 
-            var result = _leaveRepository.UpdateLeaveStatus(updateStatus.LeaveID , updateStatus.StatusID);
+            var result = _leaveRepository.UpdateLeaveStatus(updateStatus.LeaveID , updateStatus.StatusID , updateStatus.Comment);
 
             // Send the email to Employee
             var isEmailSendSuccessfully = _emailService.Sendemail(model);

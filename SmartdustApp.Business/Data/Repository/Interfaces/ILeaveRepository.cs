@@ -34,7 +34,7 @@ namespace SmartdustApp.Business.Data.Repository.Interfaces
         List<LeaveStatusActions> GetManagerLeaveStatusActions();
 
         // Updates the status of a leave record and returns the result.
-        RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID);
+        RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID, string comment);
 
         // Updates the leave balance for a specific leave record.
         void UpdateLeaveBalance(int leaveID);

@@ -293,7 +293,7 @@ namespace SmartdustApp.Business.Data.Repository
 
             // SQL query with JOINs to fetch data from Leave, LeaveDates, and LeaveAttachedFiles tables
             var query = @"
-                         SELECT L.ID, L.UserID, U.UserName, LT.Name as LeaveType, L.Reason, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
+                         SELECT L.ID, L.UserID, U.UserName, LT.Name as LeaveType, L.Reason,L.comment, L.AppliedDate, LS.Name as LeaveStatus, L.LeaveDays,
                          LD.LeaveDate as LeaveDates,
                          LAF.DocumentID as AttachedFileIDs
                          FROM [Leave] L
@@ -414,16 +414,17 @@ namespace SmartdustApp.Business.Data.Repository
         }
 
         // Updates the status of a leave record.
-        public RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID)
+        public RequestResult<bool> UpdateLeaveStatus(int leaveID, int statusID, string comment)
         {
             using (IDbConnection db = _connectionFactory.GetConnection)
             {
                 // SQL query to update the LeaveStatusID for the specified leaveID
                 string query = @"UPDATE [Leave]
-                         SET LeaveStatusID = @statusID
+                         SET LeaveStatusID = @statusID,
+                         comment = @comment
                          WHERE ID = @leaveID";
 
-                var parameters = new { leaveID, statusID };
+                var parameters = new { leaveID, statusID, comment };
                 int result = db.Execute(query, parameters);
                 if (result > 0)
                 {

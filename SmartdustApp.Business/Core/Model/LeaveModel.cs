@@ -19,6 +19,7 @@ namespace SmartdustApp.Business.Core.Model
         public int LeaveStatusID { get; set; }
 
         public int LeaveDays { get; set; }
+        public string comment { get; set; }
 
         public List<DateTime> LeaveDates { get; set; }
         public List<int> AttachedFileIDs { get; set; }
