@@ -18,7 +18,6 @@ const EmployeeDashboardPage = () => {
 
     const [isLoading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
-    const [employeeDetails, setEmployeeDetails] = useState([]);
     const [managerAndEmployeeData, setManagerAndEmployeeData] = useState([]);
     const { auth, setNotification, notification } = useContext(AuthContext);
 
@@ -74,7 +73,13 @@ const EmployeeDashboardPage = () => {
     }
     const handleDelete = (id) => {
         console.log(id , 'asdfsdf')
-        axios.post(`api/leave/DeleteManagerAndEmployeeData/${id}`, {
+        axios.post(`api/leave/DeleteManagerAndEmployeeData`, {
+            id: id,
+            managerId: 1,
+            managerName: '',
+            employeeId: 1,
+            employeeName: ''
+        }, {
             headers: {
                 'Authorization': `${auth.accessToken}`
             }

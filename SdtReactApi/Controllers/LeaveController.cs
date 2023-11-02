@@ -177,10 +177,10 @@ namespace SmartdustApp.Controllers
 
         // Deletes a leave balance record by its ID and returns the result.
         [HttpPost]
-        [Route("DeleteLeaveBalance/{id}")]
-        public IActionResult DeleteLeaveBalance(int id)
+        [Route("DeleteLeaveBalance")]
+        public IActionResult DeleteLeaveBalance(LeaveBalance leavebalance)
         {
-            var result = _leaveService.DeleteLeaveBalance(id);
+            var result = _leaveService.DeleteLeaveBalance(leavebalance.ID);
             if (result.IsSuccessful)
             {
                 return Ok(result);
@@ -284,10 +284,10 @@ namespace SmartdustApp.Controllers
 
         // Deletes manager and employee data by ID and returns the result.
         [HttpPost]
-        [Route("DeleteManagerAndEmployeeData/{id}")]
-        public IActionResult DeleteManagerAndEmployeeData(int id)
+        [Route("DeleteManagerAndEmployeeData")]
+        public IActionResult DeleteManagerAndEmployeeData(EmployeeTable employeeData)
         {
-            var result = _leaveService.DeleteManagerAndEmployeeData(id);
+            var result = _leaveService.DeleteManagerAndEmployeeData(employeeData.ID);
             if (result.IsSuccessful)
             {
                 return Ok(result);
