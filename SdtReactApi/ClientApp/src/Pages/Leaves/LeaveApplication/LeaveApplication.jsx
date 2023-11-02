@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import './LeaveApplication.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -8,9 +8,10 @@ import Button from '@mui/joy/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import AuthContext from '../../../context/AuthProvider';
 import dayjs from 'dayjs';
-import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
-import { useEffect } from 'react';
+import { MobileDatePicker} from '@mui/x-date-pickers';
 import Chip from '@mui/material/Chip';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const initialState = {
     leaveDates:[],
@@ -201,6 +202,13 @@ const LeaveApplication = () => {
     }, [])
     return (
         <div className='leave-application-page'>
+
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className='leave-application-header'>
                 <h1>Leave Application</h1>
                 <Divider />
