@@ -38,7 +38,6 @@ const LeaveApplication = () => {
     const handleFileChange = (e) => {
         const filesArray = Array.from(e.target.files);
         setFile(filesArray);
-        console.log(filesArray);
     };
     const handleDeleteFile = (indexToDelete) => {
         setFile(file?.filter((file, index) => index !== indexToDelete));
@@ -50,7 +49,6 @@ const LeaveApplication = () => {
             ...prevState,
             [name]: value
         }));
-        console.log(leaveData)
 
     };
 
@@ -70,8 +68,6 @@ const LeaveApplication = () => {
             }));
         }
 
-        console.log(leaveData.leaveDates);
-        console.log(leaveData);
     };
 
     // Utility function to check if two dates have the same day, month, and year (ignoring time)
@@ -87,13 +83,11 @@ const LeaveApplication = () => {
             ...prevState,
             leaveDates: prevState?.leaveDates?.filter((date, index) => index !== indexToDelete),
         }));
-        console.log(leaveData?.leaveDates, 'Deleted Date')
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true)
-        console.log(leaveData?.leaveDates,'leaveData?.leaveDates')
         const formData = new FormData();
 
         // Check if there are files to upload
@@ -123,7 +117,6 @@ const LeaveApplication = () => {
                     }
                 })
                     .then(response => {
-                        console.log(response.data);
                         // Call ApplyLeave with AttachedFileIDs
                         ApplyLeave(response.data);
                     })
@@ -160,7 +153,6 @@ const LeaveApplication = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.message[0]?.reason)
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
                 setLoading(false)
@@ -168,7 +160,6 @@ const LeaveApplication = () => {
             })
             .catch(error => {
                 setLoading(false)
-                console.log(error)
 
                 if (error.response && error.response.status === 401) {
                     // Handle 401 Unauthorized error
@@ -189,11 +180,9 @@ const LeaveApplication = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.requestedObject)
                 setLeaveTypes(response?.data?.requestedObject)
             })
             .catch(error => {
-                console.log(error)
             })
     }
 

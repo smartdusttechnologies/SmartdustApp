@@ -25,7 +25,6 @@ export default function EditLeaveBalance({ data, leavetypes, employeeDetails, ha
 
     const handleClickOpen = () => {
         setOpen(true);
-        console.log(data, 'EditLeaveBalance Data')
     };
 
     const handleClose = () => {
@@ -41,7 +40,6 @@ export default function EditLeaveBalance({ data, leavetypes, employeeDetails, ha
         });
     };
     const handleUpdateClick = () => {
-        console.log(formData, 'formData create leavebalance')
         handleUpdate(formData);
         handleClose();
     };

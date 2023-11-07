@@ -14,7 +14,7 @@ const loginurl = 'api/security/login';
 
 const Login = () => {
     const navigate = useNavigate();
-    const { auth, setAuth, notification, setNotification } = useContext(AuthContext);
+    const { setAuth, notification, setNotification } = useContext(AuthContext);
 
   const [email , setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,8 +32,6 @@ const Login = () => {
       }        
       )
       .then(response=> {
-        console.log(response?.data)
-        console.log(response?.data.message[0].reason)
         const isAuthenticated = response?.data?.isSuccessful
 
         // For Success
@@ -42,7 +40,6 @@ const Login = () => {
             const userName = response?.data?.requestedObject?.userName
             const userId = response?.data?.requestedObject?.userId
             const roleId = response?.data?.requestedObject?.roleId
-            console.log(accessToken,userName,userId)
             setAuth({ roleId, accessToken, userName, userId, isAuthenticated })
 
             //navigate('/')
@@ -69,7 +66,6 @@ const Login = () => {
       })
       .catch(error=>{
           setLoading(false)
-        console.log(error.response.data)
         const isAuthenticated = error?.response?.data?.isSuccessful
 
         // For Error 

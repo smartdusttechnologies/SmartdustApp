@@ -232,7 +232,6 @@ const NoDataTableRows = (rows) => {
 };
 
 export default function LeavesDataTable({ rows, leavetypes, UpdateLeave }) {
-    console.log(rows , 'props')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);

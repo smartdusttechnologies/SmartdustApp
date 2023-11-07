@@ -3,7 +3,6 @@ import './Home.css'
 import SlickGoTo from '../../components/AutoSlider/AutoSlider'
 import Contact from '../Contact/Contact'
 import Image_Slider_2 from '../../assets/images/Image_Slider_2.webp'
-import LocationMap from '../../components/Localtionmap/Locationmap'
 import { ToastContainer, toast } from 'react-toastify';
 
 const Home = () => {

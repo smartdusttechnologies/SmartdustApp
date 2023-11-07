@@ -36,7 +36,6 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
         });
     };
     const handleCreateClick = () => {
-        console.log(formData, 'formData create leavebalance')
         // Validate the form data
         if (formData.user && formData.leaveType && formData.balance > 0) {
             handleCreate(formData);

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './LeaveDashboard.css'
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import LeaveBalanceMenu from './LeaveDashboardComponents/LeaveBalance'
-import { Button, Box } from '@mui/material'
+import {  Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import LeavesDataTable from './LeaveDashboardComponents/LeavesTable';
@@ -30,7 +30,6 @@ const LeaveDashboard = () => {
                 setLoading(false)
             })
             .catch(error => {
-                console.log(error)
                 if (error.response && error.response.status === 401) {
                     // Handle 401 Unauthorized error
                     navigate('/unauthorizedpage')
@@ -45,11 +44,9 @@ const LeaveDashboard = () => {
             }
         })
             .then(response => {
-                console.log(response.data.requestedObject , 'Leave Balance')
                 setLeavebalance(response?.data?.requestedObject)
             })
             .catch(error => {
-                console.log(error)
             })
     }
 
@@ -60,11 +57,9 @@ const LeaveDashboard = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.requestedObject, 'GetLeaveTypes')
                 setLeaveTypes(response?.data?.requestedObject)
             })
             .catch(error => {
-                console.log(error)
             })
     };
 
@@ -89,13 +84,11 @@ const LeaveDashboard = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.message[0]?.reason)
                 handleGetLeaves()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
             })
             .catch(error => {
-                console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })

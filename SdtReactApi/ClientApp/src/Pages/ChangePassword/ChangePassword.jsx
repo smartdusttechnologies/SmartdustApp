@@ -24,7 +24,6 @@ const ChangePassword = () => {
   const handleSubmit = (e)=>{
     e.preventDefault()
     setLoading(true)
-    console.log(oldPassword,newPassword,confirmPassword,auth.userName,auth.userId)
 
     axios.post(api , {
       oldPassword,
@@ -36,8 +35,6 @@ const ChangePassword = () => {
        headers: {"Authorization" : `${auth.accessToken}`}
     })
     .then(response=>{
-      console.log(response?.data)
-      console.log(response?.data.message[0].reason)
       const isSuccessful = response?.data.isSuccessful
 
       // For Success
@@ -57,7 +54,6 @@ const ChangePassword = () => {
       }
     })
     .catch(error =>{
-        console.log(error)
         setLoading(false)
       const isSuccessful = error.response?.data.isSuccessful
 

@@ -36,7 +36,6 @@ export default function EditLeave({ rowData, leavetypes, UpdateLeave }) {
 
     const handleClickOpen = () => {
         setOpen(true);
-        console.log(rowData,'editable data')
     };
 
     const handleClose = () => {
@@ -46,7 +45,6 @@ export default function EditLeave({ rowData, leavetypes, UpdateLeave }) {
     const handleFileChange = (e) => {
         const filesArray = Array.from(e.target.files);
         setFile(filesArray);
-        console.log(filesArray);
     };
     const handleDeleteFile = (indexToDelete) => {
         setFile(file?.filter((file, index) => index !== indexToDelete));
@@ -109,7 +107,6 @@ export default function EditLeave({ rowData, leavetypes, UpdateLeave }) {
                 // Upload files and get AttachedFileIDs
                 axios.post('api/document/FileUpload', formData)
                     .then(response => {
-                        console.log(response.data);
                         // Call ApplyLeave with AttachedFileIDs
                         UpdateLeave([...updatedAttachedFileIDs, ...response.data], rowData.id, updatedLeaveType, updatedReason, updatedLeaveDates );
                     })

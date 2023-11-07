@@ -247,7 +247,6 @@ const NoDataTableRows = (rows) => {
 };
 
 export default function EmployeeLeaveTable({ rows, actionRows, handleUpdatestatus }) {
-    console.log(rows, 'Employee Leaves')
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);

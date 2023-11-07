@@ -42,7 +42,6 @@ const Contact = () => {
 
   const handleSubmit = (e)=>{
     e.preventDefault()
-    console.log(userdata)
     
     if(validateForm()){
       setLoading(true)
@@ -59,8 +58,6 @@ const Contact = () => {
           }
       })
       .then(response=>{
-        console.log(response?.data)
-        console.log(response?.data.message[0].reason)
         const isSuccessful = response?.data.requestedObject
 
         // For Success
@@ -98,26 +95,6 @@ const Contact = () => {
           setNotification([...notification, {message : error.response?.data.message[0].reason , success : error?.response.data.requestedObject}])
         }
 
-        // console.log(error?.response.data?.errors)
-        // const errormessages = error?.response.data?.errors
-        // if(errormessages){
-        //   for(let key in errormessages){
-        //     console.log(errormessages[key][0])
-        //     let msg = errormessages[key][0]
-        //     toast.error(msg,{
-        //       position: "bottom-center",
-        //       autoClose: 5000,
-        //       hideProgressBar: true,
-        //       closeOnClick: true,
-        //       pauseOnHover: false,
-        //       draggable: true,
-        //       progress: undefined,
-        //       theme: "dark",
-        //     });
-        //     setNotification([...notification, {message:msg,success:false}])
-        //     break;
-        //   }
-        // }
       })
     }
     

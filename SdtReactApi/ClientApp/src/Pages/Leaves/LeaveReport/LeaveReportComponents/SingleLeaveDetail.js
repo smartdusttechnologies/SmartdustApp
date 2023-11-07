@@ -22,7 +22,6 @@ export default function SingleLeaveDetail({ rows }) {
 
     const handleClickOpen = () => {
         setOpen(true);
-        console.log(rows, 'Single Leave Details')
     };
 
     const handleClose = () => {

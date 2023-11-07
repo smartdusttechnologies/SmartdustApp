@@ -13,7 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 const signupapi = 'api/security/SignUp';
 
 const Signup = () => {
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+  const { notification , setNotification} = useContext(AuthContext)
   const navigate = useNavigate()
 
   const [newuser , setNewuser] = useState({
@@ -32,11 +32,9 @@ const Signup = () => {
 
 
   const handleChange = (e)=>{
-    console.log(e)
     const newdata = {...newuser}
     newdata[e.target.name] = e.target.value
     setNewuser(newdata)
-    console.log(newuser)
   }
 
     const handleSubmit = (e) => {
@@ -58,8 +56,6 @@ const Signup = () => {
                 newPassword: newuser.confirmpassword
             })
                 .then(response => {
-                    console.log(response?.data)
-                    console.log(response?.data.message[0].reason)
                     const isSuccessful = response?.data.isSuccessful
 
                     // For Success
@@ -84,7 +80,6 @@ const Signup = () => {
                 })
                 .catch(error => {
                     setLoading(false)
-                    console.log(error)
                     const isSuccessful = error.response?.data.isSuccessful
 
                     // For Error 
@@ -119,11 +114,9 @@ const Signup = () => {
   const handleGetOrganizations = ()=>{
       axios.get('api/home/GetOrganizations')
     .then(response=>{
-      console.log(response?.data?.requestedObject)
       setOrganizations(response?.data?.requestedObject)
     })
     .catch(error=>{
-      console.log(error)
     })
   }
 

@@ -2,12 +2,8 @@ import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import './EmployeeDashboard.css'
 import { useNavigate } from 'react-router-dom'
-import { Divider, InputLabel, TextField, Box, FormControl, MenuItem, Select } from '@mui/material'
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
-import Button from '@mui/joy/Button';
+import { Box} from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify';
-import dayjs from 'dayjs';
-import Chip from '@mui/material/Chip';
 import AuthContext from '../../../context/AuthProvider'
 import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
 import EmployeeManagerTable from './EmployeeDashboardcomponents/EmployeeManagerTable';
@@ -35,13 +31,11 @@ const EmployeeDashboardPage = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.message[0]?.reason)
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
             })
             .catch(error => {
-                console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
@@ -60,19 +54,16 @@ const EmployeeDashboardPage = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.message[0]?.reason)
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
             })
             .catch(error => {
-                console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
     }
     const handleDelete = (id) => {
-        console.log(id , 'asdfsdf')
         axios.post(`api/leave/DeleteManagerAndEmployeeData`, {
             id: id,
             managerId: 1,
@@ -85,13 +76,11 @@ const EmployeeDashboardPage = () => {
             }
         })
             .then(response => {
-                console.log(response)
                 handleGetManagerAndEmployeeData()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
             })
             .catch(error => {
-                console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
@@ -103,11 +92,9 @@ const EmployeeDashboardPage = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.requestedObject, 'handleGetUsers')
                 setUsers(response?.data?.requestedObject)
             })
             .catch(error => {
-                console.log(error)
             })
     }
     const handleGetManagerAndEmployeeData = () => {
@@ -118,12 +105,10 @@ const EmployeeDashboardPage = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.requestedObject, 'GetManagerAndEmployeeData')
                 setManagerAndEmployeeData(response?.data?.requestedObject)
                 setLoading(false)
             })
             .catch(error => {
-                console.log(error)
                 if (error.response && error.response.status === 401) {
                     // Handle 401 Unauthorized error
                     navigate('/unauthorizedpage')

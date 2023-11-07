@@ -6,7 +6,6 @@ const ForgotPassword = () => {
   const [regemail , setEmail] = useState("")
   const [otp , setOtp] = useState(0)
 
-  // console.log(regemail , otp);
   const handleEmailSubmit = ()=>{
     
   }

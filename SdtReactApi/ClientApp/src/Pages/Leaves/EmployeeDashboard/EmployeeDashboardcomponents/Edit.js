@@ -1,17 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react'
-import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState } from 'react'
+import { ToastContainer } from 'react-toastify';
 import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
-import { TextField, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {  FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 
 export default function Edit({ data, users, handleUpdate }) {
     const [open, setOpen] = React.useState(false);
@@ -24,7 +21,6 @@ export default function Edit({ data, users, handleUpdate }) {
 
     const handleClickOpen = () => {
         setOpen(true);
-        console.log(data, 'Edit Data')
     };
 
     const handleClose = () => {
@@ -40,7 +36,6 @@ export default function Edit({ data, users, handleUpdate }) {
         });
     };
     const handleUpdateClick = () => {
-        console.log(formData, 'formData edit')
         handleUpdate(formData);
         //handleClose();
     };

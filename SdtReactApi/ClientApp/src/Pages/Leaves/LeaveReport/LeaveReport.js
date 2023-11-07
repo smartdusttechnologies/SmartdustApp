@@ -2,13 +2,10 @@ import React, { useContext, useState, useEffect } from 'react'
 import './LeaveReport.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { Divider, InputLabel, TextField, Box } from '@mui/material'
+import { Box } from '@mui/material'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
-import Button from '@mui/joy/Button';
 import { ToastContainer, toast } from 'react-toastify';
-import dayjs from 'dayjs';
-import Chip from '@mui/material/Chip';
-import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import AuthContext from '../../../context/AuthProvider'
 import LoadingProgress from '../../../components/LoadingProgress/LoadingProgress';
 import EmployeeLeaveTable from './LeaveReportComponents/EmployeeLeaveTable';
@@ -35,7 +32,6 @@ const LeaveReport = () => {
         });
 
         setEmployeeRows(filteredRows);
-        console.log('filtering')
     };
 
     const handleGetEmployeeLeave = () => {
@@ -46,12 +42,10 @@ const LeaveReport = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.requestedObject, 'Employee Leaves')
                 setEmployeeRows(response?.data?.requestedObject)
                 setLoading(false)
             })
             .catch(error => {
-                console.log(error)
                 if (error.response && error.response.status === 401) {
                     // Handle 401 Unauthorized error
                     navigate('/unauthorizedpage')
@@ -66,11 +60,9 @@ const LeaveReport = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.requestedObject, 'GetManagerLeaveStatusActions')
                 setActionsRows(response?.data?.requestedObject)
             })
             .catch(error => {
-                console.log(error)
             })
     }
 
@@ -85,13 +77,11 @@ const LeaveReport = () => {
             }
         })
             .then(response => {
-                console.log(response?.data?.message[0]?.reason)
                 handleGetEmployeeLeave()
                 toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
             })
             .catch(error => {
-                console.log(error)
                 toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
                 setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
             })
