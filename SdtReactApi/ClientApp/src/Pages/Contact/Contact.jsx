@@ -61,18 +61,19 @@ const Contact = () => {
         const isSuccessful = response?.data.requestedObject
 
         // For Success
-        if(isSuccessful){
-          toast.success(response?.data.message[0].reason,{
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
+          if (isSuccessful) {
+              const messages = response?.data?.message;
+
+              if (messages && messages.length > 0) {
+                  const newNotifications = [];
+                  for (let i = 0; i < messages.length; i++) {
+                      if (i < 3) {
+                          toast.success(messages[i].reason, { position: "bottom-center", theme: "dark" });
+                      }
+                      newNotifications.push({ message: messages[i].reason, success: true });
+                  }
+                  setNotification([...notification, ...newNotifications]);
+              }
           setUserdata(initialState)
           setLoading(false)
         }
@@ -81,18 +82,19 @@ const Contact = () => {
         setLoading(false)
 
         // For Error 
-        if(!error?.response.data.requestedObject){
-          toast.error(error.response?.data.message[0].reason,{
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          setNotification([...notification, {message : error.response?.data.message[0].reason , success : error?.response.data.requestedObject}])
+          if (!error?.response.data.requestedObject) {
+              const messages = error?.response?.data?.message;
+
+              if (messages && messages.length > 0) {
+                  const newNotifications = [];
+                  for (let i = 0; i < messages.length; i++) {
+                      if (i < 3) {
+                          toast.error(messages[i].reason, { position: "bottom-center", theme: "dark" });
+                      }
+                      newNotifications.push({ message: messages[i].reason, success: false });
+                  }
+                  setNotification([...notification, ...newNotifications]);
+              }
         }
 
       })

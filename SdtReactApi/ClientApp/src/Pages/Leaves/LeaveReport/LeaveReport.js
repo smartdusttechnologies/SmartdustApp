@@ -78,12 +78,32 @@ const LeaveReport = () => {
         })
             .then(response => {
                 handleGetEmployeeLeave()
-                toast.success(response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: response?.data?.message[0]?.reason, success: true }])
+                const messages = response?.data?.message;
+
+                if (messages && messages.length > 0) {
+                    const newNotifications = [];
+                    for (let i = 0; i < messages.length; i++) {
+                        if (i < 3) {
+                            toast.success(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                        }
+                        newNotifications.push({ message: messages[i].reason, success: true });
+                    }
+                    setNotification([...notification, ...newNotifications]);
+                }
             })
             .catch(error => {
-                toast.error(error?.response?.data?.message[0]?.reason, { position: "bottom-center", theme: "dark" });
-                setNotification([...notification, { message: error?.response?.data?.message[0]?.reason, success: false }])
+                const messages = error?.response?.data?.message;
+
+                if (messages && messages.length > 0) {
+                    const newNotifications = [];
+                    for (let i = 0; i < messages.length; i++) {
+                        if (i < 3) {
+                            toast.error(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                        }
+                        newNotifications.push({ message: messages[i].reason, success: false });
+                    }
+                    setNotification([...notification, ...newNotifications]);
+                }
             })
     };
 

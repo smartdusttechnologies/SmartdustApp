@@ -18,7 +18,6 @@ const ChangePassword = () => {
   const [oldPassword , setOldpassword] = useState('');
   const [newPassword , setNewpassword] = useState('');
   const [confirmPassword , setConfirmpassword] = useState('');
-  const [msg , setMsg] = useState('');
 
 
   const handleSubmit = (e)=>{
@@ -35,21 +34,22 @@ const ChangePassword = () => {
        headers: {"Authorization" : `${auth.accessToken}`}
     })
     .then(response=>{
-      const isSuccessful = response?.data.isSuccessful
+      const isSuccessful = response?.data?.isSuccessful
 
       // For Success
-      if(isSuccessful){
-        toast.success(response?.data.message[0].reason,{
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-          setNotification([...notification, { message: response?.data.message[0].reason, success: isSuccessful }])
+        if (isSuccessful) {
+            const messages = response?.data?.message;
+
+            if (messages && messages.length > 0) {
+                const newNotifications = [];
+                for (let i = 0; i < messages.length; i++) {
+                    if (i < 3) {
+                        toast.success(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                    }
+                    newNotifications.push({ message: messages[i].reason, success: true });
+                }
+                setNotification([...notification, ...newNotifications]);
+            }
           setLoading(false)
       }
     })
@@ -58,18 +58,19 @@ const ChangePassword = () => {
       const isSuccessful = error.response?.data.isSuccessful
 
       // For Error 
-      if(!isSuccessful){
-        toast.error(error.response?.data.message[0].reason,{
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-        setNotification([...notification, {message:error.response?.data.message[0].reason,success:isSuccessful}])
+        if (!isSuccessful) {
+            const messages = error?.response?.data?.message;
+
+            if (messages && messages.length > 0) {
+                const newNotifications = [];
+                for (let i = 0; i < messages.length; i++) {
+                    if (i < 3) {
+                        toast.error(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                    }
+                    newNotifications.push({ message: messages[i].reason, success: false });
+                }
+                setNotification([...notification, ...newNotifications]);
+            }
       }
 
     })
