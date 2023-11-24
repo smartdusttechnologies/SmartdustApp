@@ -12,7 +12,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 export default function Edit({ data, users, handleUpdate }) {
     const [open, setOpen] = React.useState(false);
-    const [isLoading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         Id: data?.id,
         setemployee: data?.employeeID,
@@ -29,7 +28,6 @@ export default function Edit({ data, users, handleUpdate }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        //const parsedValue = name === 'balance' ? parseInt(value, 10) : value;
         setFormData({
             ...formData,
             [name]: value,
@@ -37,7 +35,6 @@ export default function Edit({ data, users, handleUpdate }) {
     };
     const handleUpdateClick = () => {
         handleUpdate(formData);
-        //handleClose();
     };
 
 

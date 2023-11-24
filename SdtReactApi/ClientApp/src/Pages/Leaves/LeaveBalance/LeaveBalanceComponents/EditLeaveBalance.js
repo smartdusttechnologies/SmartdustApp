@@ -33,7 +33,6 @@ export default function EditLeaveBalance({ data, leavetypes, employeeDetails, ha
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        //const parsedValue = name === 'balance' ? parseInt(value, 10) : value;
         setFormData({
             ...formData,
             [name]: value,
@@ -50,7 +49,6 @@ export default function EditLeaveBalance({ data, leavetypes, employeeDetails, ha
             <Tooltip title="Edit">
                 <span>
                     <IconButton
-                        //disabled={rowData.leaveStatus !== "Pending" && rowData.leaveStatus !== "Deny"}
                         variant="outlined"
                         onClick={handleClickOpen}
                     >
@@ -96,7 +94,6 @@ export default function EditLeaveBalance({ data, leavetypes, employeeDetails, ha
                             <Select
                                 label='Leave Type'
                                 name='leaveType'
-                                name="leaveType"
                                 value={formData.leaveType}
                                 onChange={(e) => handleChange(e)}
                                 required

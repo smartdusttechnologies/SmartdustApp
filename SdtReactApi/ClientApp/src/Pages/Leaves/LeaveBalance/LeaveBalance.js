@@ -106,9 +106,9 @@ const LeaveBalancePage = () => {
     const handleDelete = (id) => {
         axios.post(`api/leave/DeleteLeaveBalance`, {
             id: id,
-            userId: 1,
+            userId: 0,
             leavetype: '',
-            available: 1,
+            available: 0,
             userName: ''
         }, {
             headers: {

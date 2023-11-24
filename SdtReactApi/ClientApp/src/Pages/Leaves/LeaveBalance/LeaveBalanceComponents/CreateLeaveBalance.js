@@ -66,7 +66,6 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
                 <Divider />
                 <DialogContent>
                     <div
-                        //onSubmit={() => handleCreateClick }
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -122,7 +121,6 @@ const CreateLeaveBalance = ({ leavetypes, handleCreate, employeeDetails }) => {
                         <Button
                             type='submit'
                             onClick={() => handleCreateClick()}
-                            //loading={isLoading}
                         >
                             Create
                         </Button>

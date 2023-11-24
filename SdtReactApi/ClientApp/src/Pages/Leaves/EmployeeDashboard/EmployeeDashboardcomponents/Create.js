@@ -61,7 +61,6 @@ const Create = ({ users, handleCreate }) => {
                 <Divider />
                 <DialogContent>
                     <div
-                        //onSubmit={() => handleCreateClick }
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -105,7 +104,6 @@ const Create = ({ users, handleCreate }) => {
                         <Button
                             type='submit'
                             onClick={() => handleCreateClick()}
-                        //loading={isLoading}
                         >
                             Create
                         </Button>

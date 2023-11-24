@@ -252,7 +252,6 @@ const LeaveApplication = () => {
                     <Select
                         label='Leave Type'
                         name='leaveType'
-                        //value={leaveData.leaveType}
                         onChange={(e) => handleChange(e)}
                         required
                     >

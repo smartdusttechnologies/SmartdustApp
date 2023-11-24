@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import './Login.css'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import AuthContext from '../../context/AuthProvider';
 import { TextField } from '@mui/material';
