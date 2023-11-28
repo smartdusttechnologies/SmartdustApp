@@ -147,6 +147,10 @@ const LeaveBalancePage = () => {
                 setEmployeeDetails(response?.data?.requestedObject)
             })
             .catch(error => {
+                if (error.response && error.response.status === 401) {
+                    // Handle 401 Unauthorized error
+                    navigate('/unauthorizedpage')
+                }
             })
     }
     const handleGetEmployeeLeaveBalance = () => {
