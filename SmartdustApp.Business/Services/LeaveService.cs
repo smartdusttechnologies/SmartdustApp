@@ -67,6 +67,7 @@ namespace SmartdustApp.Business.Services
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
+            leave.AppliedDate = DateTime.Now;
             var validationResult = ValidateLeaveDate(leave);
             if (!validationResult.IsSuccessful)
             {
@@ -120,6 +121,7 @@ namespace SmartdustApp.Business.Services
             {
                 throw new UnauthorizedAccessException("You're Unauthorized");
             }
+            leave.AppliedDate = DateTime.Now;
             var validationResult = ValidateLeaveDate(leave);
             if (!validationResult.IsSuccessful)
             {
