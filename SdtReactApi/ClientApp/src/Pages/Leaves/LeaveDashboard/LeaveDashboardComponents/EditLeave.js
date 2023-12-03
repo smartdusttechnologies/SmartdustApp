@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker, StaticDatePicker, DatePicker } from '@mui/x-date-pickers';
+import { MobileDatePicker,  } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import AuthContext from '../../../../context/AuthProvider';
@@ -145,7 +145,7 @@ export default function EditLeave({ rowData, leavetypes, UpdateLeave }) {
                         return response.blob();
                     } else {
                         // Handle other response statuses (e.g., error handling)
-                        throw new Error('Failed to download document');
+                        toast.error('Failed to download document', { position: "bottom-center" });
                     }
                 })
                 .then(blob => {

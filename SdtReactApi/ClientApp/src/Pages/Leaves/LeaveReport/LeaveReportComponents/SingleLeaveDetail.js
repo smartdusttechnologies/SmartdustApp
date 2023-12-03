@@ -1,20 +1,18 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
-import { TextField } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
-import axios from 'axios'
 import dayjs from 'dayjs';
 import DownloadIcon from '@mui/icons-material/Download';
 import AuthContext from '../../../../context/AuthProvider';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function SingleLeaveDetail({ rows }) {
     const [open, setOpen] = React.useState(false);
@@ -53,7 +51,7 @@ export default function SingleLeaveDetail({ rows }) {
                         return response.blob();
                     } else {
                         // Handle other response statuses (e.g., error handling)
-                        throw new Error('Failed to download document');
+                        toast.error('Failed to download document', { position: "bottom-center" });
                     }
                 })
                 .then(blob => {
@@ -155,6 +153,7 @@ export default function SingleLeaveDetail({ rows }) {
                     </div>
                 </DialogContent>
             </Dialog>
+            <ToastContainer />
         </div>
     );
 }
