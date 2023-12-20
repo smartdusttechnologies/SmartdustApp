@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
-import './EmployeeDashboard.css'
 import { useNavigate } from 'react-router-dom'
 import { Box} from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify';
