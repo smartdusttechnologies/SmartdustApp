@@ -9,12 +9,13 @@ namespace SmartdustApp.Web.UI.Mappers
     {
         public MappingProfile()
         {
-           CreateMap<UserDTO,UserModel>().ReverseMap();
+            CreateMap<UserDTO,UserModel>().ReverseMap();
             CreateMap<LeaveDTO,LeaveModel>().ReverseMap();
             CreateMap<UpdateLeaveStatusDTO, UpdateLeaveModel>().ReverseMap();
             CreateMap<LeaveBalanceDTO, LeaveBalance>().ReverseMap();
             CreateMap<EmployeeDTO, EmployeeTable>().ReverseMap();
             CreateMap<ContactDTO, ContactModel>().ReverseMap();
+            CreateMap<ChangePasswordDTO, ChangePasswordModel>().ReverseMap();
         }
     }
 }

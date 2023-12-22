@@ -49,18 +49,6 @@ namespace SmartdustApp.Controllers
         public IActionResult ApplyLeave(LeaveDTO leave)
         {
             var leaveModel = _mapper.Map<LeaveDTO, LeaveModel>(leave);
-            //var leaveModel = new LeaveModel()
-            //{
-            //    UserID = leave.UserID,
-            //    UserName = leave.UserName,
-            //    LeaveTypeID = leave.LeaveTypeID,
-            //    Reason = leave.Reason,
-            //    LeaveStatus = leave.LeaveStatus,
-            //    LeaveStatusID = leave.LeaveStatusID,
-            //    LeaveDays = leave.LeaveDays,
-            //    LeaveDates = leave.LeaveDates,
-            //    AttachedFileIDs = leave.AttachedFileIDs,
-            //};
             var result = _leaveService.Save(leaveModel);
             if (result.IsSuccessful)
             {
@@ -75,19 +63,6 @@ namespace SmartdustApp.Controllers
         public IActionResult UpdateLeave(LeaveDTO leave)
         {
             var leaveModel = _mapper.Map<LeaveDTO, LeaveModel>(leave);
-            //var leaveModel = new LeaveModel()
-            //{
-            //    ID = leave.ID,
-            //    UserID = leave.UserID,
-            //    UserName = leave.UserName,
-            //    LeaveTypeID = leave.LeaveTypeID,
-            //    Reason = leave.Reason,
-            //    LeaveStatus = leave.LeaveStatus,
-            //    LeaveStatusID = leave.LeaveStatusID,
-            //    LeaveDays = leave.LeaveDays,
-            //    LeaveDates = leave.LeaveDates,
-            //    AttachedFileIDs = leave.AttachedFileIDs,
-            //};
             var result = _leaveService.Update(leaveModel);
             if (result.IsSuccessful)
             {
@@ -120,12 +95,6 @@ namespace SmartdustApp.Controllers
         public IActionResult UpdateLeaveStatus(UpdateLeaveStatusDTO updateStatus)
         {
             var updateStatusModel = _mapper.Map<UpdateLeaveStatusDTO, UpdateLeaveModel>(updateStatus);
-            //var updateStatusModel = new UpdateLeaveModel()
-            //{
-            //    LeaveID = updateStatus.LeaveID,
-            //    StatusID = updateStatus.StatusID,
-            //    Comment = updateStatus.Comment,
-            //};
             var result = _leaveService.UpdateLeaveStatus(updateStatusModel);
             if (result.IsSuccessful)
             {
@@ -193,13 +162,6 @@ namespace SmartdustApp.Controllers
         public IActionResult CreateLeaveBalance(LeaveBalanceDTO leavebalance)
         {
             var leavebalanceModel = _mapper.Map<LeaveBalanceDTO, LeaveBalance>(leavebalance);
-            //var leavebalanceModel = new LeaveBalance()
-            //{
-            //    UserID = leavebalance.UserID,
-            //    UserName = leavebalance.UserName,
-            //    LeaveType = leavebalance.LeaveType,
-            //    Available = leavebalance.Available,
-            //};
             var result = _leaveService.CreateLeaveBalance(leavebalanceModel);
             if (result.IsSuccessful)
             {
@@ -214,14 +176,6 @@ namespace SmartdustApp.Controllers
         public IActionResult UpdateLeaveBalance(LeaveBalanceDTO leavebalance)
         {
             var leavebalanceModel = _mapper.Map<LeaveBalanceDTO, LeaveBalance>(leavebalance);
-            //var leavebalanceModel = new LeaveBalance()
-            //{
-            //    ID = leavebalance.ID,
-            //    UserID = leavebalance.UserID,
-            //    UserName = leavebalance.UserName,
-            //    LeaveType = leavebalance.LeaveType,
-            //    Available = leavebalance.Available,
-            //};
             var result = _leaveService.UpdateLeaveBalance(leavebalanceModel);
             if (result.IsSuccessful)
             {
@@ -317,12 +271,6 @@ namespace SmartdustApp.Controllers
         public IActionResult CreateManagerAndEmployeeData(EmployeeDTO employeeData)
         {
             var employeeModel = _mapper.Map<EmployeeDTO, EmployeeTable>(employeeData);
-            //var employeeModel = new EmployeeTable()
-            //{
-            //    ID = employeeData.ID,
-            //    ManagerID = employeeData.ManagerID,
-            //    EmployeeID = employeeData.EmployeeID,
-            //};
             var result = _leaveService.CreateManagerAndEmployeeData(employeeModel);
             if (result.IsSuccessful)
             {
@@ -337,12 +285,6 @@ namespace SmartdustApp.Controllers
         public IActionResult EditManagerAndEmployeeData(EmployeeDTO employeeData)
         {
             var employeeModel = _mapper.Map<EmployeeDTO, EmployeeTable>(employeeData);
-            //var employeeModel = new EmployeeTable()
-            //{
-            //    ID = employeeData.ID,
-            //    ManagerID = employeeData.ManagerID,
-            //    EmployeeID = employeeData.EmployeeID,
-            //};
             var result = _leaveService.EditManagerAndEmployeeData(employeeModel);
             if (result.IsSuccessful)
             {
