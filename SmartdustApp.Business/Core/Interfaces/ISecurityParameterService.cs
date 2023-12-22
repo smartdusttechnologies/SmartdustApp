@@ -8,5 +8,8 @@ namespace SmartdustApp.Business.Core.Interfaces
     {
         RequestResult<bool> ValidatePasswordPolicy(int orgId, string password);
         RequestResult<bool> ChangePaaswordPolicy(ChangePasswordModel password);
+
+        RequestResult<bool> ValidatePhoneNumber(string phoneNumber);
+        RequestResult<bool> ValidateEmail(string email);
     }
 }

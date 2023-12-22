@@ -12,6 +12,10 @@ using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository;
 using TestingAndCalibrationLabs.Business.Core.Interfaces;
 using TestingAndCalibrationLabs.Business.Services;
+using SmartdustApp.Common;
+using Microsoft.AspNetCore.Authorization;
+using SmartdustApp.Business.Services.Security;
+using SmartdustApp.Web.Common;
 
 namespace SmartdustApp
 {
@@ -29,6 +33,7 @@ namespace SmartdustApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(options =>
             {
@@ -53,10 +58,12 @@ namespace SmartdustApp
             //Repository DI
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ILeaveRepository, LeaveRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
             //Service DI
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IConnectionFactory, ConnectionFactory>();
             services.AddScoped<ILeaveService, LeaveService>();
+            services.AddScoped<IDocumentService, DocumentService>();
             //
 
             services.AddScoped<Business.Core.Interfaces.ILogger, Logger>();
@@ -64,6 +71,7 @@ namespace SmartdustApp
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IRoleService, RoleService>();
             //Authorization Handler Initalization Start
+            services.AddScoped<Business.Core.Interfaces.IAuthorizationService, AuthorizationService>();
             //Authorization Handler Initalization End
             services.AddScoped<ISecurityParameterService, SecurityParameterService>();
             //Repository
@@ -78,6 +86,13 @@ namespace SmartdustApp
 
             //Email service
             services.AddScoped<IEmailService, EmailService>();
+
+            //Authorization Handler Initalization Start
+            services.AddScoped<IAuthorizationHandler, LeaveBalanceAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, EmployeeTableAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, EmployeeLeaveAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, LeaveAuthorizationHandler>();
+            //Authorization Handler Initalization End
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,7 +110,11 @@ namespace SmartdustApp
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseHttpsRedirection();
+            //app.UseAuthentication();
             app.UseRouting();
+            app.UseMiddleware<SdtAuthenticationMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapFallbackToFile("index.html");

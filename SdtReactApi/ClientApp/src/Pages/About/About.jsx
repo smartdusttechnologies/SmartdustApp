@@ -1,25 +1,12 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import SlickGoTo from '../../components/AutoSlider/AutoSlider'
 import AuthContext from '../../context/AuthProvider'
-import axios from 'axios'
 
 const api = 'https://localhost:7023/Security'
 
 const About = () => {
   const {auth} = useContext(AuthContext)
 
-  console.log(auth.accessToken)
-      // const handleAuth = ()=>{
-
-      //   axios.get(api, { headers: {"Authorization" : `${auth.accessToken}`} })
-      //   .then(res => {
-      //     console.log(res.data);
-      //     })
-      // }
-  
-      //   useEffect(() => {
-      //     handleAuth()
-      //   })
 
   return (
     <div className='About-page'>

@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthProvider';
 import UserAccountMenu from '../UserProfile/UserAccountMenu';
 import NotificationBellMenu from '../NotificationBell/NotificationBellMenu';
+import AbsenceMenu from '../AbsenceMenu/AbsenceMenu';
 
 export default function Drawer() {
   const {auth} = React.useContext(AuthContext);
@@ -37,7 +38,6 @@ export default function Drawer() {
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 , backgroundColor:'black' }}
       role="presentation"
-      // onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List className='drawer-menu'>
@@ -45,9 +45,9 @@ export default function Drawer() {
         {!auth.isAuthenticated && (<Link to={'/login'}><ListItem>Sign in</ListItem></Link>)}
         <Link to={'/contact'}><ListItem>Contact</ListItem></Link>
         <Link to={'/about'}><ListItem>About</ListItem></Link>
+              {auth.isAuthenticated && <AbsenceMenu color="white" fontWeight="500" />}
         <NotificationBellMenu/>
         <UserAccountMenu/>
-        
       </List>
     </Box>
   );

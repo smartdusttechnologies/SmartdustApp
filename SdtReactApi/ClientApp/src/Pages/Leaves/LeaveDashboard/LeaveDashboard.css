@@ -20,3 +20,14 @@
 .leaveboard-head h1{
     font-family: sans-serif;
 }
+
+@media screen and (min-width:101px) and (max-width:600px) {
+    .leaveboard-head{
+        height: 10rem;
+    }
+    .leaveboard-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+}

@@ -30,8 +30,8 @@
 }
 
 @media screen and (min-width:101px) and (max-width:600px){
-    .Footer-body{
-        width: 390px;
+    .Footer-body {
+        width: 100%;
         height: 25vh;
     }
 

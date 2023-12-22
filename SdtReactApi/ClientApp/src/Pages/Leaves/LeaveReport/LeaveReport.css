@@ -1,0 +1,19 @@
+﻿.heading{
+    width:80%;
+    margin:auto
+}
+.filtering-options {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom:30px;
+}
+.filtering-options button{
+    height:40px;
+}
+.range-pickers {
+    display: flex;
+    gap: 30px;
+}

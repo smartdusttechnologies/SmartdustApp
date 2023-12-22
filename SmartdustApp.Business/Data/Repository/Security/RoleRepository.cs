@@ -85,7 +85,7 @@ namespace SmartdustApp.Business.Repository
                                 inner join [GroupClaim] gc on gc.GroupId = g.GroupId
                                 inner join [PermissionModuleType] pmt on pmt.Name = @permissionModuleType
 								inner join [SubPermissionModuleType] spmt on pmt.Id = spmt.PermissionModuleTypeId and spmt.Name = @subPermissionModuleType
-                                inner join [Permission] p on p.Id = gc.PermissionId and p.PermissionModuleTypeId=spmt.Id
+                                inner join [Permission] p on p.Id = gc.PermissionId and p.PermissionModuleTypeId=pmt.Id
                                 inner join [PermissionType] pt on pt.Id = p.PermissionTypeId
                             where g.UserId=@userId
                                 and gc.ClaimTypeId=@claimType
@@ -108,7 +108,7 @@ namespace SmartdustApp.Business.Repository
                                 inner join [UserClaim] uc on uc.userId = u.Id
                                 inner join [PermissionModuleType] pmt on pmt.Name = @permissionModuleType
                                 inner join [SubPermissionModuleType] spmt on pmt.Id = spmt.PermissionModuleTypeId and spmt.Name = @subPermissionModuleType
-								inner join [Permission] p on p.Id = uc.PermissionId and p.PermissionModuleTypeId=spmt.Id
+								inner join [Permission] p on p.Id = uc.PermissionId and p.PermissionModuleTypeId=pmt.Id
                                 inner join [PermissionType] pt on pt.Id = p.PermissionTypeId
                             where u.Id=@userId 
                                 and u.OrgId=@organizationId
@@ -131,7 +131,7 @@ namespace SmartdustApp.Business.Repository
                                 inner join [RoleClaim] urc on urc.RoleId = ur.RoleId
                                 inner join [PermissionModuleType] pmt on pmt.Name = @permissionModuleType
                                 inner join [SubPermissionModuleType] spmt on pmt.Id = spmt.PermissionModuleTypeId and spmt.Name = @subPermissionModuleType
-                                inner join [Permission] p on p.Id = urc.PermissionId and p.PermissionModuleTypeId=spmt.Id
+                                inner join [Permission] p on p.Id = urc.PermissionId and p.PermissionModuleTypeId=pmt.Id
                                 inner join [PermissionType] pt on pt.Id = p.PermissionTypeId
                             where u.Id=@userId
                                 and u.OrgId=@organizationId

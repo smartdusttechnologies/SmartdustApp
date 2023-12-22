@@ -1,25 +1,30 @@
 import React, { useContext, useState } from 'react'
 import './Login.css'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import AuthContext from '../../context/AuthProvider';
 import { TextField } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Button from '@mui/joy/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const loginurl = 'api/security/login';
 
 const Login = () => {
-  const navigate = useNavigate()
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+    const navigate = useNavigate();
+    const { setAuth, notification, setNotification } = useContext(AuthContext);
 
   const [email , setEmail] = useState('');
-  const [password , setPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
   
   const handleSubmit = (e)=>{
-    e.preventDefault()
-    
+      e.preventDefault()
+      setLoading(true)
+
       axios.post(loginurl ,
       {
         userName:email,
@@ -27,54 +32,56 @@ const Login = () => {
       }        
       )
       .then(response=> {
-        console.log(response?.data)
-        console.log(response?.data.message[0].reason)
-        const isAuthenticated = response?.data.isSuccessful
+        const isAuthenticated = response?.data?.isSuccessful
 
         // For Success
         if(isAuthenticated){
-          const accessToken = response?.data.requestedObject.accessToken 
-          const userName = response?.data.requestedObject.userName
-          const userId = response?.data.requestedObject.userId
-          console.log(accessToken,userName,userId)
-          setAuth({accessToken , userName , userId , isAuthenticated})
-          toast.success(response?.data.message[0].reason,{
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-          setNotification([...notification, {message:response?.data.message[0].reason,success:isAuthenticated}])
+            const accessToken = response?.data?.requestedObject?.accessToken 
+            const userName = response?.data?.requestedObject?.userName
+            const userId = response?.data?.requestedObject?.userId
+            const roleId = response?.data?.requestedObject?.roleId
+            setAuth({ roleId, accessToken, userName, userId, isAuthenticated })
 
+            const messages = response?.data?.message;
+
+            if (messages && messages.length > 0) {
+                const newNotifications = [];
+                for (let i = 0; i < messages.length; i++) {
+                    if (i < 3) {
+                        toast.success(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                    }
+                    newNotifications.push({ message: messages[i].reason, success: true });
+                }
+                setNotification([...notification, ...newNotifications]);
+            }
+
+            setTimeout(() => {
+                navigate('/')
+            }, 1000);
+          setLoading(false)
           setEmail('')
           setPassword('')
           
-          setTimeout(() => {
-            navigate('/')
-          }, 3000);
         }
       })
       .catch(error=>{
-        console.log(error.response.data)
-        const isAuthenticated = error?.response?.data.isSuccessful
+          setLoading(false)
+        const isAuthenticated = error?.response?.data?.isSuccessful
 
         // For Error 
-        if(!isAuthenticated){
-          toast.error(error.response?.data.message[0].reason,{
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-          setNotification([...notification, {message:error.response?.data.message[0].reason,success:isAuthenticated}])
+          if (!isAuthenticated) {
+              const messages = error?.response?.data?.message;
+
+              if (messages && messages.length > 0) {
+                  const newNotifications = [];
+                  for (let i = 0; i < messages.length; i++) {
+                      if (i < 3) {
+                          toast.error(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                      }
+                      newNotifications.push({ message: messages[i].reason, success: false });
+                  }
+                  setNotification([...notification, ...newNotifications]);
+              }
         }
       })
   }
@@ -112,7 +119,13 @@ const Login = () => {
            <div> <label htmlFor="">Remember me</label> <input type="checkbox" /></div>
           <Link to={'/forgotpassword'} className='forgot-pass'>Forgot password</Link>
           </div>
-          <input className='submit-btn' type="submit" value={'Sign in'}/>
+            <Button
+              type='submit'
+              color='success'
+              loading={isLoading}
+            >
+              Sign in
+            </Button>
         </form>
         
         <div className='Or-div'>
@@ -131,9 +144,9 @@ const Login = () => {
           <Link to={'/signup'}>Don't have an account? Sign Up</Link>
         </div>
         <div className='why-box'>
-          <p class="why">Why Create an Account?</p>
+          <p className="why">Why Create an Account?</p>
           <div>
-              <p class="ans">
+              <p className="ans">
                   By creating the account you agreed to our
                   <a>Privacy Policy</a>&
                   <a>Cookie Policy</a>
@@ -141,7 +154,13 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+          <ToastContainer />
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isLoading}
+          >
+              <CircularProgress color="inherit" />
+          </Backdrop>
     </div>
   )
 }

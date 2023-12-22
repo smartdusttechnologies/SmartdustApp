@@ -12,6 +12,10 @@ import LeaveDashboard from '../../Pages/Leaves/LeaveDashboard/LeaveDashboard'
 import LeaveApplication from '../../Pages/Leaves/LeaveApplication/LeaveApplication'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import LeaveReport from '../../Pages/Leaves/LeaveReport/LeaveReport'
+import LeaveBalancePage from '../../Pages/Leaves/LeaveBalance/LeaveBalance'
+import EmployeeDashboardPage from '../../Pages/Leaves/EmployeeDashboard/EmployeeDashboard'
+import UnauthorizedPage from '../../Pages/UnauthorizedPage/UnauthorizedPage'
 
 const AllRoutes = () => {
   return (
@@ -20,7 +24,8 @@ const AllRoutes = () => {
       <Route path='/contact' element={<Contact/>}></Route>
       <Route path='/about' element={<About/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
-      <Route path='/signup' element={<Signup/>}></Route>
+          <Route path='/signup' element={<Signup />}></Route>
+          <Route path='/unauthorizedpage' element={<UnauthorizedPage />}></Route>
       <Route
         path='/changepassword'
         element={
@@ -33,21 +38,47 @@ const AllRoutes = () => {
       <Route
         path='/leavedashboard'
         element={
-          //<PrivateRoute>
+          <PrivateRoute>
             <LeaveDashboard/>
-          //</PrivateRoute>
+          </PrivateRoute>
         }
       ></Route>
       <Route
         path='/leaveapplication'
         element={
-          //<PrivateRoute>
-          //</PrivateRoute>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <LeaveApplication/>
-          </LocalizationProvider>
+            <PrivateRoute>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <LeaveApplication/>
+                </LocalizationProvider>
+            </PrivateRoute>
         }
-      ></Route>
+          ></Route>
+          <Route
+              path='/leavereport'
+              element={
+                  <PrivateRoute>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <LeaveReport />
+                      </LocalizationProvider>
+                  </PrivateRoute>
+              }
+          ></Route>
+          <Route
+              path='/leavebalance'
+              element={
+                  <PrivateRoute>
+                          <LeaveBalancePage />
+                  </PrivateRoute>
+              }
+          ></Route>
+          <Route
+              path='/employeedashboard'
+              element={
+                  <PrivateRoute>
+                      <EmployeeDashboardPage />
+                  </PrivateRoute>
+              }
+          ></Route>
     </Routes>
   )
 }

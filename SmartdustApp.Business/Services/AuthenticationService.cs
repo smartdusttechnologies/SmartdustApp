@@ -55,7 +55,7 @@ namespace SmartdustApp.Business.Services
                     validationMessages.Add(new ValidationMessage { Reason = "UserName or password mismatch.", Severity = ValidationSeverity.Error });
                     return new RequestResult<LoginToken>(validationMessages);
                 }
-                if (!user.IsActive && user.Locked)
+                if (!user.IsActive || user.Locked)
                 {
                     validationMessages.Add(new ValidationMessage { Reason = "Access denied.", Severity = ValidationSeverity.Error });
                     return new RequestResult<LoginToken>(validationMessages);
@@ -76,6 +76,7 @@ namespace SmartdustApp.Business.Services
 
                 loginRequest.Id = passwordLogin.UserId;
                 token = GenerateTokens(loginRequest.UserName);
+                token.RoleId = passwordLogin.RoleId;
 
                 //TODO: this should be a async operation and can be made more cross-cutting design feature rather than calling inside the actual feature.
                 loginRequest.LoginDate = DateTime.Now;
@@ -219,6 +220,17 @@ namespace SmartdustApp.Business.Services
                 validationMessages.Add(error);
                 return new RequestResult<bool>(false, validationMessages);
             }
+            var validatePhoneResult = _securityParameterService.ValidatePhoneNumber(user.Mobile);
+            if (!validatePhoneResult.IsSuccessful)
+            {
+                return validatePhoneResult;
+            }
+            var validateEmailResult = _securityParameterService.ValidateEmail(user.Email);
+            if (!validateEmailResult.IsSuccessful)
+            {
+                return validateEmailResult;
+            }
+
             var validatePasswordResult = _securityParameterService.ValidatePasswordPolicy(user.OrgId, user.Password);
             return validatePasswordResult;
         }

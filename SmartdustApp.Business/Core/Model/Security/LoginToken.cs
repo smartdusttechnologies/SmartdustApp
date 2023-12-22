@@ -12,6 +12,11 @@ namespace SmartdustApp.Business.Core.Model
         /// User Name.
         /// </summary>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// Role Id.
+        /// </summary>
+        public int RoleId { get; set; }
         /// <summary>
         /// Access Token.
         /// </summary>

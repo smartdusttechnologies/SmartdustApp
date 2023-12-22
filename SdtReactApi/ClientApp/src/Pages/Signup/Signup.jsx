@@ -6,11 +6,14 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider'
+import Button from '@mui/joy/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const signupapi = 'api/security/SignUp';
 
 const Signup = () => {
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+  const { notification , setNotification} = useContext(AuthContext)
   const navigate = useNavigate()
 
   const [newuser , setNewuser] = useState({
@@ -25,18 +28,18 @@ const Signup = () => {
     confirmpassword:""
   })
   const [organizations , setOrganizations] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
 
   const handleChange = (e)=>{
-    console.log(e)
     const newdata = {...newuser}
     newdata[e.target.name] = e.target.value
     setNewuser(newdata)
-    console.log(newuser)
   }
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setLoading(true)
         if (validateForm()) {
             axios.post(signupapi, {
                 id: 0,
@@ -53,47 +56,47 @@ const Signup = () => {
                 newPassword: newuser.confirmpassword
             })
                 .then(response => {
-                    console.log(response?.data)
-                    console.log(response?.data.message[0].reason)
                     const isSuccessful = response?.data.isSuccessful
 
                     // For Success
                     if (isSuccessful) {
-                        toast.success(response?.data.message[0].reason, {
-                            position: "bottom-center",
-                            autoClose: 5000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: false,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
-                        });
-                        setNotification([...notification, { message: response?.data.message[0].reason, success: isSuccessful }])
+                        const messages = response?.data?.message;
 
+                        if (messages && messages.length > 0) {
+                            const newNotifications = [];
+                            for (let i = 0; i < messages.length; i++) {
+                                if (i < 3) {
+                                    toast.success(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                                }
+                                newNotifications.push({ message: messages[i].reason, success: true });
+                            }
+                            setNotification([...notification, ...newNotifications]);
+                        }
+                        setLoading(false)
                         setTimeout(() => {
                             navigate('/login')
-                        }, 3000);
+                        }, 2000);
                     }
 
                 })
                 .catch(error => {
-                    console.log(error)
+                    setLoading(false)
                     const isSuccessful = error.response?.data.isSuccessful
 
                     // For Error 
                     if (!isSuccessful) {
-                        toast.error(error.response?.data.message[0].reason, {
-                            position: "bottom-center",
-                            autoClose: 5000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: false,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
-                        });
-                        setNotification([...notification, { message: error.response?.data.message[0].reason, success: isSuccessful }])
+                        const messages = error?.response?.data?.message;
+
+                        if (messages && messages.length > 0) {
+                            const newNotifications = [];
+                            for (let i = 0; i < messages.length; i++) {
+                                if (i < 3) {
+                                    toast.error(messages[i].reason, { position: "bottom-center", theme: "colored" });
+                                }
+                                newNotifications.push({ message: messages[i].reason, success: false });
+                            }
+                            setNotification([...notification, ...newNotifications]);
+                        }
                     }
                 })
         }
@@ -113,11 +116,9 @@ const Signup = () => {
   const handleGetOrganizations = ()=>{
       axios.get('api/home/GetOrganizations')
     .then(response=>{
-      console.log(response?.data?.requestedObject)
       setOrganizations(response?.data?.requestedObject)
     })
     .catch(error=>{
-      console.log(error)
     })
   }
 
@@ -149,7 +150,7 @@ const Signup = () => {
 
           <FormControl>
           <InputLabel id="demo-select-small-label">Country</InputLabel>
-                      <Select onChange={(e) => handleChange(e)} size='small' label='Country' name="country" required>
+            <Select onChange={(e) => handleChange(e)} size='small' label='Country' name="country" required>
               <MenuItem value="india">India</MenuItem>
             </Select>
           </FormControl>
@@ -159,7 +160,7 @@ const Signup = () => {
                       <Select onChange={(e) => handleChange(e)} size='small' label='SYSORG' name='org' required>
               {
                 organizations.map((el)=>(
-                  <MenuItem value={el.id}>{el.orgName}</MenuItem>
+                    <MenuItem key={el.id} value={el.id}>{el.orgName}</MenuItem>
                 ))
               }
             </Select>
@@ -167,7 +168,13 @@ const Signup = () => {
 
           <TextField size='small' onChange={(e)=>handleChange(e)} name='password' label='Enter Password' type="password"  required/>
           <TextField size='small' onChange={(e)=>handleChange(e)} name='confirmpassword' label='Re-Enter Password' type="password"  required/>
-          <button className='submit-btn'>Sign up</button>
+          <Button
+            type='submit'
+            color='success'
+            loading={isLoading}
+          >
+            Sign up
+          </Button>
         </form>
         
         <div className='Or-div'>
@@ -182,11 +189,14 @@ const Signup = () => {
           <a className='Google red-login' href=""><p>Google</p></a>
           <a className='Linked-In blue-login' href=""><p>Linked-In</p></a>
         </div>
-        {/* <div className='login'>
-          <Link to={'/login'}>Already have an account? Sign in</Link>
-        </div> */}
       </div>
-      <ToastContainer/>
+          <ToastContainer />
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isLoading}
+          >
+              <CircularProgress color="inherit" />
+          </Backdrop>
     </div>
   )
 }

@@ -24,7 +24,7 @@ namespace SmartdustApp.Controllers
         public IActionResult SignUp(UserDTO user)
         {
             var userModel = _mapper.Map<UserDTO,UserModel>(user);
-           
+            userModel.IsActive = true;
             RequestResult<bool> result = _authenticationService.Add(userModel);
             if (result.IsSuccessful)
             {
@@ -64,14 +64,7 @@ namespace SmartdustApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var changepasswordRequest = new ChangePasswordModel()
-                {
-                    OldPassword = changepasswordDTO.OldPassword,
-                    NewPassword = changepasswordDTO.NewPassword,
-                    ConfirmPassword = changepasswordDTO.ConfirmPassword,
-                    Username = changepasswordDTO.Username,
-                    UserId = changepasswordDTO.UserId,
-                };
+                var changepasswordRequest = _mapper.Map<ChangePasswordDTO,ChangePasswordModel>(changepasswordDTO);
                 var result = _authenticationService.UpdatePaasword(changepasswordRequest);
                 if (result.IsSuccessful)
                 {

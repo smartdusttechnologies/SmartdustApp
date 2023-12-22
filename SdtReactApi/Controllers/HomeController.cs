@@ -26,9 +26,10 @@ namespace SmartdustApp.Controllers
 
         [HttpPost]
         [Route("Contactus")]
-        public IActionResult Contactsus(ContactModel contact)
+        public IActionResult Contactsus(ContactDTO contact)
         {
-            var result = _contactService.Save(contact);
+            var contactModel = _mapper.Map<ContactDTO,ContactModel>(contact);
+            var result = _contactService.Save(contactModel);
             if (result.RequestedObject)
             {
                 return Json(result);

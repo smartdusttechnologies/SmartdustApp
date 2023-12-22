@@ -6,16 +6,13 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthProvider';
 
 export default function UserAccountMenu() {
-  const {setAuth , auth} = React.useContext(AuthContext);
+    const { auth, setAuth, setNotification } = React.useContext(AuthContext);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -24,7 +21,11 @@ export default function UserAccountMenu() {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
+    };
+    const handleLogout = () => {
+        setAuth({ ...auth, isAuthenticated: false })
+        setNotification([])
+    }
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -82,14 +83,6 @@ export default function UserAccountMenu() {
          auth.isAuthenticated && <MenuItem >
             {auth.userName}
           </MenuItem>
-        }  
-        {  
-        //  auth.isAuthenticated && 
-         (<Link to={'/leavedashboard'} style={{textDecoration:"none", color:"grey"}}>
-            <MenuItem >
-              Leave Dashboard
-            </MenuItem>
-          </Link>)
         }
         {  
          auth.isAuthenticated && (<Link to={'/changepassword'} style={{textDecoration:"none", color:"grey"}}>
@@ -99,14 +92,8 @@ export default function UserAccountMenu() {
           </Link>)
         }
         <Divider />
-        <MenuItem >
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
         {
-         auth.isAuthenticated && (<MenuItem onClick={()=>setAuth({...auth , isAuthenticated : false})}>
+         auth.isAuthenticated && (<MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

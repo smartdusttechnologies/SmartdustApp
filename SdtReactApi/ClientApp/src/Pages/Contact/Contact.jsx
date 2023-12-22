@@ -4,7 +4,6 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
 import LocationMap from '../../components/Localtionmap/Locationmap';
 import Button from '@mui/joy/Button';
 
@@ -21,23 +20,28 @@ const initialState = {
 }
 
 const Contact = () => {
-  const navigate = useNavigate()
-  const {auth , setAuth , notification , setNotification} = useContext(AuthContext)
+  const {auth  , notification , setNotification} = useContext(AuthContext)
 
   // User Details 
   const [userdata , setUserdata] = useState(initialState)
-  const [loading , setLoading] = useState(false)
+  const [isLoading , setLoading] = useState(false)
 
-  const handleChange = (e)=>{
-    const newdata = {...userdata }
-    newdata[e.target.id] = e.target.value
-    setUserdata(newdata);
-    console.log(userdata);
-  }
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        const newdata = { ...userdata };
+
+        // Check if the field is 'phone' and convert its value to a number
+        if (id === 'phone') {
+            newdata[id] = parseInt(value, 10);
+        } else {
+            newdata[id] = value;
+        }
+
+        setUserdata(newdata);
+    }
 
   const handleSubmit = (e)=>{
     e.preventDefault()
-    console.log(userdata)
     
     if(validateForm()){
       setLoading(true)
@@ -48,25 +52,28 @@ const Contact = () => {
       subject:userdata.subject,
       address:userdata.address,
       message:userdata.message
+      }, {
+          headers: {
+              'Authorization': `${auth.accessToken}`
+          }
       })
       .then(response=>{
-        console.log(response?.data)
-        console.log(response?.data.message[0].reason)
         const isSuccessful = response?.data.requestedObject
 
         // For Success
-        if(isSuccessful){
-          toast.success(response?.data.message[0].reason,{
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          setNotification([...notification, {message:response?.data.message[0].reason,success:isSuccessful}])
+          if (isSuccessful) {
+              const messages = response?.data?.message;
+
+              if (messages && messages.length > 0) {
+                  const newNotifications = [];
+                  for (let i = 0; i < messages.length; i++) {
+                      if (i < 3) {
+                          toast.success(messages[i].reason, { position: "bottom-center", theme: "dark" });
+                      }
+                      newNotifications.push({ message: messages[i].reason, success: true });
+                  }
+                  setNotification([...notification, ...newNotifications]);
+              }
           setUserdata(initialState)
           setLoading(false)
         }
@@ -75,40 +82,21 @@ const Contact = () => {
         setLoading(false)
 
         // For Error 
-        if(!error?.response.data.requestedObject){
-          toast.error(error.response?.data.message[0].reason,{
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          setNotification([...notification, {message : error.response?.data.message[0].reason , success : error?.response.data.requestedObject}])
+          if (!error?.response.data.requestedObject) {
+              const messages = error?.response?.data?.message;
+
+              if (messages && messages.length > 0) {
+                  const newNotifications = [];
+                  for (let i = 0; i < messages.length; i++) {
+                      if (i < 3) {
+                          toast.error(messages[i].reason, { position: "bottom-center", theme: "dark" });
+                      }
+                      newNotifications.push({ message: messages[i].reason, success: false });
+                  }
+                  setNotification([...notification, ...newNotifications]);
+              }
         }
 
-        // console.log(error?.response.data?.errors)
-        // const errormessages = error?.response.data?.errors
-        // if(errormessages){
-        //   for(let key in errormessages){
-        //     console.log(errormessages[key][0])
-        //     let msg = errormessages[key][0]
-        //     toast.error(msg,{
-        //       position: "bottom-center",
-        //       autoClose: 5000,
-        //       hideProgressBar: true,
-        //       closeOnClick: true,
-        //       pauseOnHover: false,
-        //       draggable: true,
-        //       progress: undefined,
-        //       theme: "dark",
-        //     });
-        //     setNotification([...notification, {message:msg,success:false}])
-        //     break;
-        //   }
-        // }
       })
     }
     
@@ -119,12 +107,12 @@ const Contact = () => {
 
 		if (!/^[a-zA-Z\s]+$/.test(userdata.name)) {
 		  errors.name = 'Name can only contain letters and spaces';
-      toast.warn(errors.name,{position: "bottom-center",theme: "dark"});
+          toast.warn(errors.name,{position: "bottom-center",theme: "dark"});
 		}
 
 		if (!/^\d{10}$/.test(userdata.phone)) {
 		  errors.phone = 'Phone number must be a 10-digit number';
-      toast.warn(errors.phone,{position: "bottom-center",theme: "dark"});
+          toast.warn(errors.phone,{position: "bottom-center",theme: "dark"});
 		}
 
 		return Object.keys(errors).length === 0;
@@ -173,11 +161,12 @@ const Contact = () => {
             <input onChange={(e)=>handleChange(e)} id='message' value={userdata.message} type="text" placeholder='Type your message here' required />
           </div>
           <div  className='submit-user-details'>
-            {/* <input type="submit" /> */}
-            {
-              loading ? <Button loading></Button> : <Button type='submit'>Submit</Button>
-            }
-            
+            <Button
+              type='submit'
+              loading={isLoading}
+            >
+              Submit
+            </Button>
           </div>
           </form>
         </div>

@@ -20,5 +20,10 @@ namespace SmartdustApp.Business.Core.Model
         /// ChangeDate
         /// </summary>
         public DateTime ChangeDate { get; set; }
+
+        /// <summary>
+        /// RoleId
+        /// </summary>
+        public int RoleId { get; set; }
     }
 }

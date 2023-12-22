@@ -2,6 +2,7 @@
 using SmartdustApp.Business.Core.Interfaces;
 using SmartdustApp.Business.Data.Repository.Interfaces.Security;
 using SmartdustApp.Business.Core.Model;
+using System.Text.RegularExpressions;
 
 namespace SmartdustApp.Business.Services
 {
@@ -76,6 +77,47 @@ namespace SmartdustApp.Business.Services
                 validationMessages.Add(new ValidationMessage { Reason = "Characters which are not allowed in password are " + securityParameter.DisAllowedChars, Severity = ValidationSeverity.Error });
                 return new RequestResult<bool>(false, validationMessages); ;
             }
+            return new RequestResult<bool>(true);
+        }
+        /// <summary>
+        /// Method to validate the Phone Number.
+        /// </summary>
+        public RequestResult<bool> ValidatePhoneNumber(string phoneNumber)
+        {
+            List<ValidationMessage> validationMessages = new List<ValidationMessage>();
+
+            // Remove any non-digit characters from the phone number
+            string sanitizedPhoneNumber = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
+            if (sanitizedPhoneNumber.Length != 10)
+            {
+                validationMessages.Add(new ValidationMessage { Reason = "Phone number must be 10 digits long", Severity = ValidationSeverity.Error });
+                return new RequestResult<bool>(false, validationMessages);
+            }
+
+            // Perform any additional validation logic specific to phone numbers, if needed
+
+            return new RequestResult<bool>(true);
+        }
+
+        /// <summary>
+        /// Method to validate the Mail.
+        /// </summary>
+        public RequestResult<bool> ValidateEmail(string email)
+        {
+            List<ValidationMessage> validationMessages = new List<ValidationMessage>();
+
+            // Use a regular expression to validate the email format
+            Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+            if (!emailRegex.IsMatch(email))
+            {
+                validationMessages.Add(new ValidationMessage { Reason = "Invalid email format", Severity = ValidationSeverity.Error });
+                return new RequestResult<bool>(false, validationMessages);
+            }
+
+            // Perform any additional validation logic specific to email addresses, if needed
+
             return new RequestResult<bool>(true);
         }
         /// <summary>
