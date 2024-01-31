@@ -45,7 +45,8 @@ namespace SmartdustApp.Common
                 || context.Request.Path.Value.StartsWith("/api/Security/SignUp", StringComparison.OrdinalIgnoreCase)
                 || context.Request.Path.Value.StartsWith("/api/Swagger", StringComparison.OrdinalIgnoreCase)
                 || context.Request.Path.Value.StartsWith("/api/Home/GetOrganizations", StringComparison.OrdinalIgnoreCase)
-                || context.Request.Path.Value.StartsWith("/api/Home/ContactUs", StringComparison.OrdinalIgnoreCase))
+                || context.Request.Path.Value.StartsWith("/api/Home/ContactUs", StringComparison.OrdinalIgnoreCase)
+                || !context.Request.Path.Value.StartsWith("/api", StringComparison.OrdinalIgnoreCase))
             {
                 await _next(context);
             }

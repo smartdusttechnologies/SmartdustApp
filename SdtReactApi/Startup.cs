@@ -16,6 +16,9 @@ using SmartdustApp.Common;
 using Microsoft.AspNetCore.Authorization;
 using SmartdustApp.Business.Services.Security;
 using SmartdustApp.Web.Common;
+using System.Transactions;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Text;
 
 namespace SmartdustApp
 {
@@ -32,9 +35,10 @@ namespace SmartdustApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+          
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
+            services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,10 +55,10 @@ namespace SmartdustApp
                 options.AddPolicy(PolicyTypes.Users.EditRole, policy => { policy.RequireClaim(CustomClaimType.ApplicationPermission.ToString(), Permissions.UsersPermissions.EditRole); });
             });
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    //configuration.RootPath = "ClientApp/build";
+            //});
             //Repository DI
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ILeaveRepository, LeaveRepository>();
@@ -98,19 +102,66 @@ namespace SmartdustApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Console.WriteLine(env.IsDevelopment());
+            Console.WriteLine("testing dtdgdfg");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler(errorApp => { 
+                    errorApp.Run(async context =>
+                {
+                    // Set the status code to 500 (Internal Server Error)
+                    context.Response.StatusCode = 200;
+
+                    // Get the exception details
+                    var exceptionHandlerPathFeature =
+                        context.Features.Get<IExceptionHandlerPathFeature>();
+
+                    if (exceptionHandlerPathFeature?.Error != null)
+                    {
+                        // Get the exception message
+                        var errorMessage = exceptionHandlerPathFeature.Error.Message;
+
+                        // You can also include additional details like stack trace if needed
+                        var stackTrace = exceptionHandlerPathFeature.Error.StackTrace;
+
+                        // Construct a detailed error message
+                        var detailedErrorMessage = $"An internal server error occurred: {errorMessage}\n\n{stackTrace}";
+
+                        // Write the detailed error message to the response
+                        await context.Response.WriteAsync(detailedErrorMessage);
+                    }
+                });
+            });
+                app.UseHsts();
             }
-            //app.UseCors();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            tokenValidationParameters = new TokenValidationParameters
+            {
+                // The signing key must match!
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JWT:Secret"])),
+
+                // Validate the JWT Issuer (iss) claim
+                ValidateIssuer = true,
+                ValidIssuer = Configuration["JWT:ValidIssuer"],
+
+                // Validate the JWT Audience (aud) claim
+                ValidateAudience = true,
+                ValidAudience = Configuration["JWT:ValidAudience"],
+
+                // Validate the token expiry
+                ValidateLifetime = true,
+
+                // If you want to allow a certain amount of clock drift, set that here:
+                ClockSkew = TimeSpan.Zero
+            };
             app.UseHttpsRedirection();
-            //app.UseAuthentication();
+            app.UseStaticFiles();
+            //app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseRouting();
             app.UseMiddleware<SdtAuthenticationMiddleware>();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -122,14 +173,15 @@ namespace SmartdustApp
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
             
         }
     }
